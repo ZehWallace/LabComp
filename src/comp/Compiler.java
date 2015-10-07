@@ -624,9 +624,19 @@ public class Compiler {
         Expr left = term();
         while ((op = lexer.token) == Symbol.MINUS || op == Symbol.PLUS
                 || op == Symbol.OR) {
+            //ERRO 8
             lexer.nextToken();
             Expr right = term();
+            
+            if(op == Symbol.MINUS || op == Symbol.PLUS){
+                if(left.getType() != Type.intType){
+                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                }else if(right.getType() != Type.intType){
+                    signalError.show("type " + right.getType().getName() + " boolean does not support operation '" + op + "'");
+                }
+            }
             left = new CompositeExpr(left, op, right);
+            
         }
         return left;
     }
