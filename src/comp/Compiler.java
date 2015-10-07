@@ -471,7 +471,7 @@ public class Compiler {
         lexer.nextToken();
         Expr expr = expr();
         //ERRO 11
-        if(expr.getType() != Type.booleanType){
+        if (expr.getType() != Type.booleanType) {
             signalError.show("non-boolean expression in  'while' command");
         }
         if (lexer.token != Symbol.RIGHTPAR) {
@@ -529,8 +529,11 @@ public class Compiler {
             if (lexer.token != Symbol.IDENT) {
                 signalError.show(SignalError.ident_expected);
             }
-
+            //ERRO 13
             String name = lexer.getStringValue();
+            if (symbolTable.getInLocal(name).getType() != Type.intType && symbolTable.getInLocal(name).getType() != Type.stringType) {
+                signalError.show("Command 'read' does not accept '" + symbolTable.getInLocal(name).getType().getName() + "' variables");
+            }
             lexer.nextToken();
             if (lexer.token == Symbol.COMMA) {
                 lexer.nextToken();
@@ -556,7 +559,14 @@ public class Compiler {
             signalError.show("( expected");
         }
         lexer.nextToken();
-        exprList();
+        //ERRO 14
+        ArrayList<Expr> exprlist = exprList().getExprList();
+        for(Expr e : exprlist){
+            Type t = e.getType();
+            if(t == Type.booleanType || t == Type.undefinedType || t == Type.voidType){
+                signalError.show("Command 'write' does not accept '" + t.getName() + "' expressions");
+            }
+        }
         if (lexer.token != Symbol.RIGHTPAR) {
             signalError.show(") expected");
         }
@@ -631,23 +641,23 @@ public class Compiler {
             //ERRO 8
             lexer.nextToken();
             Expr right = term();
-            
-            if(op == Symbol.MINUS || op == Symbol.PLUS){
-                if(left.getType() != Type.intType){
+
+            if (op == Symbol.MINUS || op == Symbol.PLUS) {
+                if (left.getType() != Type.intType) {
                     signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
-                }else if(right.getType() != Type.intType){
+                } else if (right.getType() != Type.intType) {
                     signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
                 }
             }
-            if(op == Symbol.OR){
-                if(left.getType() != Type.booleanType){
+            if (op == Symbol.OR) {
+                if (left.getType() != Type.booleanType) {
                     signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
-                }else if(right.getType() != Type.booleanType){
+                } else if (right.getType() != Type.booleanType) {
                     signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
                 }
             }
             left = new CompositeExpr(left, op, right);
-            
+
         }
         return left;
     }
@@ -660,19 +670,19 @@ public class Compiler {
                 || op == Symbol.AND) {
             lexer.nextToken();
             Expr right = signalFactor();
-            
+
             //ERRO 9
-            if(op == Symbol.DIV || op == Symbol.MULT){
-                if(left.getType() != Type.intType){
+            if (op == Symbol.DIV || op == Symbol.MULT) {
+                if (left.getType() != Type.intType) {
                     signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
-                }else if(right.getType() != Type.intType){
+                } else if (right.getType() != Type.intType) {
                     signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
                 }
             }
-            if(op == Symbol.AND){
-                if(left.getType() != Type.booleanType){
+            if (op == Symbol.AND) {
+                if (left.getType() != Type.booleanType) {
                     signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
-                }else if(right.getType() != Type.booleanType){
+                } else if (right.getType() != Type.booleanType) {
                     signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
                 }
             }
@@ -832,7 +842,7 @@ public class Compiler {
                     return new VariableExpr(v);
                 } else { // Id "."
                     Variable v = symbolTable.getInLocal(lexer.getStringValue());
-                    if(symbolTable.getInGlobal(v.getType().getName())==null){
+                    if (symbolTable.getInGlobal(v.getType().getName()) == null) {
                         signalError.show("Message send to a non-object receiver");
                     }
                     lexer.nextToken(); // coma o "."
