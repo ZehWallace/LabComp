@@ -1,0 +1,10 @@
+Relat�rio do Compilador
+
+1 de um total de 1 erros que deveriam ser sinalizados n�o o foram (100%)
+0 erros foram sinalizados na linha errada (0%)
+
+Erros que deveriam ser sinalizados mas n�o foram:
+
+tests/ER-SEM01.KRA, 16, Missing 'return' statement in method 'm' (comp.Compiler.methodDec())
+
+Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos

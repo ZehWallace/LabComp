@@ -1,0 +1,427 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="CORR_arquivos/filelist.xml">
+<title>Construcao de Compiladores</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Jose de Oliveira Guimaraes</o:Author>
+  <o:LastAuthor>José de Oliveira Guimarães</o:LastAuthor>
+  <o:Revision>3</o:Revision>
+  <o:TotalTime>10</o:TotalTime>
+  <o:Created>2001-03-21T18:11:00Z</o:Created>
+  <o:LastSaved>2003-05-12T18:32:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>332</o:Words>
+  <o:Characters>1895</o:Characters>
+  <o:Company>UFSCar</o:Company>
+  <o:Lines>15</o:Lines>
+  <o:Paragraphs>4</o:Paragraphs>
+  <o:CharactersWithSpaces>2223</o:CharactersWithSpaces>
+  <o:Version>10.2625</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>BestFit</w:Zoom>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:HyphenationZone>21</w:HyphenationZone>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;
+	mso-font-alt:"\FF2D\FF33 \660E\671D";
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:128;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:1 134676480 16 0 131072 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+@page Section1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 65.95pt 72.0pt 65.95pt;
+	mso-header-margin:36.0pt;
+	mso-footer-margin:36.0pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:389158039;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1261192734 68550671 68550681 68550683 68550671 68550681 68550683 68550671 68550681 68550683;}
+@list l0:level1
+	{mso-level-tab-stop:48.0pt;
+	mso-level-number-position:left;
+	margin-left:48.0pt;
+	text-indent:-18.0pt;}
+@list l0:level2
+	{mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level3
+	{mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level4
+	{mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level5
+	{mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level6
+	{mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level7
+	{mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level8
+	{mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l0:level9
+	{mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1
+	{mso-list-id:1224218337;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2137231778 -1880690470 68550681 68550683 68550671 68550681 68550683 68550671 68550681 68550683;}
+@list l1:level1
+	{mso-level-tab-stop:42.0pt;
+	mso-level-number-position:left;
+	margin-left:42.0pt;
+	text-indent:-24.0pt;}
+@list l1:level2
+	{mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level3
+	{mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level4
+	{mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level5
+	{mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level6
+	{mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level7
+	{mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level8
+	{mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+@list l1:level9
+	{mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Tabela normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]-->
+</head>
+
+<body lang=EN-US style='tab-interval:35.4pt'>
+
+<div class=Section1>
+
+<p class=MsoPlainText align=center style='text-align:center'><span lang=PT
+style='font-size:14.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'>Guia de Correção dos Trabalhos<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'>Construção de Compiladores<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'>Primeiro Semestre de 2001<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span class=GramE><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>Prof.</span></span><span lang=PT
+style='mso-fareast-font-family:"MS Mincho";mso-ansi-language:PT'> José de
+Oliveira Guimarães<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'>As respostas às questões abaixo devem ser não.<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>O comando break foi utilizado para sair de
+algum comando <span class=GramE>for ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Alguma
+seqüência de comandos if's aninhados poderia ser substituída por um comando <span
+class=GramE>switch ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Ha
+algum teste de comparação onde um dos operadores é true ou <span class=GramE>false
+?</span> Exemplo: <br>
+<span class=GramE><span style='mso-spacerun:yes'>    </span></span>if ( achou
+== true<span style='mso-spacerun:yes'>  </span>&amp;&amp;<span
+style='mso-spacerun:yes'>  </span>abriu == false ) ... <o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Alguma
+variável inteira é utilizada<span class=GramE><span style='mso-spacerun:yes'> 
+</span></span>como se fosse do tipo boolean ?<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>O
+compilador (não o linker) emitiu algum aviso durante a compilação de qualquer
+arquivo do programa<span class=GramE><span style='mso-spacerun:yes'>  </span></span>?
+Para responder a este item, ligue todos os avisos de compilação.<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Existe
+alguma variável de instância (variável membro) pública em alguma <span
+class=GramE>classe ?</span><o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Alguma
+constante é utilizada para mais de uma <span class=GramE>finalidade ?</span>
+Exemplo:<span class=GramE><span style='mso-spacerun:yes'>  </span></span>utilizar
+MAX para tamanho máximo de uma string e máximo de instruções no código gerado.<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>8.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Há
+alguma constante literal inteira diferente de <span class=GramE>0</span> ou 1
+no programa ?<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>9.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>Alguma variável de instância está na parte
+publica ou protegida de uma <span class=GramE>classe ?</span><span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:48.0pt;text-indent:-18.0pt;mso-list:
+l0 level1 lfo2;tab-stops:list 48.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>10.</span></span><![endif]><span lang=PT
+style='mso-fareast-font-family:"MS Mincho";mso-ansi-language:PT'> Há alguma
+variável como nome l (L minúsculo) ou o (O minúsculo) ou O (O maiúsculo) no <span
+class=GramE>programa ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'>Todas as respostas devem ser sim.<o:p></o:p></span></p>
+
+<p class=MsoPlainText><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>Apos cada vírgula ou ponto-e-vírgula existe
+pelo menos um espaço em <span class=GramE>branco ?</span><span
+style='mso-spacerun:yes'>  </span><o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>Antes e depois de <span class=GramE>( e</span>
+) do if, while e do-while existe um espaço em branco ? Não é preciso deixar
+espaço antes ou depois de qualquer parêntese, apenas naqueles especificados
+acima.<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Antes
+e depois de cada operador de comparação, lógico ou atribuição (=) existe um
+espaço em <span class=GramE>branco ?</span> Estes operadores são:<span
+class=GramE><span style='mso-spacerun:yes'>  </span></span>&amp;&amp;, &amp;,
+||, |, &lt;, &lt;=, &gt;, &gt;=, !=<span class=GramE>, !</span>, ==, =, +=, -=,
+etc.<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Entre
+o termino da definição de um método e o inicio de outro existem pelo menos duas
+linhas em <span class=GramE>branco ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>O
+programa emprega alguma convenção para identificadores que permite diferenciar
+facilmente nomes de classes de nomes de <span class=GramE>variáveis ?</span><o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Erros
+do tipo &quot;Comentário não fechado&quot; indicam o número da linha em que se
+iniciou o comentário não <span class=GramE>fechado ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>7.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'><span style='mso-spacerun:yes'> </span>Erros
+como &quot;; esperado” indica corretamente o número da linha onde houve o <span
+class=GramE>erro ?</span> Esta<span class=GramE><span
+style='mso-spacerun:yes'>  </span></span>linha é a do penúltimo tokem
+encontrado, não do último.<o:p></o:p></span></p>
+
+<p class=MsoPlainText style='margin-left:42.0pt;text-indent:-24.0pt;mso-list:
+l1 level1 lfo4;tab-stops:list 42.0pt'><![if !supportLists]><span lang=PT
+style='mso-fareast-font-family:"Courier New";mso-ansi-language:PT'><span
+style='mso-list:Ignore'>8.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=PT style='mso-fareast-font-family:
+"MS Mincho";mso-ansi-language:PT'>As mensagens de erro são emitidas por método <span
+class=GramE>apropriado ?</span> <o:p></o:p></span></p>
+
+<p class=MsoPlainText><u><span lang=PT style='mso-fareast-font-family:"MS Mincho";
+mso-ansi-language:PT'><o:p><span style='text-decoration:none'>&nbsp;</span></o:p></span></u></p>
+
+</div>
+
+</body>
+
+</html>
