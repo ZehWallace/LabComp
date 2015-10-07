@@ -2,8 +2,13 @@
      "comp.Compiler.factor()")
 
 class Program {
+	//public int batata;
     public void run() {
+
        int i;
+       
        i.run();   //#
-    }
+
+      }
+
 }
