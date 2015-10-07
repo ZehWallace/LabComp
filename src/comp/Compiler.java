@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Compiler {
 
-	// compile must receive an input with an character less than
+    // compile must receive an input with an character less than
     // p_input.lenght
     public Program compile(char[] input, PrintWriter outError) {
 
@@ -114,7 +114,7 @@ public class Compiler {
     }
 
     private void classDec() {
-		// Note que os m�todos desta classe n�o correspondem exatamente �s
+        // Note que os m�todos desta classe n�o correspondem exatamente �s
         // regras
         // da gram�tica. Este m�todo classDec, por exemplo, implementa
         // a produ��o KraClass (veja abaixo) e partes de outras produ��es.
@@ -210,7 +210,7 @@ public class Compiler {
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
          */
-        
+
         lexer.nextToken();
         if (lexer.token != Symbol.RIGHTPAR) {
             formalParamDec();
@@ -225,15 +225,15 @@ public class Compiler {
         }
 
         lexer.nextToken();
-        ArrayList<Statement> statementList  = statementList();
+        ArrayList<Statement> statementList = statementList();
         boolean isvoid = true;
-        if(type!=Type.voidType){
-            for(Statement s : statementList){
-                if(s.getClass().equals(ReturnStat.class)){
+        if (type != Type.voidType) {
+            for (Statement s : statementList) {
+                if (s.getClass().equals(ReturnStat.class)) {
                     isvoid = false;
                 }
             }
-            if(isvoid){
+            if (isvoid) {
                 signalError.show("Missing 'return' statement in method '" + name + "'");
             }
         }
@@ -247,12 +247,12 @@ public class Compiler {
 
     private void localDec() {
         // LocalDec ::= Type IdList ";"
-
         Type type = type();
         if (lexer.token != Symbol.IDENT) {
             signalError.show("Identifier expected");
         }
-        Variable v = new Variable(lexer.getStringValue(), type);
+        Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
+        symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
         while (lexer.token == Symbol.COMMA) {
             lexer.nextToken();
@@ -260,6 +260,7 @@ public class Compiler {
                 signalError.show("Identifier expected");
             }
             v = new Variable(lexer.getStringValue(), type);
+            symbolTable.putInLocal(lexer.getStringValue(), v);
             lexer.nextToken();
         }
     }
@@ -302,7 +303,7 @@ public class Compiler {
                 result = Type.stringType;
                 break;
             case IDENT:
-			// # corrija: fa�a uma busca na TS para buscar a classe
+                // # corrija: fa�a uma busca na TS para buscar a classe
                 // IDENT deve ser uma classe.
                 result = null;
                 break;
@@ -333,7 +334,7 @@ public class Compiler {
         while ((tk = lexer.token) != Symbol.RIGHTCURBRACKET
                 && tk != Symbol.ELSE) {
             Statement statement = statement();
-            if(statement != null){
+            if (statement != null) {
                 statementList.add(statement);
             }
         }
@@ -401,7 +402,7 @@ public class Compiler {
      * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ] | LocalDec
      */
     private Expr assignExprLocalDec() {
-
+        
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
                 || // token � uma classe declarada textualmente antes desta
@@ -419,6 +420,10 @@ public class Compiler {
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
             expr();
+            Variable v = symbolTable.getInLocal(lexer.getStringValue());
+            if(v == null){
+                signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
+            }
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
                 expr();
@@ -769,7 +774,7 @@ public class Compiler {
                 String firstId = lexer.getStringValue();
                 lexer.nextToken();
                 if (lexer.token != Symbol.DOT) {
-				// Id
+                    // Id
                     // retorne um objeto da ASA que representa um identificador
                     return null;
                 } else { // Id "."
@@ -781,7 +786,7 @@ public class Compiler {
                         lexer.nextToken();
                         ident = lexer.getStringValue();
                         if (lexer.token == Symbol.DOT) {
-						// Id "." Id "." Id "(" [ ExpressionList ] ")"
+                            // Id "." Id "." Id "(" [ ExpressionList ] ")"
 						/*
                              * se o compilador permite vari�veis est�ticas, � poss�vel
                              * ter esta op��o, como
@@ -821,7 +826,7 @@ public class Compiler {
                  */
                 lexer.nextToken();
                 if (lexer.token != Symbol.DOT) {
-				// only 'this'
+                    // only 'this'
                     // retorne um objeto da ASA que representa 'this'
                     // confira se n�o estamos em um m�todo est�tico
                     return null;
@@ -834,7 +839,7 @@ public class Compiler {
                     lexer.nextToken();
                     // j� analisou "this" "." Id
                     if (lexer.token == Symbol.LEFTPAR) {
-					// "this" "." Id "(" [ ExpressionList ] ")"
+                        // "this" "." Id "(" [ ExpressionList ] ")"
 					/*
                          * Confira se a classe corrente possui um m�todo cujo nome �
                          * 'ident' e que pode tomar os par�metros de ExpressionList
@@ -849,7 +854,7 @@ public class Compiler {
                         lexer.nextToken();
                         exprList = this.realParameters();
                     } else {
-					// retorne o objeto da ASA que representa "this" "." Id
+                        // retorne o objeto da ASA que representa "this" "." Id
 					/*
                          * confira se a classe corrente realmente possui uma
                          * vari�vel de inst�ncia 'ident'
@@ -868,7 +873,7 @@ public class Compiler {
 
         LiteralInt e = null;
 
-		// the number value is stored in lexer.getToken().value as an object of
+        // the number value is stored in lexer.getToken().value as an object of
         // Integer.
         // Method intValue returns that value as an value of type int.
         int value = lexer.getNumberValue();
