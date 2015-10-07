@@ -469,7 +469,11 @@ public class Compiler {
             signalError.show("( expected");
         }
         lexer.nextToken();
-        expr();
+        Expr expr = expr();
+        //ERRO 11
+        if(expr.getType() != Type.booleanType){
+            signalError.show("non-boolean expression in  'while' command");
+        }
         if (lexer.token != Symbol.RIGHTPAR) {
             signalError.show(") expected");
         }
@@ -632,7 +636,14 @@ public class Compiler {
                 if(left.getType() != Type.intType){
                     signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
                 }else if(right.getType() != Type.intType){
-                    signalError.show("type " + right.getType().getName() + " boolean does not support operation '" + op + "'");
+                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                }
+            }
+            if(op == Symbol.OR){
+                if(left.getType() != Type.booleanType){
+                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                }else if(right.getType() != Type.booleanType){
+                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
                 }
             }
             left = new CompositeExpr(left, op, right);
@@ -649,6 +660,22 @@ public class Compiler {
                 || op == Symbol.AND) {
             lexer.nextToken();
             Expr right = signalFactor();
+            
+            //ERRO 9
+            if(op == Symbol.DIV || op == Symbol.MULT){
+                if(left.getType() != Type.intType){
+                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                }else if(right.getType() != Type.intType){
+                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                }
+            }
+            if(op == Symbol.AND){
+                if(left.getType() != Type.booleanType){
+                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                }else if(right.getType() != Type.booleanType){
+                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                }
+            }
             left = new CompositeExpr(left, op, right);
         }
         return left;

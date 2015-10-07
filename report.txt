@@ -1,12 +1,17 @@
 Relat�rio do Compilador
 
 0 de um total de 1 erros que deveriam ser sinalizados n�o o foram (0%)
-1 erros foram sinalizados na linha errada (100%)
+0 erros foram sinalizados na linha errada (0%)
 Todos os erros que deveriam ter sido sinalizados o foram
+Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos
 ######################################################
-Erros que foram sinalizados na linha errada:
+Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quando o teste tinha erros) ou n�o sinalizou o erro (quando o teste N�O tinha erros). Mas � necess�rio conferir se as mensagens emitidas pelo compilador s�o compat�veis com as mensagens de erro sugeridas pelas chamadas aos metaobjetos dos testes. 
 
-tests/ER-SEM07.KRA
-    correto:    10, Message send to a non-object receiver (comp.Compiler.factor())
-    sinalizado: 7, Message send to a non-object receiver
+A lista abaixo cont�m o nome do arquivo de teste, a mensagem que ele sinalizou e a mensagem sugerida pelo arquivo de teste
 
+tests/ER-SEM12.KRA
+The compiler message was: "type boolean does not support operation '+'"
+The 'ce' message is:      "operator '+' of 'int' expects an 'int' value"
+
+
+Para o caso de teste que voc� utilizou, o compilador est� correto
