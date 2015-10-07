@@ -1,10 +1,17 @@
 Relat�rio do Compilador
 
-1 de um total de 1 erros que deveriam ser sinalizados n�o o foram (100%)
+0 de um total de 1 erros que deveriam ser sinalizados n�o o foram (0%)
 0 erros foram sinalizados na linha errada (0%)
-
-Erros que deveriam ser sinalizados mas n�o foram:
-
-tests/ER-SEM01.KRA, 16, Missing 'return' statement in method 'm' (comp.Compiler.methodDec())
-
+Todos os erros que deveriam ter sido sinalizados o foram
 Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos
+######################################################
+Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quando o teste tinha erros) ou n�o sinalizou o erro (quando o teste N�O tinha erros). Mas � necess�rio conferir se as mensagens emitidas pelo compilador s�o compat�veis com as mensagens de erro sugeridas pelas chamadas aos metaobjetos dos testes. 
+
+A lista abaixo cont�m o nome do arquivo de teste, a mensagem que ele sinalizou e a mensagem sugerida pelo arquivo de teste
+
+tests/ER-SEM01.KRA
+The compiler message was: "Missing 'return' statement in method 'm'"
+The 'ce' message is:      "Missing 'return' statement in method 'm'"
+
+
+Para o caso de teste que voc� utilizou, o compilador est� correto
