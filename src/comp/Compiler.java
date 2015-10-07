@@ -253,7 +253,7 @@ public class Compiler {
             signalError.show("Identifier expected");
         }
         if (symbolTable.getInLocal(lexer.getStringValue()) != null) {
-            signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
+            signalError.show("Variable '" + lexer.getStringValue() + "' is being redeclared");
         }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
         symbolTable.putInLocal(lexer.getStringValue(), v);
@@ -392,7 +392,7 @@ public class Compiler {
                 compositeStatement();
                 break;
             default:
-                signalError.show("Statement expected");
+                signalError.show("'operator expected' or 'variable expected at the left-hand side of a assignment'");
         }
         return null;
     }
@@ -427,15 +427,12 @@ public class Compiler {
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
             Expr exprl = expr();
-            Variable v = symbolTable.getInLocal(lexer.getStringValue());
-            if (v == null) {
-                signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
-            }
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
-                if (v.getType() != exprr.getType()) {
+//                System.out.println(exprr.getType().getName());
+                if (exprl.getType() != exprr.getType()) {
                     signalError.show("Type error: value of the right-hand side is not subtype of the variable of the left-hand side.");
                 }
                 if (lexer.token != Symbol.SEMICOLON) {
@@ -787,8 +784,20 @@ public class Compiler {
                 if (lexer.token != Symbol.DOT) {
                     // Id
                     // retorne um objeto da ASA que representa um identificador
-                    return null;
+                    Variable v = symbolTable.getInLocal(lexer.getStringValue());
+                    if (v == null) {
+                        Object o = symbolTable.getInGlobal(lexer.getStringValue());
+                        if (v == null) {
+                            signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
+                        }
+
+                    }
+                    return new VariableExpr(v);
                 } else { // Id "."
+                    Variable v = symbolTable.getInLocal(lexer.getStringValue());
+                    if(symbolTable.getInGlobal(v.getType().getName())==null){
+                        signalError.show("Message send to a non-object receiver");
+                    }
                     lexer.nextToken(); // coma o "."
                     if (lexer.token != Symbol.IDENT) {
                         signalError.show("Identifier expected");
