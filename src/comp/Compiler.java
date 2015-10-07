@@ -251,6 +251,9 @@ public class Compiler {
         if (lexer.token != Symbol.IDENT) {
             signalError.show("Identifier expected");
         }
+        if (symbolTable.getInLocal(lexer.getStringValue()) != null) {
+            signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
+        }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
         symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
@@ -258,6 +261,9 @@ public class Compiler {
             lexer.nextToken();
             if (lexer.token != Symbol.IDENT) {
                 signalError.show("Identifier expected");
+            }
+            if (symbolTable.getInLocal(lexer.getStringValue()) != null) {
+                signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
             }
             v = new Variable(lexer.getStringValue(), type);
             symbolTable.putInLocal(lexer.getStringValue(), v);
@@ -402,7 +408,7 @@ public class Compiler {
      * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ] | LocalDec
      */
     private Expr assignExprLocalDec() {
-        
+
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
                 || // token � uma classe declarada textualmente antes desta
@@ -421,7 +427,7 @@ public class Compiler {
              */
             expr();
             Variable v = symbolTable.getInLocal(lexer.getStringValue());
-            if(v == null){
+            if (v == null) {
                 signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
             }
             if (lexer.token == Symbol.ASSIGN) {
