@@ -9,9 +9,9 @@ Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quand
 
 A lista abaixo cont�m o nome do arquivo de teste, a mensagem que ele sinalizou e a mensagem sugerida pelo arquivo de teste
 
-tests/ER-SEM12.KRA
-The compiler message was: "type boolean does not support operation '+'"
-The 'ce' message is:      "operator '+' of 'int' expects an 'int' value"
+tests/ER-SEM18.KRA
+The compiler message was: "Variable 'i' was not declared"
+The 'ce' message is:      "Type 'k' was not found"
 
 
 Para o caso de teste que voc� utilizou, o compilador est� correto
