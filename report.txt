@@ -9,9 +9,9 @@ Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quand
 
 A lista abaixo cont�m o nome do arquivo de teste, a mensagem que ele sinalizou e a mensagem sugerida pelo arquivo de teste
 
-tests/ER-SEM03.KRA
-The compiler message was: "Variable i is being redeclared"
-The 'ce' message is:      "Variable 'i' is being redeclared"
+tests/ER-SEM05.KRA
+The compiler message was: "Type error: value of the right-hand side is not subtype of the variable of the left-hand side."
+The 'ce' message is:      "'int' cannot be assigned to 'boolean'"
 
 
 Para o caso de teste que voc� utilizou, o compilador est� correto

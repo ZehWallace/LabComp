@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class Compiler {
+    //LEMBRAR DE ZERAR AS SYMBOLTABLE.LOCALTABLE
 
     // compile must receive an input with an character less than
     // p_input.lenght
@@ -425,14 +426,18 @@ public class Compiler {
             /*
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
-            expr();
+            Expr exprl = expr();
             Variable v = symbolTable.getInLocal(lexer.getStringValue());
             if (v == null) {
                 signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
             }
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
-                expr();
+                Expr exprr = expr();
+                //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
+                if (v.getType() != exprr.getType()) {
+                    signalError.show("Type error: value of the right-hand side is not subtype of the variable of the left-hand side.");
+                }
                 if (lexer.token != Symbol.SEMICOLON) {
                     signalError.show("';' expected", true);
                 } else {
