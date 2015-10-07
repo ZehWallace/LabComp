@@ -412,8 +412,8 @@ public class Compiler {
 
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
-                || // token � uma classe declarada textualmente antes desta
-                // instru��o
+                ||// token � uma classe declarada textualmente antes desta
+                  // instru��o
                 (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()))) {
             /*
              * uma declara��o de vari�vel. 'lexer.token' � o tipo da vari�vel
@@ -440,6 +440,11 @@ public class Compiler {
                 } else {
                     lexer.nextToken();
                 }
+            }else if(lexer.token == Symbol.IDENT){
+                signalError.show("Type '" + lexer.getStringValue() + "' was not found");
+            }else{
+                //ARRUMAR
+                signalError.show("batata");
             }
         }
         return null;
@@ -531,8 +536,12 @@ public class Compiler {
             }
             //ERRO 13
             String name = lexer.getStringValue();
-            if (symbolTable.getInLocal(name).getType() != Type.intType && symbolTable.getInLocal(name).getType() != Type.stringType) {
-                signalError.show("Command 'read' does not accept '" + symbolTable.getInLocal(name).getType().getName() + "' variables");
+            Variable v = symbolTable.getInLocal(name);
+            if (v == null) {
+                signalError.show("Variable " + name + " was not declared");
+            }
+            if (v.getType() != Type.intType && v.getType() != Type.stringType) {
+                signalError.show("Command 'read' does not accept '" + v.getType().getName() + "' variables");
             }
             lexer.nextToken();
             if (lexer.token == Symbol.COMMA) {
@@ -561,9 +570,9 @@ public class Compiler {
         lexer.nextToken();
         //ERRO 14
         ArrayList<Expr> exprlist = exprList().getExprList();
-        for(Expr e : exprlist){
+        for (Expr e : exprlist) {
             Type t = e.getType();
-            if(t == Type.booleanType || t == Type.undefinedType || t == Type.voidType){
+            if (t == Type.booleanType || t == Type.undefinedType || t == Type.voidType) {
                 signalError.show("Command 'write' does not accept '" + t.getName() + "' expressions");
             }
         }
@@ -759,6 +768,11 @@ public class Compiler {
             case NOT:
                 lexer.nextToken();
                 e = expr();
+                //ERRO 15
+                if (e.getType() != Type.booleanType) {
+                    signalError.show("Operator '!' does not accepts '" + e.getType().getName() + "' values");
+                }
+                System.out.println(e.getType().getName());
                 return new UnaryExpr(e, Symbol.NOT);
             // ObjectCreation ::= "new" Id "(" ")"
             case NEW:
@@ -834,11 +848,12 @@ public class Compiler {
                     Variable v = symbolTable.getInLocal(lexer.getStringValue());
                     if (v == null) {
                         Object o = symbolTable.getInGlobal(lexer.getStringValue());
-                        if (v == null) {
+                        if (o == null) {
                             signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
                         }
 
                     }
+                    //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
                     return new VariableExpr(v);
                 } else { // Id "."
                     Variable v = symbolTable.getInLocal(lexer.getStringValue());
