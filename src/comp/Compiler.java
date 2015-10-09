@@ -11,8 +11,9 @@ public class Compiler {
     // compile must receive an input with an character less than
     // p_input.lenght
     public Program compile(char[] input, PrintWriter outError) {
-
+        nested_whiles = 0;
         ArrayList<CompilationError> compilationErrorList = new ArrayList<>();
+        kraClassList = new ArrayList<>();
         signalError = new SignalError(outError, compilationErrorList);
         symbolTable = new SymbolTable();
         lexer = new Lexer(input, signalError);
@@ -136,6 +137,10 @@ public class Compiler {
             signalError.show(SignalError.ident_expected);
         }
         String className = lexer.getStringValue();
+        if(symbolTable.getInGlobal(className)!=null){
+            signalError.show("Class '" + className + "' already exists");
+        }
+        KraClass kc = new KraClass(className);
         symbolTable.putInGlobal(className, new KraClass(className));
         lexer.nextToken();
         if (lexer.token == Symbol.EXTENDS) {
@@ -144,7 +149,21 @@ public class Compiler {
                 signalError.show(SignalError.ident_expected);
             }
             String superclassName = lexer.getStringValue();
-
+            
+            //ERRO 27
+            if(className.equals(superclassName)){
+                signalError.show("Class '" + className + "' is inheriting from itself");
+            }
+            if(symbolTable.getInGlobal(superclassName) == null){
+                signalError.show("Class '" + superclassName + "' does not exist");
+            }
+            
+            for(KraClass k : kraClassList){
+                if(superclassName.equals(k.getCname())){
+                    kc.setSuperclass(k);
+                }
+            }
+            
             lexer.nextToken();
         }
         if (lexer.token != Symbol.LEFTCURBRACKET) {
@@ -173,6 +192,11 @@ public class Compiler {
                 signalError.show("Identifier expected");
             }
             String name = lexer.getStringValue();
+            if(kc.getInstanceVariable(name) != null){
+                signalError.show("Variable '" + name + "' is being redeclared");
+            }
+            kc.addInstanceVariable(new InstanceVariable(name, t));
+            
             lexer.nextToken();
             if (lexer.token == Symbol.LEFTPAR) {
                 methodDec(t, name, qualifier);
@@ -186,6 +210,8 @@ public class Compiler {
             signalError.show("public/private or \"}\" expected");
         }
         lexer.nextToken();
+        
+        kraClassList.add(kc);
 
     }
 
@@ -323,7 +349,6 @@ public class Compiler {
     }
 
     private void compositeStatement() {
-
         lexer.nextToken();
         statementList();
         if (lexer.token != Symbol.RIGHTCURBRACKET) {
@@ -380,10 +405,16 @@ public class Compiler {
                 ifStatement();
                 break;
             case BREAK:
+                //ERRO 26
+                if(nested_whiles <= 0){
+                    signalError.show("break statement found outside a while statement");
+                }
                 breakStatement();
                 break;
             case WHILE:
+                nested_whiles += 1;
                 whileStatement();
+                nested_whiles -= 1;
                 break;
             case SEMICOLON:
                 nullStatement();
@@ -413,7 +444,7 @@ public class Compiler {
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
                 ||// token � uma classe declarada textualmente antes desta
-                  // instru��o
+                // instru��o
                 (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()))) {
             /*
              * uma declara��o de vari�vel. 'lexer.token' � o tipo da vari�vel
@@ -428,12 +459,13 @@ public class Compiler {
              */
             String varclass = lexer.getStringValue();
             Expr exprl = expr();
-            
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
                 //erro 18
-                if(exprl.getClass() != VariableExpr.class ){
-                    signalError.show("Variable '" + varclass + "' was not declared");      
+                if (exprl == null) {
+                    signalError.show("Variable '" + varclass + "' was not declared");
+                } else if (exprl.getClass() != VariableExpr.class) {
+                    signalError.show("Variable '" + varclass + "' was not declared");
                 }
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
@@ -446,9 +478,9 @@ public class Compiler {
                 } else {
                     lexer.nextToken();
                 }
-            }else if(lexer.token == Symbol.IDENT){
+            } else if (lexer.token == Symbol.IDENT) {
                 signalError.show("Type '" + varclass + "' was not found");
-            }else{
+            } else {
                 //ARRUMAR
                 signalError.show("batata");
             }
@@ -659,16 +691,16 @@ public class Compiler {
 
             if (op == Symbol.MINUS || op == Symbol.PLUS) {
                 if (left.getType() != Type.intType) {
-                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + left.getType().getName() + "' does not support operation '" + op + "'");
                 } else if (right.getType() != Type.intType) {
-                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + right.getType().getName() + "' does not support operation '" + op + "'");
                 }
             }
             if (op == Symbol.OR) {
                 if (left.getType() != Type.booleanType) {
-                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + left.getType().getName() + "' does not support operation '" + op + "'");
                 } else if (right.getType() != Type.booleanType) {
-                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + right.getType().getName() + "' does not support operation '" + op + "'");
                 }
             }
             left = new CompositeExpr(left, op, right);
@@ -689,16 +721,16 @@ public class Compiler {
             //ERRO 9
             if (op == Symbol.DIV || op == Symbol.MULT) {
                 if (left.getType() != Type.intType) {
-                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + left.getType().getName() + "' does not support operation '" + op + "'");
                 } else if (right.getType() != Type.intType) {
-                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + right.getType().getName() + "' does not support operation '" + op + "'");
                 }
             }
             if (op == Symbol.AND) {
                 if (left.getType() != Type.booleanType) {
-                    signalError.show("type " + left.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + left.getType().getName() + "' does not support operation '" + op + "'");
                 } else if (right.getType() != Type.booleanType) {
-                    signalError.show("type " + right.getType().getName() + " does not support operation '" + op + "'");
+                    signalError.show("type '" + right.getType().getName() + "' does not support operation '" + op + "'");
                 }
             }
             left = new CompositeExpr(left, op, right);
@@ -711,10 +743,10 @@ public class Compiler {
         if ((op = lexer.token) == Symbol.PLUS || op == Symbol.MINUS) {
             lexer.nextToken();
             Expr expr = factor();
-            if(expr.getType() == Type.booleanType || expr.getType() == Type.stringType || expr.getType() == Type.voidType || expr.getType() == Type.undefinedType){
-                signalError.show("Operator '" + op + "' does not accepts '" + expr.getType().getName() +"' expressions");
+            if (expr.getType() == Type.booleanType || expr.getType() == Type.stringType || expr.getType() == Type.voidType || expr.getType() == Type.undefinedType) {
+                signalError.show("Operator '" + op + "' does not accepts '" + expr.getType().getName() + "' expressions");
             }
-            return new SignalExpr(op,expr );
+            return new SignalExpr(op, expr);
         } else {
             return factor();
         }
@@ -861,8 +893,9 @@ public class Compiler {
                         if (o == null) {
                             //erro 18
                             return null;
+                        } else {
+                            return null;
                         }
-
                     }
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
                     return new VariableExpr(v);
@@ -987,5 +1020,6 @@ public class Compiler {
     private SymbolTable symbolTable;
     private Lexer lexer;
     private SignalError signalError;
-
+    private int nested_whiles;
+    private ArrayList<KraClass> kraClassList; 
 }

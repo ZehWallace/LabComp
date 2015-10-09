@@ -1,0 +1,11 @@
+@ce(8, "Numero no lugar de nome de variavel", 
+  "Identifier expected", "comp.Compiler.localDec()")
+  
+
+class Program {
+  
+    public void run() {
+       int 0;    //#
+    }
+
+}

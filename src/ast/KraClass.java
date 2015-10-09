@@ -2,20 +2,35 @@ package ast;
 /*
  * Krakatoa Class
  */
+
 public class KraClass extends Type {
-	
-   public KraClass( String name ) {
-      super(name);
-   }
-   
-   public String getCname() {
-      return getName();
-   }
-   
-   private String name;
-   private KraClass superclass;
-   private InstanceVariableList instanceVariableList;
+
+    public KraClass(String name) {
+        super(name);
+        instanceVariableList = new InstanceVariableList();
+    }
+
+    public String getCname() {
+        return getName();
+    }
+
+    public void addInstanceVariable(InstanceVariable v) {
+        instanceVariableList.addElement(v);
+    }
+
+    public InstanceVariable getInstanceVariable(String name) {
+        InstanceVariable v = instanceVariableList.getInstanceVariable(name);
+        return v;
+    }
+
+    public void setSuperclass(KraClass superclass) {
+        this.superclass = superclass;
+    }
+
+    private String name;
+    private KraClass superclass;
+    private InstanceVariableList instanceVariableList;â‚¢
    // private MethodList publicMethodList, privateMethodList;
-   // métodos públicos get e set para obter e iniciar as variáveis acima,
-   // entre outros métodos
+    // mï¿½todos pï¿½blicos get e set para obter e iniciar as variï¿½veis acima,
+    // entre outros mï¿½todos
 }
