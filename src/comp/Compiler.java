@@ -426,9 +426,15 @@ public class Compiler {
             /*
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
+            String varclass = lexer.getStringValue();
             Expr exprl = expr();
+            
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
+                //erro 18
+                if(exprl.getClass() != VariableExpr.class ){
+                    signalError.show("Variable '" + varclass + "' was not declared");      
+                }
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
 //                System.out.println(exprr.getType().getName());
@@ -441,7 +447,7 @@ public class Compiler {
                     lexer.nextToken();
                 }
             }else if(lexer.token == Symbol.IDENT){
-                signalError.show("Type '" + lexer.getStringValue() + "' was not found");
+                signalError.show("Type '" + varclass + "' was not found");
             }else{
                 //ARRUMAR
                 signalError.show("batata");
@@ -704,7 +710,11 @@ public class Compiler {
         Symbol op;
         if ((op = lexer.token) == Symbol.PLUS || op == Symbol.MINUS) {
             lexer.nextToken();
-            return new SignalExpr(op, factor());
+            Expr expr = factor();
+            if(expr.getType() == Type.booleanType || expr.getType() == Type.stringType || expr.getType() == Type.voidType || expr.getType() == Type.undefinedType){
+                signalError.show("Operator '" + op + "' does not accepts '" + expr.getType().getName() +"' expressions");
+            }
+            return new SignalExpr(op,expr );
         } else {
             return factor();
         }
@@ -849,7 +859,8 @@ public class Compiler {
                     if (v == null) {
                         Object o = symbolTable.getInGlobal(lexer.getStringValue());
                         if (o == null) {
-                            signalError.show("Variable '" + lexer.getStringValue() + "' was not declared");
+                            //erro 18
+                            return null;
                         }
 
                     }

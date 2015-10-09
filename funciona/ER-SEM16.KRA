@@ -1,4 +1,4 @@
-@ce(11, "Menos unario aplicado a booleano", 
+@ce(11, "Menos unário aplicado a booleano", 
   "Operator '-' does not accepts 'boolean' expressions",
   "comp.Compiler.signalFactor()")
   

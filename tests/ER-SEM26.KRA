@@ -1,5 +1,5 @@
-@ce(9, "O compilador devera sinalizar erro 'break fora de while'", 
-  "'break' statement found outside a 'while' statement", 
+@ce(9, "O compilador devera sinalizar erro break fora de while", 
+  "break statement found outside a while statement", 
   "comp.Compiler.statement())")
   
 
