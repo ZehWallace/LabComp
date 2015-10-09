@@ -29,7 +29,7 @@ public class KraClass extends Type {
 
     private String name;
     private KraClass superclass;
-    private InstanceVariableList instanceVariableList;₢
+    private InstanceVariableList instanceVariableList;
    // private MethodList publicMethodList, privateMethodList;
     // m�todos p�blicos get e set para obter e iniciar as vari�veis acima,
     // entre outros m�todos
