@@ -591,7 +591,7 @@ public class Compiler {
         lexer.nextToken();
         Expr expr = expr();
         ReturnStat returnStat = new ReturnStat(expr);
-        if (lexer.token != Symbol.SEMICO₢LON) {
+        if (lexer.token != Symbol.SEMICOLON) {
             signalError.show(SignalError.semicolon_expected);
         }
         lexer.nextToken();
