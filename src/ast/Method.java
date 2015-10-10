@@ -6,6 +6,7 @@
 package ast;
 
 import java.util.ArrayList;
+import lexer.Symbol;
 
 /**
  *
@@ -16,9 +17,11 @@ public class Method {
     private Type type;
     private ArrayList<Statement> statementList;
     private ParamList paramList;
-    public Method(String name, Type type){
+    private Symbol qualifier;
+    public Method(String name, Type type, Symbol qualifier){
         this.name = name;
         this.type = type;
+        this.qualifier = qualifier;
         statementList = new ArrayList<>();
         paramList = new ParamList();
     }
@@ -60,4 +63,10 @@ public class Method {
     public Type getType() {
         return type;
     }
+
+    public Symbol getQualifier() {
+        return qualifier;
+    }
+    
+    
 }
