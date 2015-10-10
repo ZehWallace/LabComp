@@ -251,6 +251,7 @@ public class Compiler {
          *                StatementList "}"
          */
         Method method = new Method(name, type);
+        currentMethod = method;
         lexer.nextToken();
         if (lexer.token != Symbol.RIGHTPAR) {
             method.setParamList(formalParamDec());
@@ -432,6 +433,9 @@ public class Compiler {
                 assignExprLocalDec();
                 break;
             case RETURN:
+                if(currentMethod.getType() == Type.voidType){
+                    signalError.show("Illegal 'return' statement. Method returns 'void'");
+                }
                 return returnStatement();
             case READ:
                 readStatement();
@@ -1109,4 +1113,5 @@ public class Compiler {
     private SignalError signalError;
     private int nested_whiles;
     private ArrayList<KraClass> kraClassList;
+    private Method currentMethod;
 }
