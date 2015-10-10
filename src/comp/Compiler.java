@@ -655,7 +655,7 @@ public class Compiler {
                 signalError.show("Variable " + name + " was not declared");
             }
             if (v.getType() != Type.intType && v.getType() != Type.stringType) {
-                signalError.show("Command 'read' does not accept '" + v.getType().getName() + "' variables");
+                signalError.show("'int' or 'String' expression expected");
             }
             lexer.nextToken();
             if (lexer.token == Symbol.COMMA) {

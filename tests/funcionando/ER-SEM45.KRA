@@ -1,4 +1,4 @@
-@ce(13, "Não se pode ler objetos", "'int' or 'String' expression expected",
+@ce(13, "Nao se pode ler objetos", "'int' or 'String' expression expected",
     "comp.Compiler.readStatement()")
 
 class A {
