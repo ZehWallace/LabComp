@@ -433,9 +433,6 @@ public class Compiler {
                 assignExprLocalDec();
                 break;
             case RETURN:
-                if(currentMethod.getType() == Type.voidType){
-                    signalError.show("Illegal 'return' statement. Method returns 'void'");
-                }
                 return returnStatement();
             case READ:
                 readStatement();
@@ -524,8 +521,8 @@ public class Compiler {
             } else if (lexer.token == Symbol.IDENT) {
                 signalError.show("Type '" + obj + "' was not found");
             } else if (lexer.token == Symbol.SEMICOLON) {
-                if(exprl.getType() != Type.voidType){
-                    signalError.show("Message send '" + obj + "." + ((MethodExpr)exprl).getName() + "()' returns a value that is not used");
+                if (exprl.getType() != Type.voidType) {
+                    signalError.show("Message send '" + obj + "." + ((MethodExpr) exprl).getName() + "()' returns a value that is not used");
                 }
             } else {
                 //ARRUMAR
@@ -594,6 +591,14 @@ public class Compiler {
 
         lexer.nextToken();
         Expr expr = expr();
+        //ERRO 39
+        if (currentMethod.getType().getName() != expr.getType().getName()) {
+            signalError.show("Type error: type of the expression returned is not subclass of the method return type");
+        }
+        //ERRO 35
+        if (currentMethod.getType() == Type.voidType) {
+            signalError.show("Illegal 'return' statement. Method returns 'void'");
+        }
         ReturnStat returnStat = new ReturnStat(expr);
         if (lexer.token != Symbol.SEMICOLON) {
             signalError.show(SignalError.semicolon_expected);
