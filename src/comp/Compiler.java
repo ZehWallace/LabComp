@@ -280,16 +280,21 @@ public class Compiler {
         ArrayList<Statement> statementList = statementList();
         method.setStatementList(statementList);
         boolean isvoid = true;
-        if (type != Type.voidType) {
-            for (Statement s : statementList) {
-                if (s.getClass().equals(ReturnStat.class)) {
-                    isvoid = false;
-                }
+        for (Statement s : statementList) {
+            if (s.getClass().equals(ReturnStat.class)) {
+                isvoid = false;
             }
+        }
+        if (type == Type.voidType) {
+            if (!isvoid) {
+                signalError.show("Illegal 'return' statement. Method returns 'void'");
+            }
+        } else {
             if (isvoid) {
                 signalError.show("Missing 'return' statement in method '" + name + "'");
             }
         }
+
         if (lexer.token != Symbol.RIGHTCURBRACKET) {
             signalError.show("} expected");
         }
@@ -308,6 +313,7 @@ public class Compiler {
             signalError.show("Variable '" + lexer.getStringValue() + "' is being redeclared");
         }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
+
         symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
         while (lexer.token == Symbol.COMMA) {
@@ -349,7 +355,7 @@ public class Compiler {
 
     private Type type() {
         // Type ::= BasicType | Id
-        Type result;
+        Type result = null;
 
         switch (lexer.token) {
             case VOID:
@@ -367,7 +373,14 @@ public class Compiler {
             case IDENT:
                 // # corrija: fa�a uma busca na TS para buscar a classe
                 // IDENT deve ser uma classe.
-                result = Type.undefinedType;
+                for (KraClass kc : kraClassList) {
+                    if (kc.getName().equals(lexer.getStringValue())) {
+                        result = kc;
+                    }
+                }
+                if (result == null) {
+                    signalError.show("Class '" + lexer.getStringValue() + "' is not declared");
+                }
                 break;
             default:
                 signalError.show("Type expected");
@@ -420,7 +433,6 @@ public class Compiler {
                 break;
             case RETURN:
                 return returnStatement();
-//			break;
             case READ:
                 readStatement();
                 break;
@@ -469,7 +481,6 @@ public class Compiler {
      * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ] | LocalDec
      */
     private Expr assignExprLocalDec() {
-
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
                 ||// token � uma classe declarada textualmente antes desta
@@ -486,15 +497,15 @@ public class Compiler {
             /*
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
-            String varclass = lexer.getStringValue();
+            String obj = lexer.getStringValue();
             Expr exprl = expr();
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
                 //erro 18
                 if (exprl == null) {
-                    signalError.show("Variable '" + varclass + "' was not declared");
+                    signalError.show("Variable '" + obj + "' was not declared");
                 } else if (exprl.getClass() != VariableExpr.class) {
-                    signalError.show("Variable '" + varclass + "' was not declared");
+                    signalError.show("Variable '" + obj + "' was not declared");
                 }
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
@@ -507,7 +518,11 @@ public class Compiler {
                     lexer.nextToken();
                 }
             } else if (lexer.token == Symbol.IDENT) {
-                signalError.show("Type '" + varclass + "' was not found");
+                signalError.show("Type '" + obj + "' was not found");
+            } else if (lexer.token == Symbol.SEMICOLON) {
+                if(exprl.getType() != Type.voidType){
+                    signalError.show("Message send '" + obj + "." + ((MethodExpr)exprl).getName() + "()' returns a value that is not used");
+                }
             } else {
                 //ARRUMAR
                 signalError.show("batata");
@@ -576,7 +591,7 @@ public class Compiler {
         lexer.nextToken();
         Expr expr = expr();
         ReturnStat returnStat = new ReturnStat(expr);
-        if (lexer.token != Symbol.SEMICOLON) {
+        if (lexer.token != Symbol.SEMICO₢LON) {
             signalError.show(SignalError.semicolon_expected);
         }
         lexer.nextToken();
@@ -802,7 +817,7 @@ public class Compiler {
         Expr e;
         ExprList exprList;
         String messageName, ident;
-        Variable v;
+        Variable v = null;
         switch (lexer.token) {
             // IntValue
             case LITERALINT:
@@ -854,7 +869,15 @@ public class Compiler {
                 if (!isType(className)) {
                     signalError.show("Class '" + className + "' is not declared");
                 }
-                v = new Variable(className, Type.undefinedType);
+
+                for (KraClass kc : kraClassList) {
+                    if (kc.getName().equals(className)) {
+                        v = new Variable(className, kc);
+                    }
+                }
+                if (v == null) {
+                    signalError.show("Class '" + className + "' is not declared");
+                }
                 /*
                  * // encontre a classe className in symbol table KraClass 
                  *      aClass = symbolTable.getInGlobal(className); 
@@ -912,13 +935,12 @@ public class Compiler {
                  *                 Id "." Id "(" [ ExpressionList ] ")" |
                  *                 Id "." Id "." Id "(" [ ExpressionList ] ")" |
                  */
-
                 String firstId = lexer.getStringValue();
                 lexer.nextToken();
                 if (lexer.token != Symbol.DOT) {
                     // Id
                     // retorne um objeto da ASA que representa um identificador
-                    v = symbolTable.getInLocal(lexer.getStringValue());
+                    v = symbolTable.getInLocal(firstId);
                     if (v == null) {
                         Object o = symbolTable.getInGlobal(lexer.getStringValue());
                         if (o == null) {
@@ -981,7 +1003,7 @@ public class Compiler {
                                 }
                             }
                             if (m == null) {
-                                signalError.show("Message send '" + firstId + "." + ident + "()' returns a value that is not used");
+                                signalError.show("Class or superclasses of object '" + firstId + " do not have method " + ident + "()'");
                             }
 
                             // Id "." Id "(" [ ExpressionList ] ")"
@@ -990,6 +1012,16 @@ public class Compiler {
                              * para fazer as confer�ncias sem�nticas, procure por
                              * m�todo 'ident' na classe de 'firstId'
                              */
+                            if (exprList != null) {
+                                Iterator<Variable> var = m.getParamList().elements();
+                                for (Expr expr : exprList.getExprList()) {
+                                    if (expr.getType() != var.next().getType()) {
+                                        signalError.show("Method '" + ident + "()' does not have correct parameters");
+                                    }
+                                }
+                            }
+
+                            return new MethodExpr(m);
                         } else {
                             // retorne o objeto da ASA que representa Id "." Id
                         }

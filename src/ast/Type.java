@@ -2,7 +2,7 @@ package ast;
 
 abstract public class Type {
 
-    public Type( String name ) {
+    public Type(String name) {
         this.name = name;
     }
 
@@ -14,6 +14,10 @@ abstract public class Type {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     abstract public String getCname();
