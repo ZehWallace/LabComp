@@ -11,6 +11,7 @@ public class KraClass extends Type {
         methodList = new MethodList();
     }
 
+    @Override
     public String getCname() {
         return getName();
     }

@@ -1,6 +1,6 @@
 Relat�rio do Compilador
 
-0 de um total de 1 erros que deveriam ser sinalizados n�o o foram (0%)
+0 de um total de 33 erros que deveriam ser sinalizados n�o o foram (0%)
 0 erros foram sinalizados na linha errada (0%)
 Todos os erros que deveriam ter sido sinalizados o foram
 Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos
@@ -9,9 +9,169 @@ Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quand
 
 A lista abaixo cont�m o nome do arquivo de teste, a mensagem que ele sinalizou e a mensagem sugerida pelo arquivo de teste
 
-tests/ER-SEM30.KRA
+ER-SEM01.KRA
+The compiler message was: "Missing 'return' statement in method 'm'"
+The 'ce' message is:      "Missing 'return' statement in method 'm'"
+
+
+ER-SEM02.KRA
+The compiler message was: "Variable 'I' was not declared"
+The 'ce' message is:      "Variable 'I' was not declared"
+
+
+ER-SEM03.KRA
+The compiler message was: "Variable 'i' is being redeclared"
+The 'ce' message is:      "Variable 'i' is being redeclared"
+
+
+ER-SEM04.KRA
+The compiler message was: "Type error: value of the right-hand side is not subtype of the variable of the left-hand side."
+The 'ce' message is:      "Type error: value of the right-hand side is not subtype of the variable of the left-hand side."
+
+
+ER-SEM05.KRA
+The compiler message was: "Type error: value of the right-hand side is not subtype of the variable of the left-hand side."
+The 'ce' message is:      "'int' cannot be assigned to 'boolean'"
+
+
+ER-SEM06.KRA
+The compiler message was: "'operator expected' or 'variable expected at the left-hand side of a assignment'"
+The 'ce' message is:      "'operator expected' or 'variable expected at the left-hand side of a assignment'"
+
+
+ER-SEM07.KRA
+The compiler message was: "Message send to a non-object receiver"
+The 'ce' message is:      "Message send to a non-object receiver"
+
+
+ER-SEM08.KRA
+The compiler message was: "type 'boolean' does not support operation '+'"
+The 'ce' message is:      "type boolean does not support operation '+'"
+
+
+ER-SEM09.KRA
+The compiler message was: "type 'int' does not support operation '&&'"
+The 'ce' message is:      "type 'int' does not support operator '&&'"
+
+
+ER-SEM11.KRA
+The compiler message was: "non-boolean expression in  'while' command"
+The 'ce' message is:      "non-boolean expression in  'while' command"
+
+
+ER-SEM12.KRA
+The compiler message was: "type 'boolean' does not support operation '+'"
+The 'ce' message is:      "operator '+' of 'int' expects an 'int' value"
+
+
+ER-SEM13.KRA
+The compiler message was: "Command 'read' does not accept 'boolean' variables"
+The 'ce' message is:      "Command 'read' does not accept 'boolean' variables"
+
+
+ER-SEM14.KRA
+The compiler message was: "Command 'write' does not accept 'boolean' expressions"
+The 'ce' message is:      "Command 'write' does not accept 'boolean' expressions"
+
+
+ER-SEM15.KRA
+The compiler message was: "Operator '!' does not accepts 'int' values"
+The 'ce' message is:      "Operator '!' does not accepts 'int' values"
+
+
+ER-SEM16.KRA
+The compiler message was: "Operator '-' does not accepts 'boolean' expressions"
+The 'ce' message is:      "Operator '-' does not accepts 'boolean' expressions"
+
+
+ER-SEM17.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Command 'read' expects a variable"
+
+
+ER-SEM18.KRA
+The compiler message was: "Type 'k' was not found"
+The 'ce' message is:      "Type 'k' was not found"
+
+
+ER-SEM19.KRA
+The compiler message was: "Type 'Program' was not found"
+The 'ce' message is:      "Type 'Program' was not found"
+
+
+ER-SEM20.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM21.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM22.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM23.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM24.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM25.KRA
+The compiler message was: "Identifier expected"
+The 'ce' message is:      "Identifier expected"
+
+
+ER-SEM26.KRA
+The compiler message was: "break statement found outside a while statement"
+The 'ce' message is:      "break statement found outside a while statement"
+
+
+ER-SEM27.KRA
+The compiler message was: "Class 'B' does not exist"
+The 'ce' message is:      "Class 'A' is inheriting from itself"
+
+
+ER-SEM28.KRA
+The compiler message was: "Variable 'i' is being redeclared"
+The 'ce' message is:      "Variable 'i' is being redeclared"
+
+
+ER-SEM29.KRA
+The compiler message was: "Method 'put' of the subclass 'B' has a signature different from the same method of superclass 'A'"
+The 'ce' message is:      "Method 'put' of the subclass 'B' has a signature different from the same method of superclass 'A'"
+
+
+ER-SEM30.KRA
 The compiler message was: "Method 'put' of subclass 'B' has a signature different from method inherited from superclass 'A'"
 The 'ce' message is:      "Method 'put' of subclass 'B' has a signature different from method inherited from superclass 'A'"
 
 
-Para o caso de teste que voc� utilizou, o compilador est� correto
+ER-SEM31.KRA
+The compiler message was: "Method 'i' has name equal to an instance variable"
+The 'ce' message is:      "Method 'i' has name equal to an instance variable"
+
+
+ER-SEM32.KRA
+The compiler message was: "Method 'm' is being redeclared"
+The 'ce' message is:      "Method 'm' is being redeclared"
+
+
+ER-SEM33.KRA
+The compiler message was: "Method 'm' is being redeclared"
+The 'ce' message is:      "Method 'm' is being redeclared"
+
+
+ER-SEM34.KRA
+The compiler message was: "Message send 'a.m()' returns a value that is not used"
+The 'ce' message is:      "Message send 'a.m()' returns a value that is not used"
+
+
+Para os casos de teste que voc� utilizou, o compilador est� correto

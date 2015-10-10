@@ -138,7 +138,7 @@ public class Compiler {
         }
         String className = lexer.getStringValue();
         if (symbolTable.getInGlobal(className) != null) {
-            signalError.show("Class '" + className + "' already exists");
+            signalError.show("Class '" + className + "' is being redeclared");
         }
         KraClass kc = new KraClass(className);
         symbolTable.putInGlobal(className, new KraClass(className));
@@ -192,15 +192,13 @@ public class Compiler {
                 signalError.show("Identifier expected");
             }
             String name = lexer.getStringValue();
-            if (kc.getInstanceVariable(name) != null) {
-                signalError.show("Variable '" + name + "' is being redeclared");
-            }
-            kc.addInstanceVariable(new InstanceVariable(name, t));
-
             lexer.nextToken();
             if (lexer.token == Symbol.LEFTPAR) {
+                if (kc.getInstanceVariable(name) != null) {
+                    signalError.show("Method '" + name + "' has name equal to an instance variable");
+                }
                 if (kc.getMethod(name) != null) {
-                    signalError.show("Method '" + name + "' already exists");
+                    signalError.show("Method '" + name + "' is being redeclared");
                 }
                 //ERRO 29 ERRO 30 AQUI
                 KraClass skc = kc.getSuperclass();
@@ -210,6 +208,14 @@ public class Compiler {
             } else if (qualifier != Symbol.PRIVATE) {
                 signalError.show("Attempt to declare a public instance variable");
             } else {
+                //ERRO RANDOM
+                if (kc.getMethod(name) != null) {
+                    signalError.show("Variable '" + name + "' has name equal to a method");
+                }
+                if (kc.getInstanceVariable(name) != null) {
+                    signalError.show("Variable '" + name + "' is being redeclared");
+                }
+                kc.addInstanceVariable(new InstanceVariable(name, t));
                 instanceVarDec(t, name);
             }
         }
@@ -361,7 +367,7 @@ public class Compiler {
             case IDENT:
                 // # corrija: fa�a uma busca na TS para buscar a classe
                 // IDENT deve ser uma classe.
-                result = null;
+                result = Type.undefinedType;
                 break;
             default:
                 signalError.show("Type expected");
@@ -492,7 +498,6 @@ public class Compiler {
                 }
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
-//                System.out.println(exprr.getType().getName());
                 if (exprl.getType() != exprr.getType()) {
                     signalError.show("Type error: value of the right-hand side is not subtype of the variable of the left-hand side.");
                 }
@@ -797,7 +802,7 @@ public class Compiler {
         Expr e;
         ExprList exprList;
         String messageName, ident;
-
+        Variable v;
         switch (lexer.token) {
             // IntValue
             case LITERALINT:
@@ -837,7 +842,6 @@ public class Compiler {
                 if (e.getType() != Type.booleanType) {
                     signalError.show("Operator '!' does not accepts '" + e.getType().getName() + "' values");
                 }
-                System.out.println(e.getType().getName());
                 return new UnaryExpr(e, Symbol.NOT);
             // ObjectCreation ::= "new" Id "(" ")"
             case NEW:
@@ -847,6 +851,10 @@ public class Compiler {
                 }
 
                 String className = lexer.getStringValue();
+                if (!isType(className)) {
+                    signalError.show("Class '" + className + "' is not declared");
+                }
+                v = new Variable(className, Type.undefinedType);
                 /*
                  * // encontre a classe className in symbol table KraClass 
                  *      aClass = symbolTable.getInGlobal(className); 
@@ -865,7 +873,7 @@ public class Compiler {
                 /*
                  * return an object representing the creation of an object
                  */
-                return null;
+                return new VariableExpr(v);
             /*
              * PrimaryExpr ::= "super" "." Id "(" [ ExpressionList ] ")"  | 
              *                 Id  |
@@ -910,22 +918,24 @@ public class Compiler {
                 if (lexer.token != Symbol.DOT) {
                     // Id
                     // retorne um objeto da ASA que representa um identificador
-                    Variable v = symbolTable.getInLocal(lexer.getStringValue());
+                    v = symbolTable.getInLocal(lexer.getStringValue());
                     if (v == null) {
                         Object o = symbolTable.getInGlobal(lexer.getStringValue());
                         if (o == null) {
                             //erro 18
                             return null;
                         } else {
-                            return null;
+                            return new VariableExpr(new Variable(lexer.getStringValue(), Type.undefinedType));
                         }
                     }
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
                     return new VariableExpr(v);
                 } else { // Id "."
-                    Variable v = symbolTable.getInLocal(lexer.getStringValue());
-                    if (symbolTable.getInGlobal(v.getType().getName()) == null) {
-                        signalError.show("Message send to a non-object receiver");
+                    v = symbolTable.getInLocal(lexer.getStringValue());
+                    if (v.getType() != Type.undefinedType) {
+                        if (symbolTable.getInGlobal(v.getType().getName()) == null) {
+                            signalError.show("Message send to a non-object receiver");
+                        }
                     }
                     lexer.nextToken(); // coma o "."
                     if (lexer.token != Symbol.IDENT) {
@@ -952,6 +962,28 @@ public class Compiler {
                             exprList = this.realParameters();
 
                         } else if (lexer.token == Symbol.LEFTPAR) {
+                            String objclass = symbolTable.getInLocal(firstId).getType().getName();
+                            Method m = null;
+                            for (KraClass kc : kraClassList) {
+                                if (kc.getName().equals(objclass)) {
+                                    m = kc.getMethod(ident);
+                                    if (m == null) {
+                                        KraClass skc = kc.getSuperclass();
+                                        while (skc != null) {
+                                            m = skc.getMethod(ident);
+                                            if (m == null) {
+                                                skc = skc.getSuperclass();
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (m == null) {
+                                signalError.show("Message send '" + firstId + "." + ident + "()' returns a value that is not used");
+                            }
+
                             // Id "." Id "(" [ ExpressionList ] ")"
                             exprList = this.realParameters();
                             /*
