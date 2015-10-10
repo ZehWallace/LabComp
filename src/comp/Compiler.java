@@ -137,7 +137,7 @@ public class Compiler {
             signalError.show(SignalError.ident_expected);
         }
         String className = lexer.getStringValue();
-        if(symbolTable.getInGlobal(className)!=null){
+        if (symbolTable.getInGlobal(className) != null) {
             signalError.show("Class '" + className + "' already exists");
         }
         KraClass kc = new KraClass(className);
@@ -149,21 +149,21 @@ public class Compiler {
                 signalError.show(SignalError.ident_expected);
             }
             String superclassName = lexer.getStringValue();
-            
+
             //ERRO 27
-            if(className.equals(superclassName)){
+            if (className.equals(superclassName)) {
                 signalError.show("Class '" + className + "' is inheriting from itself");
             }
-            if(symbolTable.getInGlobal(superclassName) == null){
+            if (symbolTable.getInGlobal(superclassName) == null) {
                 signalError.show("Class '" + superclassName + "' does not exist");
             }
-            
-            for(KraClass k : kraClassList){
-                if(superclassName.equals(k.getCname())){
+
+            for (KraClass k : kraClassList) {
+                if (superclassName.equals(k.getCname())) {
                     kc.setSuperclass(k);
                 }
             }
-            
+
             lexer.nextToken();
         }
         if (lexer.token != Symbol.LEFTCURBRACKET) {
@@ -192,14 +192,21 @@ public class Compiler {
                 signalError.show("Identifier expected");
             }
             String name = lexer.getStringValue();
-            if(kc.getInstanceVariable(name) != null){
+            if (kc.getInstanceVariable(name) != null) {
                 signalError.show("Variable '" + name + "' is being redeclared");
             }
             kc.addInstanceVariable(new InstanceVariable(name, t));
-            
+
             lexer.nextToken();
             if (lexer.token == Symbol.LEFTPAR) {
-                methodDec(t, name, qualifier);
+                if (kc.getMethod(name) != null) {
+                    signalError.show("Method '" + name + "' already exists");
+                }
+                //ERRO 29 ERRO 30 AQUI
+                KraClass skc = kc.getSuperclass();
+                Method method = methodDec(t, name, qualifier, kc, skc);
+                kc.addMethod(method);
+
             } else if (qualifier != Symbol.PRIVATE) {
                 signalError.show("Attempt to declare a public instance variable");
             } else {
@@ -210,7 +217,7 @@ public class Compiler {
             signalError.show("public/private or \"}\" expected");
         }
         lexer.nextToken();
-        
+
         kraClassList.add(kc);
 
     }
@@ -232,15 +239,27 @@ public class Compiler {
         lexer.nextToken();
     }
 
-    private void methodDec(Type type, String name, Symbol qualifier) {
+    private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc) {
         /*
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
          */
-
+        Method method = new Method(name, type);
         lexer.nextToken();
         if (lexer.token != Symbol.RIGHTPAR) {
-            formalParamDec();
+            method.setParamList(formalParamDec());
+        }
+        while (skc != null) {
+            Method skcmethod = skc.getMethod(name);
+            if (skcmethod != null) {
+                if (!method.getParamList().toString().equals(skcmethod.getParamList().toString())) {
+                    signalError.show("Method '" + name + "' of the subclass '" + kc.getName() + "' has a signature different from the same method of superclass '" + skc.getName() + "'");
+                }
+                if (!method.getType().equals(skcmethod.getType())) {
+                    signalError.show("Method '" + name + "' of subclass '" + kc.getName() + "' has a signature different from method inherited from superclass '" + skc.getName() + "'");
+                }
+            }
+            skc = skc.getSuperclass();
         }
         if (lexer.token != Symbol.RIGHTPAR) {
             signalError.show(") expected");
@@ -253,6 +272,7 @@ public class Compiler {
 
         lexer.nextToken();
         ArrayList<Statement> statementList = statementList();
+        method.setStatementList(statementList);
         boolean isvoid = true;
         if (type != Type.voidType) {
             for (Statement s : statementList) {
@@ -269,7 +289,7 @@ public class Compiler {
         }
 
         lexer.nextToken();
-
+        return method;
     }
 
     private void localDec() {
@@ -298,24 +318,27 @@ public class Compiler {
         }
     }
 
-    private void formalParamDec() {
+    private ParamList formalParamDec() {
         // FormalParamDec ::= ParamDec { "," ParamDec }
-
-        paramDec();
+        ParamList paramList = new ParamList();
+        paramList.addElement(paramDec());
         while (lexer.token == Symbol.COMMA) {
             lexer.nextToken();
-            paramDec();
+            paramList.addElement(paramDec());
         }
+        return paramList;
     }
 
-    private void paramDec() {
+    private Variable paramDec() {
         // ParamDec ::= Type Id
-
-        type();
+        //AQUI
+        Type type = type();
         if (lexer.token != Symbol.IDENT) {
             signalError.show("Identifier expected");
         }
+        String name = lexer.getStringValue();
         lexer.nextToken();
+        return new Variable(name, type);
     }
 
     private Type type() {
@@ -406,7 +429,7 @@ public class Compiler {
                 break;
             case BREAK:
                 //ERRO 26
-                if(nested_whiles <= 0){
+                if (nested_whiles <= 0) {
                     signalError.show("break statement found outside a while statement");
                 }
                 breakStatement();
@@ -1021,5 +1044,5 @@ public class Compiler {
     private Lexer lexer;
     private SignalError signalError;
     private int nested_whiles;
-    private ArrayList<KraClass> kraClassList; 
+    private ArrayList<KraClass> kraClassList;
 }
