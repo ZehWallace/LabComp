@@ -35,6 +35,10 @@ public class Method {
         return paramList;
     }
     
+    public Variable getParam(String name){
+        return paramList.getParam(name);
+    }
+    
     public void setParamList(ParamList paramList){
         this.paramList = paramList;
     }

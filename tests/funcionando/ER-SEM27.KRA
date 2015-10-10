@@ -3,7 +3,7 @@
   "comp.Compiler.classDec()")
   
 
-class A extends B {   //#
+class A extends A {   //#
 }
 
 

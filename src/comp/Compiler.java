@@ -6,7 +6,6 @@ import java.io.*;
 import java.util.*;
 
 public class Compiler {
-    //LEMBRAR DE ZERAR AS SYMBOLTABLE.LOCALTABLE
 
     // compile must receive an input with an character less than
     // p_input.lenght
@@ -141,6 +140,7 @@ public class Compiler {
             signalError.show("Class '" + className + "' is being redeclared");
         }
         KraClass kc = new KraClass(className);
+        currentclass = kc;
         symbolTable.putInGlobal(className, new KraClass(className));
         lexer.nextToken();
         if (lexer.token == Symbol.EXTENDS) {
@@ -259,7 +259,7 @@ public class Compiler {
         while (skc != null) {
             Method skcmethod = skc.getMethod(name);
             if (skcmethod != null) {
-                if (!method.getParamList().toString().equals(skcmethod.getParamList().toString())) {
+                if (!method.getParamList().getTypeNames().equals(skcmethod.getParamList().getTypeNames())) {
                     signalError.show("Method '" + name + "' of the subclass '" + kc.getName() + "' has a signature different from the same method of superclass '" + skc.getName() + "'");
                 }
                 if (!method.getType().equals(skcmethod.getType())) {
@@ -510,9 +510,33 @@ public class Compiler {
                 }
                 Expr exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
-                if (exprl.getType() != exprr.getType()) {
-                    signalError.show("Type error: value of the right-hand side is not subtype of the variable of the left-hand side.");
+                if (exprr.getType() == Type.voidType) {
+                    signalError.show("Expression expected in the right-hand side of assignment");
                 }
+                if (exprl.getType() != exprr.getType() && exprr.getType()!= Type.undefinedType) {
+                    //ERRO 38
+                    if (exprl.getType().getClass().equals(KraClass.class) && exprr.getType().getClass().equals(KraClass.class)) {
+                        KraClass skc = ((KraClass) exprr.getType()).getSuperclass();
+                        boolean isSClass = false;
+                        while (skc != null && !isSClass) {
+                            if (exprl.getType().getName().equals(skc.getName())) {
+                                isSClass = true;
+                            } else {
+                                skc = skc.getSuperclass();
+                            }
+                        }
+                        if (!isSClass) {
+                            signalError.show("Type error: type of the right-hand side of the assignment is not a subclass of the left-hand side");
+                        }
+                    } else {
+                        signalError.show("Type error: value of the right-hand side is not subtype of the variable of the left-hand side.");
+                    }
+                }
+                
+                if(exprl.getType().getClass() != KraClass.class && exprr.getType() == Type.undefinedType){
+                    signalError.show("Type error: 'null' cannot be assigned to a variable of a basic type");
+                }
+                
                 if (lexer.token != Symbol.SEMICOLON) {
                     signalError.show("';' expected", true);
                 } else {
@@ -526,7 +550,7 @@ public class Compiler {
                 }
             } else {
                 //ARRUMAR
-                signalError.show("batata");
+                signalError.show("expected ';'");
             }
         }
         return null;
@@ -664,6 +688,8 @@ public class Compiler {
             Type t = e.getType();
             if (t == Type.booleanType || t == Type.undefinedType || t == Type.voidType) {
                 signalError.show("Command 'write' does not accept '" + t.getName() + "' expressions");
+            }else if(t.getClass() == KraClass.class){
+                signalError.show("Command 'write' does not accept objects");
             }
         }
         if (lexer.token != Symbol.RIGHTPAR) {
@@ -822,7 +848,8 @@ public class Compiler {
      *                 "this" "." Id "." Id "(" [ ExpressionList ] ")"
      */
     private Expr factor() {
-
+        KraClass skc;
+        Method m;
         Expr e;
         ExprList exprList;
         String messageName, ident;
@@ -935,7 +962,18 @@ public class Compiler {
                  */
                 lexer.nextToken();
                 exprList = realParameters();
-                break;
+                skc = currentclass.getSuperclass();
+                if (skc == null) {
+                    signalError.show("Current class does not have superclass");
+                }
+                m = skc.getMethod(messageName);
+                while (m == null && (skc = skc.getSuperclass()) != null) {
+                    m = skc.getMethod(messageName);
+                }
+                if (m == null) {
+                    signalError.show("Superclass of current class does not have method '" + messageName + "'");
+                }
+                return new MethodExpr(m);
             case IDENT:
                 /*
                  * PrimaryExpr ::=  
@@ -951,6 +989,9 @@ public class Compiler {
                     // retorne um objeto da ASA que representa um identificador
                     v = symbolTable.getInLocal(firstId);
                     if (v == null) {
+                        v = currentMethod.getParam(firstId);
+                    }
+                    if (v == null) {
                         Object o = symbolTable.getInGlobal(lexer.getStringValue());
                         if (o == null) {
                             //erro 18
@@ -963,12 +1004,16 @@ public class Compiler {
                     return new VariableExpr(v);
                 } else { // Id "."
                     v = symbolTable.getInLocal(lexer.getStringValue());
-                    if (v.getType() != Type.undefinedType) {
+                    if (v == null) {
+                        v = currentMethod.getParam(lexer.getStringValue());
+                    }
+                    if (v.getType().getClass() != KraClass.class) {
                         if (symbolTable.getInGlobal(v.getType().getName()) == null) {
                             signalError.show("Message send to a non-object receiver");
                         }
                     }
                     lexer.nextToken(); // coma o "."
+
                     if (lexer.token != Symbol.IDENT) {
                         signalError.show("Identifier expected");
                     } else {
@@ -993,13 +1038,21 @@ public class Compiler {
                             exprList = this.realParameters();
 
                         } else if (lexer.token == Symbol.LEFTPAR) {
-                            String objclass = symbolTable.getInLocal(firstId).getType().getName();
-                            Method m = null;
+                            v = symbolTable.getInLocal(firstId);
+                            if (v == null) {
+                                v = currentMethod.getParam(firstId);
+                            }
+                            if (v == null) {
+                                signalError.show("Variable '" + firstId + "' is not declared");
+                            }
+                            //PROCURA SE A CLASSE OBJCLASS EXISTE E POSSUI O MÉTODO
+                            String objclass = v.getType().getName();
+                            m = null;
                             for (KraClass kc : kraClassList) {
                                 if (kc.getName().equals(objclass)) {
                                     m = kc.getMethod(ident);
                                     if (m == null) {
-                                        KraClass skc = kc.getSuperclass();
+                                        skc = kc.getSuperclass();
                                         while (skc != null) {
                                             m = skc.getMethod(ident);
                                             if (m == null) {
@@ -1012,7 +1065,7 @@ public class Compiler {
                                 }
                             }
                             if (m == null) {
-                                signalError.show("Method " + ident + "() was not found in class '" + firstId + "' or its superclasses");
+                                signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
                             }
 
                             // Id "." Id "(" [ ExpressionList ] ")"
@@ -1022,10 +1075,21 @@ public class Compiler {
                              * m�todo 'ident' na classe de 'firstId'
                              */
                             if (exprList != null) {
+                                boolean isSubClass = false;
                                 Iterator<Variable> var = m.getParamList().elements();
                                 for (Expr expr : exprList.getExprList()) {
-                                    if (expr.getType() != var.next().getType()) {
-                                        signalError.show("Method '" + ident + "()' does not have correct parameters");
+                                    v = var.next();
+                                    if (expr.getType() != v.getType()) {
+                                        if (expr.getType().getClass() == KraClass.class && v.getType().getClass() == KraClass.class) {
+                                            while ((skc = ((KraClass) expr.getType()).getSuperclass()) != null) {
+                                                if (skc == v.getType()) {
+                                                    isSubClass = true;
+                                                }
+                                            }
+                                        }
+                                        if (!isSubClass) {
+                                            signalError.show("Type error: the type of the real parameter is not subclass of the type of the formal parameter");
+                                        }
                                     }
                                 }
                             }
@@ -1067,6 +1131,29 @@ public class Compiler {
                          * 'ident' e que pode tomar os par�metros de ExpressionList
                          */
                         exprList = this.realParameters();
+                        m = currentclass.getMethod(ident);
+
+                        if (exprList != null) {
+                            boolean isSubClass = false;
+                            Iterator<Variable> var = m.getParamList().elements();
+                            for (Expr expr : exprList.getExprList()) {
+                                v = var.next();
+                                if (expr.getType() != v.getType()) {
+                                    if (expr.getType().getClass() == KraClass.class && v.getType().getClass() == KraClass.class) {
+                                        while ((skc = ((KraClass) expr.getType()).getSuperclass()) != null) {
+                                            if (skc == v.getType()) {
+                                                isSubClass = true;
+                                            }
+                                        }
+                                    }
+                                    if (!isSubClass) {
+                                        signalError.show("Type error: the type of the real parameter is not subclass of the type of the formal parameter");
+                                    }
+                                }
+                            }
+                        }
+
+                        return new MethodExpr(m);
                     } else if (lexer.token == Symbol.DOT) {
                         // "this" "." Id "." Id "(" [ ExpressionList ] ")"
                         lexer.nextToken();
@@ -1081,7 +1168,11 @@ public class Compiler {
                          * confira se a classe corrente realmente possui uma
                          * vari�vel de inst�ncia 'ident'
                          */
-                        return null;
+                        InstanceVariable var = currentclass.getInstanceVariable(ident);
+                        if (var == null) {
+                            signalError.show("Class '" + currentclass.getName() + "' does not have attribute '" + ident + "'");
+                        }
+                        return new VariableExpr(var);
                     }
                 }
                 break;
@@ -1119,4 +1210,5 @@ public class Compiler {
     private int nested_whiles;
     private ArrayList<KraClass> kraClassList;
     private Method currentMethod;
+    private KraClass currentclass;
 }

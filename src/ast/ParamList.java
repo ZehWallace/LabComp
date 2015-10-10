@@ -19,6 +19,14 @@ public class ParamList {
     public int getSize() {
         return paramList.size();
     }
+    
+    public Variable getParam(String name){
+        for(Variable v : paramList){
+            if(v.getName().equals(name))
+                return v;
+        }
+        return null;
+    }
 
     @Override
     public String toString() {
@@ -29,6 +37,15 @@ public class ParamList {
         sb.append("@");
         return sb.toString();
 
+    }
+    
+    public String getTypeNames(){
+        StringBuilder sb = new StringBuilder();
+        for (Variable v : paramList) {
+            sb.append(v.getType().getName());
+        }
+        sb.append("@");
+        return sb.toString();
     }
 
     private ArrayList<Variable> paramList;

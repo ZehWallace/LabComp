@@ -9,6 +9,7 @@ public class KraClass extends Type {
         super(name);
         instanceVariableList = new InstanceVariableList();
         methodList = new MethodList();
+        superclass = null;
     }
 
     @Override
