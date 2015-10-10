@@ -1012,7 +1012,7 @@ public class Compiler {
                                 }
                             }
                             if (m == null) {
-                                signalError.show("Class or superclasses of object '" + firstId + " do not have method " + ident + "()'");
+                                signalError.show("Method " + ident + "() was not found in class '" + firstId + "' or its superclasses");
                             }
 
                             // Id "." Id "(" [ ExpressionList ] ")"
