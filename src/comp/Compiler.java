@@ -440,6 +440,7 @@ public class Compiler {
         if(!isType(className)){
             signalError.show("Class '" + className + "' was not found");
         }
+        
 
         lexer.nextToken();
         if (lexer.token != Symbol.LEFTPAR) {
