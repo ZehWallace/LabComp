@@ -166,7 +166,6 @@ public class Compiler {
             if (symbolTable.getInGlobal(superclassName) == null) {
                 signalError.show("Class '" + superclassName + "' does not exist");
             }
-            System.out.print(symbolTable.getInGlobal(superclassName).getName());
             if(symbolTable.getInGlobal(superclassName).isFinal()){  
                 signalError.show("Class '" + className + "' is inheriting from final class '"+ superclassName +"'");
             }
