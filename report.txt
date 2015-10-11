@@ -1,6 +1,6 @@
 Relat�rio do Compilador
 
-0 de um total de 73 erros que deveriam ser sinalizados n�o o foram (0%)
+0 de um total de 79 erros que deveriam ser sinalizados n�o o foram (0%)
 0 erros foram sinalizados na linha errada (0%)
 0 erros foram sinalizados em 1 arquivos sem erro (0%)
 Todos os erros que deveriam ter sido sinalizados o foram
@@ -359,6 +359,36 @@ The 'ce' message is:      "Static method 'm' was not found in class 'A'"
 ER-SEM76.KRA
 The compiler message was: "Method 'm' was not found in class 'A' or its superclasses"
 The 'ce' message is:      "Method 'm' was not found in class 'A' or its superclasses"
+
+
+ER-SEM77.KRA
+The compiler message was: "Method 'run' was not found in class 'Program'"
+The 'ce' message is:      "Method 'run' was not found in class 'Program'"
+
+
+ER-SEM78.KRA
+The compiler message was: "Source code without a class 'Program'"
+The 'ce' message is:      "Source code without a class 'Program'"
+
+
+ER-SEM79.KRA
+The compiler message was: "Method 'run' of class 'Program' cannot take parameters"
+The 'ce' message is:      "Method 'run' of class 'Program' cannot take parameters"
+
+
+ER-SEM80.KRA
+The compiler message was: "Method 'run' of class 'Program' with a return value type different from 'void'"
+The 'ce' message is:      "Method 'run' of class 'Program' with a return value type different from 'void'"
+
+
+ER-SEM81.KRA
+The compiler message was: "Method 'run' of class 'Program' cannot be private"
+The 'ce' message is:      "Method 'run' of class 'Program' cannot be private"
+
+
+ER-SEM82.KRA
+The compiler message was: "Method 'run' cannot be static"
+The 'ce' message is:      "Method 'run' cannot be static"
 
 
 ER-SEM84.KRA

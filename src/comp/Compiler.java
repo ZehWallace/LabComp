@@ -41,6 +41,9 @@ public class Compiler {
             if (lexer.token != Symbol.EOF) {
                 signalError.show("End of file expected");
             }
+            if (symbolTable.getInGlobal("Program") == null) {
+                signalError.show("Source code without a class 'Program'");
+            }
         } catch (RuntimeException e) {
             // if there was an exception, there is a compilation signalError
         }
@@ -242,6 +245,9 @@ public class Compiler {
                 instanceVarDec(t, name);
             }
         }
+        if (kc.getName().equals("Program") && kc.getMethod("run") == null) {
+            signalError.show("Method 'run' was not found in class 'Program'");
+        }
         if (lexer.token != Symbol.RIGHTCURBRACKET) {
             signalError.show("public/private or \"}\" expected");
         }
@@ -279,8 +285,24 @@ public class Compiler {
         method.setIsStatic(isStatic);
         currentMethod = method;
         lexer.nextToken();
+
+        if (name.equals("run") && method.getType() != Type.voidType) {
+            signalError.show("Method 'run' of class '" + currentClass.getName() + "' with a return value type different from 'void'");
+        }
+        
+        if(name.equals("run") && qualifier == Symbol.PRIVATE){
+            signalError.show("Method 'run' of class '" + currentClass.getName() + "' cannot be private");
+        }
+        
+        if(name.equals("run") && isStatic){
+            signalError.show("Method 'run' cannot be static");
+        }
+        
         if (lexer.token != Symbol.RIGHTPAR) {
             method.setParamList(formalParamDec());
+            if (name.equals("run") && method.getParamList().getSize() > 0) {
+                signalError.show("Method 'run' of class '" + currentClass.getName() + "' cannot take parameters");
+            }
         }
         while (skc != null) {
             Method skcmethod = skc.getMethod(name);
