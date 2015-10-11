@@ -9,29 +9,34 @@ package ast;
  *
  * @author Bruno
  */
-public class MethodExpr extends Expr{
-    
-    public MethodExpr(Method method){
+public class MethodExpr extends Expr {
+
+    public MethodExpr(Method method) {
         this.method = method;
     }
-    
+
     @Override
     public void genC(PW pw, boolean putParenthesis) {
-        
+
     }
 
     @Override
     public Type getType() {
         return method.getType();
     }
-    
-    public String getName(){
+
+    public String getName() {
         return method.getName();
     }
-    
-    public Method getMethod(){
+
+    public Method getMethod() {
         return method;
     }
-    
+
     Method method;
+
+    @Override
+    void genKra(PW pw) {
+        pw.print(method.getName() + "()batata pode acontecer");
+    }
 }

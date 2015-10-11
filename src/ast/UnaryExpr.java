@@ -36,4 +36,10 @@ public class UnaryExpr extends Expr {
 
 	private Expr	expr;
 	private Symbol	op;
+
+    @Override
+    void genKra(PW pw) {
+        pw.print(op.name());
+        expr.genKra(pw);
+    }
 }

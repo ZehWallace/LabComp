@@ -59,4 +59,9 @@ public class CompositeExpr extends Expr {
         arrayOper.put(Symbol.AND, "&&");
         arrayOper.put(Symbol.OR, "||");
     }
+
+    @Override
+    void genKra(PW pw) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -5,7 +5,5 @@ abstract public class Expr {
       // new method: the type of the expression
     abstract public Type getType();
 
-    void genKra(PW pw){
-        
-    }
+    abstract void genKra(PW pw);
 }

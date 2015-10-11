@@ -19,7 +19,7 @@ class Program {
       A a;
       null
       A a = A A;
-      ;
+      set()batata pode acontecer;
       null
    }
 }
