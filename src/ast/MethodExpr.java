@@ -11,11 +11,12 @@ package ast;
  */
 public class MethodExpr extends Expr {
 
-    public MethodExpr(Method method, boolean ismessagesendtoself, boolean ismessagesendtosuper, String messagesendtoclass) {
+    public MethodExpr(Method method, ExprList exprlist, boolean ismessagesendtoself, boolean ismessagesendtosuper, String messagesendtoclass) {
         this.method = method;
         this.ismessagesendtoself = ismessagesendtoself;
         this.ismessagesendtosuper = ismessagesendtosuper;
         this.messagesendtoclass = messagesendtoclass;
+        this.exprlist = exprlist;
     }
 
     @Override
@@ -40,18 +41,23 @@ public class MethodExpr extends Expr {
     private boolean ismessagesendtoself;
     private String messagesendtoclass;
     private boolean ismessagesendtosuper;
+    private ExprList exprlist;
 
     @Override
     void genKra(PW pw) {
-        if(ismessagesendtosuper){
+        if (ismessagesendtosuper) {
             pw.print("super.");
         }
-        if(ismessagesendtoself){
+        if (ismessagesendtoself) {
             pw.print("this.");
         }
-        if(!messagesendtoclass.equals("")){
+        if (!messagesendtoclass.equals("")) {
             pw.print(messagesendtoclass + ".");
         }
-        pw.print(method.getName() + "()batata pode acontecer");
+        pw.print(method.getName() + "(");
+        if (exprlist != null) {
+            exprlist.genKra(pw);
+        }
+        pw.print(")");
     }
 }

@@ -7,22 +7,23 @@ public class ExprList {
     public ExprList() {
         exprList = new ArrayList<Expr>();
     }
-    
-    public ExprList(ArrayList<Expr> exprList){
+
+    public ExprList(ArrayList<Expr> exprList) {
         this.exprList = exprList;
     }
 
-    public void addElement( Expr expr ) {
+    public void addElement(Expr expr) {
         exprList.add(expr);
     }
 
-    public void genC( PW pw ) {
+    public void genC(PW pw) {
 
         int size = exprList.size();
-        for ( Expr e : exprList ) {
-        	e.genC(pw, false);
-            if ( --size > 0 )
+        for (Expr e : exprList) {
+            e.genC(pw, false);
+            if (--size > 0) {
                 pw.print(", ");
+            }
         }
     }
 
@@ -34,12 +35,16 @@ public class ExprList {
 
     void genKra(PW pw) {
         int cont = 0;
-        for(Expr expr : exprList){
-            if(cont > 0){
-                pw.print(", ");
+        if (exprList != null) {
+            for (Expr expr : exprList) {
+                if (cont > 0) {
+                    pw.print(", ");
+                }
+                if (expr != null) {
+                    expr.genKra(pw);
+                }
+                cont++;
             }
-            //expr.genKra(pw);
-            cont++;
         }
     }
 

@@ -367,7 +367,7 @@ public class Compiler {
             signalError.show("Variable '" + lexer.getStringValue() + "' is being redeclared");
         }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
-        variableexprlist.add(new VariableExpr(v,false,""));
+        variableexprlist.add(new VariableExpr(v, false, ""));
         symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
         while (lexer.token == Symbol.COMMA) {
@@ -379,7 +379,7 @@ public class Compiler {
                 signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
             }
             v = new Variable(lexer.getStringValue(), type);
-            variableexprlist.add(new VariableExpr(v,false,""));
+            variableexprlist.add(new VariableExpr(v, false, ""));
             symbolTable.putInLocal(lexer.getStringValue(), v);
             lexer.nextToken();
         }
@@ -1037,7 +1037,7 @@ public class Compiler {
                 /*
                  * return an object representing the creation of an object
                  */
-                return new VariableExpr(v,false,"");
+                return new VariableExpr(v, false, "");
             /*
              * PrimaryExpr ::= "super" "." Id "(" [ ExpressionList ] ")"  | 
              *                 Id  |
@@ -1082,7 +1082,7 @@ public class Compiler {
                 if (m.getQualifier() == Symbol.PRIVATE) {
                     signalError.show("Method '" + messageName + "' was not found in the public interface of '" + currentClass.getSuperclass().getName() + "' or its superclasses");
                 }
-                return new MethodExpr(m,false,true,"");
+                return new MethodExpr(m, exprList, false, true, "");
             case IDENT:
                 /*
                  * PrimaryExpr ::=  
@@ -1110,7 +1110,7 @@ public class Compiler {
                         }
                     }
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
-                    return new VariableExpr(v,false,"");
+                    return new VariableExpr(v, false, "");
                 } else { // Id "."
 
                     v = symbolTable.getInLocal(lexer.getStringValue());
@@ -1233,14 +1233,14 @@ public class Compiler {
                                 }
                             }
 
-                            return new MethodExpr(m,false,false,firstId);
+                            return new MethodExpr(m, exprList, false, false, firstId);
                         } else {
                             // retorne o objeto da ASA que representa Id "." Id
                             v = currentClass.getInstanceVariable(lexer.getStringValue());
                             if (v == null) {
                                 return null;
                             } else {
-                                return new VariableExpr(v,false,firstId);
+                                return new VariableExpr(v, false, firstId);
                             }
                         }
                     }
@@ -1318,7 +1318,7 @@ public class Compiler {
                             }
                         }
 
-                        return new MethodExpr(m,true,false,"");
+                        return new MethodExpr(m, exprList, true, false, "");
                     } else if (lexer.token == Symbol.DOT) {
                         // "this" "." Id "." Id "(" [ ExpressionList ] ")"
                         lexer.nextToken();
@@ -1342,7 +1342,7 @@ public class Compiler {
                             signalError.show("Attempt to access an instance variable using 'this' in a static method");
                         }
 
-                        return new VariableExpr(var,true,"");
+                        return new VariableExpr(var, true, "");
                     }
                 }
                 break;
