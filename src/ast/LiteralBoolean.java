@@ -24,10 +24,10 @@ public class LiteralBoolean extends Expr {
     @Override
     void genKra(PW pw) {
         if(value){
-            pw.println("true;");
+            pw.print("true");
         }
         else{
-            pw.println("false;");
+            pw.print("false");
         }
     }
 }

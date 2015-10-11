@@ -21,6 +21,6 @@ public class LiteralInt extends Expr {
 
     @Override
     void genKra(PW pw) {
-        pw.println(value + ";");
+        pw.print(value + "");
     }
 }
