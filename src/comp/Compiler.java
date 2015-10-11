@@ -173,8 +173,11 @@ public class Compiler {
         }
         lexer.nextToken();
 
+        boolean isStatic = false;
+
         while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC || lexer.token == Symbol.STATIC) {
             if (lexer.token == Symbol.STATIC) {
+                isStatic = true;
                 lexer.nextToken();
             }
             Symbol qualifier;
@@ -202,12 +205,13 @@ public class Compiler {
                     signalError.show("Method '" + name + "' has name equal to an instance variable");
                 }
                 if (kc.getMethod(name) != null) {
-                    signalError.show("Method '" + name + "' is being redeclared");
+                    signalError.show("Redefinition of static method '"+ name +"'");
                 }
                 //ERRO 29 ERRO 30 AQUI
                 KraClass skc = kc.getSuperclass();
-                Method method = methodDec(t, name, qualifier, kc, skc);
+                Method method = methodDec(t, name, qualifier, kc, skc, isStatic);
                 kc.addMethod(method);
+                isStatic = false;
 
             } else if (qualifier != Symbol.PRIVATE) {
                 signalError.show("Attempt to declare a public instance variable");
@@ -247,12 +251,13 @@ public class Compiler {
         lexer.nextToken();
     }
 
-    private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc) {
+    private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc, boolean isStatic) {
         /*
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
          */
         Method method = new Method(name, type, qualifier);
+        method.setIsStatic(isStatic);
         currentMethod = method;
         lexer.nextToken();
         if (lexer.token != Symbol.RIGHTPAR) {
@@ -1102,6 +1107,9 @@ public class Compiler {
                                 }
 
                             }
+                            if (v != null && m.isIsStatic()){
+                                signalError.show("Method '"+ ident +"' was not found in class '" + objclass + "' or its superclasses");
+                            }
 
                             if (m.getQualifier() == Symbol.PRIVATE && m != currentClass.getMethod(ident)) {
                                 signalError.show("Method '" + ident + "' was not found in the public interface of '" + objc.getName() + "' or its superclasses");
@@ -1149,6 +1157,7 @@ public class Compiler {
                  *                 "this" "." Id "(" [ ExpressionList ] ")"  | 
                  *                 "this" "." Id "." Id "(" [ ExpressionList ] ")"
                  */
+
                 lexer.nextToken();
                 if (lexer.token != Symbol.DOT) {
                     // only 'this'
@@ -1164,6 +1173,9 @@ public class Compiler {
                     lexer.nextToken();
                     // j� analisou "this" "." Id
                     if (lexer.token == Symbol.LEFTPAR) {
+                        if (currentMethod.isIsStatic()) {
+                            signalError.show("Call to 'this' in a static method");
+                        }
                         // "this" "." Id "(" [ ExpressionList ] ")"
 					/*
                          * Confira se a classe corrente possui um m�todo cujo nome �
@@ -1218,6 +1230,9 @@ public class Compiler {
                         lexer.nextToken();
                         exprList = this.realParameters();
                     } else {
+                        if (currentMethod.isIsStatic()) {
+                            signalError.show("Attempt to access an instance variable using 'this' in a static method");
+                        }
                         // retorne o objeto da ASA que representa "this" "." Id
 					/*
                          * confira se a classe corrente realmente possui uma

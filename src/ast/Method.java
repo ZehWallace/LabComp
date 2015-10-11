@@ -13,6 +13,7 @@ import lexer.Symbol;
  * @author Bruno
  */
 public class Method {
+    private boolean isStatic;
     private String name;
     private Type type;
     private ArrayList<Statement> statementList;
@@ -49,6 +50,15 @@ public class Method {
     public void setStatementList(ArrayList<Statement> statementList){
         this.statementList = statementList;
     }
+
+    public boolean isIsStatic() {
+        return isStatic;
+    }
+
+    public void setIsStatic(boolean isStatic) {
+        this.isStatic = isStatic;
+    }
+    
     
     @Override
     public String toString(){

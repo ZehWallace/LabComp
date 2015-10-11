@@ -1,15 +1,9 @@
 Relat�rio do Compilador
 
-6 de um total de 74 erros que deveriam ser sinalizados n�o o foram (8%)
+3 de um total de 74 erros que deveriam ser sinalizados n�o o foram (4%)
 1 erros foram sinalizados na linha errada (1%)
 
 Erros que deveriam ser sinalizados mas n�o foram:
-
-ER-SEM71.KRA, 9, Attempt to access an instance variabel using 'this' in a static method (comp.Compiler.factor())
-
-ER-SEM72.KRA, 11, Call to 'this' in a static method (comp.Compiler.factor())
-
-ER-SEM76.KRA, 16, Method 'm' was not found in class 'A' or its superclasses (comp.Compiler.factor())
 
 ER-SEM77.KRA, 10, Method 'run' was not found in class 'Program' (comp.Compiler.classDec())
 
@@ -180,12 +174,12 @@ The 'ce' message is:      "Method 'i' has name equal to an instance variable"
 
 
 ER-SEM32.KRA
-The compiler message was: "Method 'm' is being redeclared"
+The compiler message was: "Redefinition of static method 'm'"
 The 'ce' message is:      "Method 'm' is being redeclared"
 
 
 ER-SEM33.KRA
-The compiler message was: "Method 'm' is being redeclared"
+The compiler message was: "Redefinition of static method 'm'"
 The 'ce' message is:      "Method 'm' is being redeclared"
 
 
@@ -345,12 +339,22 @@ The 'ce' message is:      "'.' or '=' expected after identifier OR statement exp
 
 
 ER-SEM70.KRA
-The compiler message was: "Method 'm' is being redeclared"
+The compiler message was: "Redefinition of static method 'm'"
 The 'ce' message is:      "Method 'm' is being redefined"
 
 
+ER-SEM71.KRA
+The compiler message was: "Attempt to access an instance variable using 'this' in a static method"
+The 'ce' message is:      "Attempt to access an instance variabel using 'this' in a static method"
+
+
+ER-SEM72.KRA
+The compiler message was: "Call to 'this' in a static method"
+The 'ce' message is:      "Call to 'this' in a static method"
+
+
 ER-SEM73.KRA
-The compiler message was: "Method 'm' is being redeclared"
+The compiler message was: "Redefinition of static method 'm'"
 The 'ce' message is:      "Redefinition of static method 'm'"
 
 
@@ -362,5 +366,10 @@ The 'ce' message is:      "'.' or '=' expected after identifier OR statement exp
 ER-SEM75.KRA
 The compiler message was: "Static method 'm' was not found in class 'A'"
 The 'ce' message is:      "Static method 'm' was not found in class 'A'"
+
+
+ER-SEM76.KRA
+The compiler message was: "Method 'm' was not found in class 'A' or its superclasses"
+The 'ce' message is:      "Method 'm' was not found in class 'A' or its superclasses"
 
 
