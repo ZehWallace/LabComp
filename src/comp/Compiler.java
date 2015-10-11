@@ -149,7 +149,7 @@ public class Compiler {
         kc.setIsFInal(isFinal);
         kraClassList.add(kc);
         currentClass = kc;
-        symbolTable.putInGlobal(className, new KraClass(className));
+        symbolTable.putInGlobal(className, kc);
         lexer.nextToken();
         if (lexer.token == Symbol.EXTENDS) {
             lexer.nextToken();
@@ -166,7 +166,8 @@ public class Compiler {
             if (symbolTable.getInGlobal(superclassName) == null) {
                 signalError.show("Class '" + superclassName + "' does not exist");
             }
-            if(symbolTable.getInGlobal(superclassName).isFinal()){
+            System.out.print(symbolTable.getInGlobal(superclassName).getName());
+            if(symbolTable.getInGlobal(superclassName).isFinal()){  
                 signalError.show("Class '" + className + "' is inheriting from final class '"+ superclassName +"'");
             }
 
