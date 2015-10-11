@@ -17,11 +17,13 @@ public class KraClass extends Type {
         if (isFInal) {
             pw.print("final ");
         }
-        pw.println("class " + name + " {");
+        pw.printlnIdent("class " + name + " {");
         pw.add();
+        instanceVariableList.genKra(pw);
+        methodList.genKra(pw);
         //chamar outro genKra
         pw.sub();
-        pw.println("}");
+        pw.printlnIdent("}");
     }
     
     @Override

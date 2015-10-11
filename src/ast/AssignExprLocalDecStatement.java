@@ -9,13 +9,7 @@ package ast;
  *
  * @author Bruno
  */
-public class NewStatement extends Statement{
-    KraClass kc;
-    ExprList exprlist;
-    
-    public NewStatement(KraClass kc){
-        this.kc = kc;
-    }
+public class AssignExprLocalDecStatement extends Statement{
     
     @Override
     public void genC(PW pw) {
@@ -24,7 +18,7 @@ public class NewStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        pw.printlnIdent(" new " + kc.getName() + " ();");
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

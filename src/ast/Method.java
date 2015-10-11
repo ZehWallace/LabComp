@@ -20,6 +20,7 @@ public class Method {
     private ArrayList<Statement> statementList;
     private ParamList paramList;
     private Symbol qualifier;
+    
     public Method(String name, Type type, Symbol qualifier){
         this.name = name;
         this.type = type;
@@ -85,6 +86,33 @@ public class Method {
 
     public void setIsFinal(boolean isFinal) {
         this.isFinal = isFinal;
+    }
+
+    void genKra(PW pw) {
+        pw.printIdent("");
+        if(isFinal){
+            pw.print("final ");
+        }
+        if(isStatic){
+            pw.print("static ");
+        }
+        
+        if(qualifier == Symbol.PUBLIC){
+            pw.print("public ");
+        }else{
+            pw.print("private ");
+        }
+        
+        pw.print(type.getName() + " " + name + " (");
+        paramList.genKra(pw);
+        pw.println(") {");
+        pw.add();
+        //genkra statement list
+        for(Statement s : statementList){
+            s.genKra(pw);
+        }
+        pw.sub();
+        pw.printlnIdent("}");
     }
     
     

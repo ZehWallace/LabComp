@@ -9,14 +9,8 @@ package ast;
  *
  * @author Bruno
  */
-public class NewStatement extends Statement{
-    KraClass kc;
-    ExprList exprlist;
-    
-    public NewStatement(KraClass kc){
-        this.kc = kc;
-    }
-    
+public class NullStatement extends Statement{
+
     @Override
     public void genC(PW pw) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -24,7 +18,7 @@ public class NewStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        pw.printlnIdent(" new " + kc.getName() + " ();");
+        pw.printlnIdent("null");
     }
     
 }

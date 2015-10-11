@@ -5,20 +5,26 @@
  */
 package ast;
 
+import java.util.ArrayList;
+
 /**
  *
- * @author guilherme
+ * @author Bruno
  */
-public class WriteStat extends Statement {
-
-    public WriteStat(ExprList exprlist){
-        this.exprlist = exprlist;
-    }
+public class CompositeStatement extends Statement{
+    ArrayList<Statement> statementList;
     
+    public CompositeStatement(ArrayList<Statement> statementList){
+        this.statementList = statementList;
+    }
     @Override
     public void genC(PW pw) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    void genKra(PW pw) {
+        pw.print("**compositestatement**");
+    }
     
-    private ExprList exprlist;
 }

@@ -33,7 +33,6 @@ public class InstanceVariableList {
         for (InstanceVariable iv : instanceVariableList){
             iv.genKra(pw);
         }
-        
     }
 
     private ArrayList<InstanceVariable> instanceVariableList;

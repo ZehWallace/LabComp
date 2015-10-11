@@ -9,12 +9,10 @@ package ast;
  *
  * @author Bruno
  */
-public class NewStatement extends Statement{
-    KraClass kc;
-    ExprList exprlist;
-    
-    public NewStatement(KraClass kc){
-        this.kc = kc;
+public class WritelnStatement extends Statement{
+
+    public WritelnStatement(ExprList exprlist){
+        this.exprlist = exprlist;
     }
     
     @Override
@@ -24,7 +22,11 @@ public class NewStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        pw.printlnIdent(" new " + kc.getName() + " ();");
+        pw.printIdent("writeln (");
+        exprlist.genKra(pw);
+        pw.println(");");
     }
+    
+    private ExprList exprlist;
     
 }

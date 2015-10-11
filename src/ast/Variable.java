@@ -17,6 +17,6 @@ public class Variable {
     private Type type;
 
     public void genKra(PW pw) {
-        pw.print("private " + type.getName() +" "+ name + ";");
+        pw.print(type.getName() +" "+ name);
     }
 }

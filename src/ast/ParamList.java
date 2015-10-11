@@ -50,4 +50,15 @@ public class ParamList {
 
     private ArrayList<Variable> paramList;
 
+    void genKra(PW pw) {
+        int cont = 0;
+        for(Variable v : paramList){
+            if(cont > 0){
+                pw.print(", ");
+            }
+            v.genKra(pw);
+            cont++;
+        }
+    }
+
 }

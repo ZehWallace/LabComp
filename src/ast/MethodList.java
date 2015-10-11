@@ -14,19 +14,19 @@ import java.util.ArrayList;
 public class MethodList {
 
     public MethodList() {
-        instanceMethodList = new ArrayList<>();
+        methodList = new ArrayList<>();
     }
     
     public void addElement(Method meth){
-        instanceMethodList.add(meth);
+        methodList.add(meth);
     }
     
     public int getSize(){
-        return instanceMethodList.size();
+        return methodList.size();
     }
     
     public Method getInstanceMethod(String name){
-        for(Method m : instanceMethodList){
+        for(Method m : methodList){
             if(m.getName().equals(name)){
                 return m;
             }
@@ -34,5 +34,11 @@ public class MethodList {
         return null;
     }
     
-    ArrayList<Method> instanceMethodList;
+    ArrayList<Method> methodList;
+
+    public void genKra(PW pw) {
+        for(Method m : methodList){
+            m.genKra(pw);
+        }
+    }
 }

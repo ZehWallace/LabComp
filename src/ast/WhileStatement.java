@@ -9,9 +9,9 @@ package ast;
  *
  * @author guilherme
  */
-public class WhileStat extends Statement {
+public class WhileStatement extends Statement {
 
-    public WhileStat(Expr expr, Statement stat){
+    public WhileStatement(Expr expr, Statement stat){
         this.expr = expr;
         this.stat = stat;
     }
@@ -23,4 +23,15 @@ public class WhileStat extends Statement {
     
     private Expr expr;
     private Statement stat;
+
+    @Override
+    void genKra(PW pw) {
+        pw.printIdent("while (");
+        expr.genKra(pw);
+        pw.println(") {");
+        pw.add();
+        stat.genKra(pw);
+        pw.sub();
+        pw.printlnIdent("}");
+    }
 }

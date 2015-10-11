@@ -8,7 +8,13 @@ public class InstanceVariable extends Variable {
     }
 
     public void genKra(PW pw) {
+        pw.printIdent("");
+        if(isStatic){
+            pw.print("static ");
+        }
+        pw.print("private ");
         super.genKra(pw);
+        pw.println(";");
     }
     public void setisStatic(boolean isStatic){
         this.isStatic = isStatic;
