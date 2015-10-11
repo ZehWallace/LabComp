@@ -28,6 +28,13 @@ public class InstanceVariableList {
         }
         return null;
     }
+    
+    public void genKra(PW pw){
+        for (InstanceVariable iv : instanceVariableList){
+            iv.genKra(pw);
+        }
+        
+    }
 
     private ArrayList<InstanceVariable> instanceVariableList;
 

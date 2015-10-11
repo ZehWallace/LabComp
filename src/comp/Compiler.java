@@ -28,7 +28,7 @@ public class Compiler {
     private Program program(ArrayList<CompilationError> compilationErrorList) {
         // Program ::= KraClass { KraClass }
         ArrayList<MetaobjectCall> metaobjectCallList = new ArrayList<>();
-        ArrayList<KraClass> kraClassList = new ArrayList<>();
+        kraClassList = new ArrayList<>();
         Program program = new Program(kraClassList, metaobjectCallList, compilationErrorList);
         try {
             while (lexer.token == Symbol.MOCall) {
@@ -148,6 +148,7 @@ public class Compiler {
         if (symbolTable.getInGlobal(className) != null) {
             signalError.show("Class '" + className + "' is being redeclared");
         }
+        //System.out.println();
         KraClass kc = new KraClass(className);
         kc.setIsFInal(isFinal);
         kraClassList.add(kc);
@@ -241,7 +242,7 @@ public class Compiler {
                 if (kc.getInstanceVariable(name) != null) {
                     signalError.show("Variable '" + name + "' is being redeclared");
                 }
-                kc.addInstanceVariable(new InstanceVariable(name, t));
+                kc.addInstanceVariable(new InstanceVariable(name, t, isStatic));
                 instanceVarDec(t, name);
             }
         }
@@ -289,15 +290,15 @@ public class Compiler {
         if (name.equals("run") && method.getType() != Type.voidType) {
             signalError.show("Method 'run' of class '" + currentClass.getName() + "' with a return value type different from 'void'");
         }
-        
-        if(name.equals("run") && qualifier == Symbol.PRIVATE){
+
+        if (name.equals("run") && qualifier == Symbol.PRIVATE) {
             signalError.show("Method 'run' of class '" + currentClass.getName() + "' cannot be private");
         }
-        
-        if(name.equals("run") && isStatic){
+
+        if (name.equals("run") && isStatic) {
             signalError.show("Method 'run' cannot be static");
         }
-        
+
         if (lexer.token != Symbol.RIGHTPAR) {
             method.setParamList(formalParamDec());
             if (name.equals("run") && method.getParamList().getSize() > 0) {
@@ -733,10 +734,10 @@ public class Compiler {
             //ERRO 13
             String name = lexer.getStringValue();
             Variable v = symbolTable.getInLocal(name);
-            if(v == null){
-                if(currentClass.getName().equals(name) || name.equals(Symbol.THIS)){
+            if (v == null) {
+                if (currentClass.getName().equals(name) || name.equals(Symbol.THIS)) {
                     lexer.nextToken();
-                    if(lexer.token == Symbol.DOT){
+                    if (lexer.token == Symbol.DOT) {
                         lexer.nextToken();
                         v = currentClass.getInstanceVariable(lexer.getStringValue());
                     }
@@ -1227,9 +1228,9 @@ public class Compiler {
                         } else {
                             // retorne o objeto da ASA que representa Id "." Id
                             v = currentClass.getInstanceVariable(lexer.getStringValue());
-                            if(v == null){
+                            if (v == null) {
                                 return null;
-                            }else{
+                            } else {
                                 return new VariableExpr(v);
                             }
                         }
@@ -1318,9 +1319,7 @@ public class Compiler {
                         lexer.nextToken();
                         exprList = this.realParameters();
                     } else {
-                        if (currentMethod.isStatic()) {
-                            signalError.show("Attempt to access an instance variable using 'this' in a static method");
-                        }
+
                         // retorne o objeto da ASA que representa "this" "." Id
 					/*
                          * confira se a classe corrente realmente possui uma
@@ -1330,6 +1329,10 @@ public class Compiler {
                         if (var == null) {
                             signalError.show("Class '" + currentClass.getName() + "' does not have attribute '" + ident + "'");
                         }
+                        if (currentMethod.isStatic() && var.isStatic()) {
+                            signalError.show("Attempt to access an instance variable using 'this' in a static method");
+                        }
+
                         return new VariableExpr(var);
                     }
                 }
