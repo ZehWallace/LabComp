@@ -24,7 +24,9 @@ public class CompositeStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        pw.print("**compositestatement**");
+        for(Statement statement : statementList){
+            statement.genKra(pw);
+        }
     }
     
 }

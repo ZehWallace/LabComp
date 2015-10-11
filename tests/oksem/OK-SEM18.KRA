@@ -9,11 +9,12 @@
 
 class A {
    static private int n;
-   static public int get() {
+   static public int get(int n) {
        return A.n;
    }
-   static public void set( int n ) {
+   static public boolean set( boolean ok, int n ) {
        A.n = n;
+	   return true;
    }
    
 }
@@ -34,11 +35,11 @@ class B extends A {
 class Program {
     
     public void run() {
-        
+        boolean batata;
         A a;
         
         a = new A();
-        if ( B.set(false, 0) ) A.set(0);
+        if ( B.set(false, 0) ) batata = A.set(true, 0);
         write( B.get(1) );
     }
 

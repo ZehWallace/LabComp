@@ -56,7 +56,7 @@ public class ParamList {
             if(cont > 0){
                 pw.print(", ");
             }
-            v.genKra(pw);
+            pw.print(v.getType().getName() + " " + v.getName());
             cont++;
         }
     }

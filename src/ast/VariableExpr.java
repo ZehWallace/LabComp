@@ -2,10 +2,11 @@ package ast;
 
 public class VariableExpr extends Expr {
 
-    public VariableExpr(Variable v, boolean ismessagetoself, String messagetoclass) {
+    public VariableExpr(Variable v, boolean ismessagetoself, String messagetoclass, boolean isNew) {
         this.v = v;
         this.ismessagetoself = ismessagetoself;
         this.messagetoclass = messagetoclass;
+        this.isNew = isNew;
     }
 
     public void genC(PW pw, boolean putParenthesis) {
@@ -19,7 +20,13 @@ public class VariableExpr extends Expr {
         if(!messagetoclass.equals("")){
             pw.print(messagetoclass + ".");
         }
+        if(isNew){
+            pw.print("new ");
+        }
         pw.print(v.getName());
+        if(isNew){
+            pw.print("()");
+        }
     }
 
     public Type getType() {
@@ -29,4 +36,5 @@ public class VariableExpr extends Expr {
     private Variable v;
     private boolean ismessagetoself;
     private String messagetoclass;
+    private boolean isNew;
 }

@@ -6,8 +6,8 @@ class Program {
    public void run () {
       A a;
       
-      a = A;
-      A()batata pode acontecer;
+      a = new A();
+      a.A();
       
    }
 }

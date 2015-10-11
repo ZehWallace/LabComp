@@ -34,7 +34,7 @@ public class IfStatement extends Statement {
         pw.add();
         stat.genKra(pw);
         pw.sub();
-        pw.printIdent("}");
+        pw.printlnIdent("}");
         if(stat2 != null){
             pw.add();
             pw.println(" else {");

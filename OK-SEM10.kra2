@@ -1,5 +1,5 @@
 class A {
-   public void first (pn) {
+   public void first (int pn) {
    }
 }
 class B {
@@ -18,20 +18,20 @@ class Program {
       
       C c;
       
-      a = A;
-      b = B;
-      c = C;
-      first()batata pode acontecer;
+      a = new A();
+      b = new B();
+      c = new C();
+      a.first(0);
       
-      first()batata pode acontecer;
+      b.first(0);
       
-      first()batata pode acontecer;
+      c.first(0);
       
-      second()batata pode acontecer;
+      b.second();
       
-      second()batata pode acontecer;
+      c.second();
       
-      third()batata pode acontecer;
+      c.third();
       
       a = b;
       a = c;

@@ -10,8 +10,8 @@ class Program {
    public void run () {
       A a;
       
-      a = A;
-      p()batata pode acontecer;
+      a = new A();
+      a.p();
       
    }
 }

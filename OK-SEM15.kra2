@@ -1,15 +1,15 @@
 class A {
    public void print () {
-      write ();
+      write (0);
    }
-   public void accept (x) {
-      print()batata pode acontecer;
+   public void accept (A x) {
+      x.print();
       
    }
 }
 class B {
    public void m () {
-      accept()batata pode acontecer;
+      super.accept();
       
    }
 }
@@ -17,8 +17,8 @@ class Program {
    public void run () {
       B b;
       
-      b = B;
-      m()batata pode acontecer;
+      b = new B();
+      b.m();
       
    }
 }

@@ -39,7 +39,7 @@ public class UnaryExpr extends Expr {
 
     @Override
     void genKra(PW pw) {
-        pw.print(op.name());
+        pw.print(op.toString());
         expr.genKra(pw);
     }
 }

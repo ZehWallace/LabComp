@@ -1,21 +1,21 @@
 class A {
-   static private int n;
-   static public int get (int n) {
+   static private n;
+   static public int get (n) {
       return A.n;
    }
-   static public boolean set (boolean ok, int n) {
+   static public boolean set (ok, n) {
       A.n = n;
       return true;
    }
 }
 class B {
-   static private int n;
-   static public int get (int n) {
-      return B.n + n;
+   static private n;
+   static public int get (n) {
+      return ;
    }
-   static public boolean set (boolean ok, int n) {
+   static public boolean set (ok, n) {
       B.n = n;
-      return !ok;
+      return NOTok;
    }
 }
 class Program {
@@ -24,7 +24,7 @@ class Program {
       
       A a;
       
-      a = new A();
+      a = A;
       if (B.set(false, 0)){
          batata = A.set(true, 0);
       }

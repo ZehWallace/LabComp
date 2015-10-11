@@ -1,6 +1,6 @@
 Relat�rio do Compilador
 
-9 erros foram sinalizados em 18 arquivos sem erro (50%)
+8 erros foram sinalizados em 18 arquivos sem erro (44%)
 ######################################################
 Erros que foram sinalizados mas n�o deveriam ter sido:
 
@@ -15,8 +15,6 @@ OK-SEM12.KRA, 22, Identifier expected
 OK-SEM14.KRA, 27, Incompatible types cannot be compared with '==' because the result will always be 'false'
 
 OK-SEM17.KRA, 12, Variable 'n' is being redeclared
-
-OK-SEM18.KRA, 23, Method 'get' of the subclass 'B' has a signature different from the same method of superclass 'A'
 
 OK-SEM19.KRA, 17, Attempt to access an instance variable using 'this' in a static method
 
