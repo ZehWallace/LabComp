@@ -1,4 +1,13 @@
 class A {
+   public void A () {
+   }
 }
 class Program {
+   public void run () {
+      A a;
+      null
+      A a = A A;
+      ;
+      null
+   }
 }

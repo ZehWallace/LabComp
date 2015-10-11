@@ -5,12 +5,32 @@
  */
 package ast;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Bruno
  */
-public class AssignExprLocalDecStatement extends Statement{
-    
+public class AssignExprLocalDecStatement extends Statement {
+
+    ArrayList<VariableExpr> variableexprlist;
+    Expr exprl, exprr;
+
+    //caso declaração
+    public AssignExprLocalDecStatement(ArrayList<VariableExpr> variableexprlist) {
+        this.variableexprlist = variableexprlist;
+        this.exprl = null;
+        this.exprr = null;
+    }
+
+    //caso assignment
+
+    public AssignExprLocalDecStatement(Expr exprl, Expr exprr) {
+        this.exprl = exprl; //se exprr e exprl != null -> assignment
+        this.exprr = exprr; //se exprr == null -> método
+        this.variableexprlist = null;
+    }
+
     @Override
     public void genC(PW pw) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -18,7 +38,23 @@ public class AssignExprLocalDecStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (variableexprlist != null) {
+            for(VariableExpr ve : variableexprlist){
+                pw.printIdent("");
+                ve.genKra(pw);
+                pw.println(";");
+            }
+        } else if (exprl != null && exprr != null) {
+            pw.printIdent("");
+            exprl.genKra(pw);
+            pw.print(" = ");
+            exprr.genKra(pw);
+            pw.println(";");
+        } else if (exprl != null){
+            pw.printIdent("");
+            exprl.genKra(pw);
+            pw.println(";");
+        }
     }
-    
+
 }

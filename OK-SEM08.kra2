@@ -1,6 +1,28 @@
 class A {
+   private int i;
+   public void put (int x, int y, boolean ok) {
+      if (){
+**compositestatement**      }   }
+   public int get () {
+      return       private int i;
+;
+   }
+   public void set (int i) {
+            private int i;
+ = int i;
+   }
 }
 class B {
+   public void put (int a, int b, boolean c) {
+      if (){
+**compositestatement**      }   }
 }
 class Program {
+   public void run () {
+      B b;
+      null
+      B b = B B;
+      ;
+      null
+   }
 }

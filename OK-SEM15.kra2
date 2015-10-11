@@ -1,6 +1,24 @@
 class A {
+   public void print () {
+      write ();
+   }
+   public void accept (A x) {
+      ;
+      null
+   }
 }
 class B {
+   public void m () {
+      ;
+      null
+   }
 }
 class Program {
+   public void run () {
+      B b;
+      null
+      B b = B B;
+      ;
+      null
+   }
 }

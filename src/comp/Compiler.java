@@ -356,7 +356,8 @@ public class Compiler {
         return method;
     }
 
-    private void localDec() {
+    private ArrayList<VariableExpr> localDec() {
+        ArrayList<VariableExpr> variableexprlist = new ArrayList<>();
         // LocalDec ::= Type IdList ";"
         Type type = type();
         if (lexer.token != Symbol.IDENT) {
@@ -366,7 +367,7 @@ public class Compiler {
             signalError.show("Variable '" + lexer.getStringValue() + "' is being redeclared");
         }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
-
+        variableexprlist.add(new VariableExpr(v));
         symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
         while (lexer.token == Symbol.COMMA) {
@@ -378,9 +379,11 @@ public class Compiler {
                 signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
             }
             v = new Variable(lexer.getStringValue(), type);
+            variableexprlist.add(new VariableExpr(v));
             symbolTable.putInLocal(lexer.getStringValue(), v);
             lexer.nextToken();
         }
+        return variableexprlist;
     }
 
     private ParamList formalParamDec() {
@@ -510,10 +513,9 @@ public class Compiler {
             case INT:
             case BOOLEAN:
             case STRING:
-                assignExprLocalDec();
-                break;
+                return assignExprLocalDec();
             case RETURN:
-                return returnStatement(₢);
+                return returnStatement();
             case READ:
                 return readStatement();
             case WRITE:
@@ -534,6 +536,7 @@ public class Compiler {
                 nested_whiles -= 1;
                 return whileStatement;
             case SEMICOLON:
+                System.out.println(lexer.getStringValue());
                 return nullStatement();
             case LEFTCURBRACKET:
                 return compositeStatement();
@@ -556,7 +559,9 @@ public class Compiler {
     /*
      * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ] | LocalDec
      */
-    private Expr assignExprLocalDec() {
+    private AssignExprLocalDecStatement assignExprLocalDec() {
+        ArrayList<VariableExpr> variableExprList = new ArrayList<>();
+        Expr exprl = null, exprr = null;
         if (lexer.token == Symbol.INT || lexer.token == Symbol.BOOLEAN
                 || lexer.token == Symbol.STRING
                 ||// token � uma classe declarada textualmente antes desta
@@ -568,13 +573,14 @@ public class Compiler {
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ] | LocalDec 
              * LocalDec ::= Type IdList ``;''
              */
-            localDec();
+            variableExprList = localDec();
+            return new AssignExprLocalDecStatement(variableExprList);
         } else {
             /*
              * AssignExprLocalDec ::= Expression [ ``$=$'' Expression ]
              */
             String obj = lexer.getStringValue();
-            Expr exprl = expr();
+            exprl = expr();
             if (lexer.token == Symbol.ASSIGN) {
                 lexer.nextToken();
                 //erro 18
@@ -583,7 +589,7 @@ public class Compiler {
                 } else if (exprl.getClass() != VariableExpr.class) {
                     signalError.show("Variable '" + obj + "' was not declared");
                 }
-                Expr exprr = expr();
+                exprr = expr();
                 //AQUI MODIFICAR TIPO EXPR PARA VARIAVEL
                 if (exprr.getType() == Type.voidType) {
                     signalError.show("Expression expected in the right-hand side of assignment");
@@ -629,8 +635,8 @@ public class Compiler {
                 //ARRUMAR
                 signalError.show("expected ';'");
             }
+            return new AssignExprLocalDecStatement(exprl, exprr);
         }
-        return null;
     }
 
     private ExprList realParameters() {
