@@ -1,9 +1,29 @@
 Relat�rio do Compilador
 
-0 de um total de 54 erros que deveriam ser sinalizados n�o o foram (0%)
-0 erros foram sinalizados na linha errada (0%)
-Todos os erros que deveriam ter sido sinalizados o foram
-Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos
+6 de um total de 74 erros que deveriam ser sinalizados n�o o foram (8%)
+1 erros foram sinalizados na linha errada (1%)
+
+Erros que deveriam ser sinalizados mas n�o foram:
+
+ER-SEM71.KRA, 9, Attempt to access an instance variabel using 'this' in a static method (comp.Compiler.factor())
+
+ER-SEM72.KRA, 11, Call to 'this' in a static method (comp.Compiler.factor())
+
+ER-SEM76.KRA, 16, Method 'm' was not found in class 'A' or its superclasses (comp.Compiler.factor())
+
+ER-SEM77.KRA, 10, Method 'run' was not found in class 'Program' (comp.Compiler.classDec())
+
+ER-SEM78.KRA, 10, Source code without a class 'Program' (comp.Compiler.program())
+
+ER-SEM79.KRA, 5, Method 'run' of class 'Program' cannot take parameters
+
+######################################################
+Erros que foram sinalizados na linha errada:
+
+ER-SEM80.KRA
+    correto:    7, Method 'run' of class 'Program' with a return value type different from 'void' (comp.Compiler.methodDec())
+    sinalizado: 8, Missing 'return' statement in method 'run'
+
 ######################################################
 Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quando o teste tinha erros) ou n�o sinalizou o erro (quando o teste N�O tinha erros). Mas � necess�rio conferir se as mensagens emitidas pelo compilador s�o compat�veis com as mensagens de erro sugeridas pelas chamadas aos metaobjetos dos testes. 
 
@@ -279,4 +299,68 @@ The compiler message was: "Method 'p' was not found in the public interface of '
 The 'ce' message is:      "Method 'p' was not found in the public interface of 'A' or its superclasses"
 
 
-Para os casos de teste que voc� utilizou, o compilador est� correto
+ER-SEM61.KRA
+The compiler message was: "Method 's' was not found in class 'C' or its superclasses"
+The 'ce' message is:      "Method 's' was not found in class 'C' or its superclasses"
+
+
+ER-SEM62.KRA
+The compiler message was: "Variable 'a' was not declared"
+The 'ce' message is:      "Identifier 'a' was not found"
+
+
+ER-SEM63.KRA
+The compiler message was: "'.' or '=' expected after an identifier OR statement expected"
+The 'ce' message is:      "'.' or '=' expected after an identifier OR statement expected"
+
+
+ER-SEM64.KRA
+The compiler message was: "'.' or '=' expected after an identifier OR statement expected"
+The 'ce' message is:      "'.' or '=' expected after an identifier OR statement expected"
+
+
+ER-SEM65.KRA
+The compiler message was: "Static method 'p' was not found in class 'Program'"
+The 'ce' message is:      "Static method 'p' was not found in class 'Program'"
+
+
+ER-SEM66.KRA
+The compiler message was: "Static method 'p' was not found in class 'Program'"
+The 'ce' message is:      "Static method 'p' was not found in class 'Program'"
+
+
+ER-SEM67.KRA
+The compiler message was: "'.' or '=' expected after an identifier OR statement expected"
+The 'ce' message is:      "'.' or '=' expected after an identifier OR statement expected"
+
+
+ER-SEM68.KRA
+The compiler message was: "Method 'p' was not found in class 'Program' or its superclasses"
+The 'ce' message is:      "Method 'p' was not found in class 'Program' or its superclasses"
+
+
+ER-SEM69.KRA
+The compiler message was: "'.' or '=' expected after an identifier OR statement expected"
+The 'ce' message is:      "'.' or '=' expected after identifier OR statement expected"
+
+
+ER-SEM70.KRA
+The compiler message was: "Method 'm' is being redeclared"
+The 'ce' message is:      "Method 'm' is being redefined"
+
+
+ER-SEM73.KRA
+The compiler message was: "Method 'm' is being redeclared"
+The 'ce' message is:      "Redefinition of static method 'm'"
+
+
+ER-SEM74.KRA
+The compiler message was: "'.' or '=' expected after an identifier OR statement expected"
+The 'ce' message is:      "'.' or '=' expected after identifier OR statement expected"
+
+
+ER-SEM75.KRA
+The compiler message was: "Static method 'm' was not found in class 'A'"
+The 'ce' message is:      "Static method 'm' was not found in class 'A'"
+
+

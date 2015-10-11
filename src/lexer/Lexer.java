@@ -50,8 +50,10 @@ public class Lexer {
 		keywordsTable.put( "new", Symbol.NEW );
 		keywordsTable.put( "public", Symbol.PUBLIC );
 		keywordsTable.put( "private", Symbol.PRIVATE );
+                keywordsTable.put( "static", Symbol.STATIC);
 		keywordsTable.put( "String", Symbol.STRING );
 		keywordsTable.put( "extends", Symbol.EXTENDS );
+                
 
 	}
 
@@ -333,6 +335,29 @@ public class Lexer {
 
     public String getStringValue() {
        return stringValue;
+    }
+    
+    public Symbol afterLastToken(){
+        //super gambiarra monstro batatuda
+        int lastTokenPos = tokenPos;
+        String lastStringValue = stringValue;
+        Symbol lastToken = token;
+        int lastLineNumber = lineNumber;
+        int lastNumberValue = numberValue;
+        int lastBeforeLastTokenPos = beforeLastTokenPos;
+        String lastMetaobjectName = metaobjectName;
+        
+        nextToken();
+        
+        Symbol retorno = token;
+        tokenPos = lastTokenPos;
+        stringValue = lastStringValue;
+        token = lastToken;
+        lineNumber = lastLineNumber;
+        numberValue = lastNumberValue;
+        beforeLastTokenPos = lastBeforeLastTokenPos;
+        metaobjectName = lastMetaobjectName;
+        return retorno;
     }
 
     public int getNumberValue() {

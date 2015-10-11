@@ -1,6 +1,7 @@
 package comp;
 
 import ast.*;
+import java.awt.font.TextHitInfo;
 import lexer.*;
 import java.io.*;
 import java.util.*;
@@ -140,6 +141,7 @@ public class Compiler {
             signalError.show("Class '" + className + "' is being redeclared");
         }
         KraClass kc = new KraClass(className);
+        kraClassList.add(kc);
         currentClass = kc;
         symbolTable.putInGlobal(className, new KraClass(className));
         lexer.nextToken();
@@ -171,8 +173,10 @@ public class Compiler {
         }
         lexer.nextToken();
 
-        while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC) {
-
+        while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC || lexer.token == Symbol.STATIC) {
+            if (lexer.token == Symbol.STATIC) {
+                lexer.nextToken();
+            }
             Symbol qualifier;
             switch (lexer.token) {
                 case PRIVATE:
@@ -223,8 +227,6 @@ public class Compiler {
             signalError.show("public/private or \"}\" expected");
         }
         lexer.nextToken();
-
-        kraClassList.add(kc);
 
     }
 
@@ -486,7 +488,7 @@ public class Compiler {
                 || lexer.token == Symbol.STRING
                 ||// token � uma classe declarada textualmente antes desta
                 // instru��o
-                (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()))) {
+                (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()) && lexer.afterLastToken() != Symbol.DOT)) {
             /*
              * uma declara��o de vari�vel. 'lexer.token' � o tipo da vari�vel
              * 
@@ -548,6 +550,8 @@ public class Compiler {
                 if (exprl.getType() != Type.voidType) {
                     signalError.show("Message send '" + obj + "." + ((MethodExpr) exprl).getName() + "()' returns a value that is not used");
                 }
+            } else if (lexer.token == Symbol.LEFTPAR) {
+                signalError.show("'.' or '=' expected after an identifier OR statement expected");
             } else {
                 //ARRUMAR
                 signalError.show("expected ';'");
@@ -852,7 +856,7 @@ public class Compiler {
      *                 "this" "." Id "." Id "(" [ ExpressionList ] ")"
      */
     private Expr factor() {
-        KraClass skc;
+        KraClass classe = null, skc, objc;
         Method m;
         Expr e;
         ExprList exprList;
@@ -1011,13 +1015,23 @@ public class Compiler {
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
                     return new VariableExpr(v);
                 } else { // Id "."
+
                     v = symbolTable.getInLocal(lexer.getStringValue());
                     if (v == null) {
                         v = currentMethod.getParam(lexer.getStringValue());
                     }
-                    if (v.getType().getClass() != KraClass.class) {
-                        if (symbolTable.getInGlobal(v.getType().getName()) == null) {
-                            signalError.show("Message send to a non-object receiver");
+                    if (v == null) {
+                        classe = symbolTable.getInGlobal(lexer.getStringValue());
+                    }
+
+                    if (v == null && classe == null) {
+                        signalError.show("Ident is neither variable or class");
+                    }
+                    if (v != null) {
+                        if (v.getType().getClass() != KraClass.class) {
+                            if (symbolTable.getInGlobal(v.getType().getName()) == null) {
+                                signalError.show("Message send to a non-object receiver");
+                            }
                         }
                     }
                     lexer.nextToken(); // coma o "."
@@ -1050,16 +1064,26 @@ public class Compiler {
                             if (v == null) {
                                 v = currentMethod.getParam(firstId);
                             }
-                            if (v == null) {
-                                signalError.show("Variable '" + firstId + "' is not declared");
+                            if (v == null && classe == null) {
+                                if (v == null) {
+                                    signalError.show("Variable '" + firstId + "' is not declared");
+                                }
                             }
                             //PROCURA SE A CLASSE OBJCLASS EXISTE E POSSUI O MÉTODO
-                            String objclass = v.getType().getName();
+                            String objclass = null;
                             m = null;
-                            if (v.getType().getClass() != KraClass.class) {
-                                signalError.show("Expects object");
+                            //verifica se método é de objeto ou classe
+                            if (classe == null) {
+                                objclass = v.getType().getName();
+                                if (v.getType().getClass() != KraClass.class) {
+                                    signalError.show("Expects object");
+                                }
+                                objc = (KraClass) v.getType();
+                            } else {
+                                objclass = classe.getName();
+                                objc = classe;
                             }
-                            KraClass objc = (KraClass) v.getType();
+
                             m = objc.getMethod(ident);
 
                             skc = objc.getSuperclass();
@@ -1069,9 +1093,14 @@ public class Compiler {
                                 }
                                 skc = skc.getSuperclass();
                             }
-
                             if (m == null) {
-                                signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
+                                if (v != null) {
+                                    signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
+                                }
+                                if (classe != null) {
+                                    signalError.show("Static method '" + ident + "' was not found in class '" + objclass + "'");
+                                }
+
                             }
 
                             if (m.getQualifier() == Symbol.PRIVATE && m != currentClass.getMethod(ident)) {
@@ -1141,7 +1170,23 @@ public class Compiler {
                          * 'ident' e que pode tomar os par�metros de ExpressionList
                          */
                         exprList = this.realParameters();
-                        m = currentClass.getMethod(ident);
+                        objc = currentClass;
+
+                        m = objc.getMethod(ident);
+                        skc = objc.getSuperclass();
+                        while (skc != null && (m == null || m.getQualifier() == Symbol.PRIVATE)) {
+                            if (skc.getMethod(ident) != null) {
+                                m = skc.getMethod(ident);
+                            }
+                            skc = skc.getSuperclass();
+                        }
+                        if (m == null) {
+                            signalError.show("Method '" + ident + "' was not found in class '" + currentClass.getName() + "' or its superclasses");
+                        }
+
+                        if (m.getQualifier() == Symbol.PRIVATE && m != currentClass.getMethod(ident)) {
+                            signalError.show("Method '" + ident + "' was not found in the public interface of '" + objc.getName() + "' or its superclasses");
+                        }
 
                         if (exprList != null) {
                             boolean isSubClass = false;
