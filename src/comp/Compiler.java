@@ -1082,7 +1082,7 @@ public class Compiler {
                 if (m.getQualifier() == Symbol.PRIVATE) {
                     signalError.show("Method '" + messageName + "' was not found in the public interface of '" + currentClass.getSuperclass().getName() + "' or its superclasses");
                 }
-                return new MethodExpr(m);
+                return new MethodExpr(m,false,true,"");
             case IDENT:
                 /*
                  * PrimaryExpr ::=  
@@ -1233,7 +1233,7 @@ public class Compiler {
                                 }
                             }
 
-                            return new MethodExpr(m);
+                            return new MethodExpr(m,false,false,firstId);
                         } else {
                             // retorne o objeto da ASA que representa Id "." Id
                             v = currentClass.getInstanceVariable(lexer.getStringValue());
@@ -1318,7 +1318,7 @@ public class Compiler {
                             }
                         }
 
-                        return new MethodExpr(m);
+                        return new MethodExpr(m,true,false,"");
                     } else if (lexer.token == Symbol.DOT) {
                         // "this" "." Id "." Id "(" [ ExpressionList ] ")"
                         lexer.nextToken();
