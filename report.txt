@@ -1,22 +1,10 @@
 Relat�rio do Compilador
 
-2 de um total de 75 erros que deveriam ser sinalizados n�o o foram (2%)
-1 erros foram sinalizados na linha errada (1%)
+0 de um total de 73 erros que deveriam ser sinalizados n�o o foram (0%)
+0 erros foram sinalizados na linha errada (0%)
 0 erros foram sinalizados em 1 arquivos sem erro (0%)
-
-Erros que deveriam ser sinalizados mas n�o foram:
-
-ER-SEM81.KRA, 7, Method 'run' of class 'Program' cannot be private (comp.Compiler.methodDec())
-
-ER-SEM82.KRA, 5, Method 'run' cannot be static
-
-######################################################
-Erros que foram sinalizados na linha errada:
-
-ER-SEM84.KRA
-    correto:    12, Redeclaration of final method 'finalMethod' (comp.Compiler.methodDec())
-    sinalizado: 6, public/private or "}" expected
-
+Todos os erros que deveriam ter sido sinalizados o foram
+Um ou mais arquivos de teste tinham erros, mas estes foram sinalizados nos n�meros de linhas corretos
 O compilador n�o sinalizou nenhum erro que n�o deveria ter sinalizado
 ######################################################
 Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quando o teste tinha erros) ou n�o sinalizou o erro (quando o teste N�O tinha erros). Mas � necess�rio conferir se as mensagens emitidas pelo compilador s�o compat�veis com as mensagens de erro sugeridas pelas chamadas aos metaobjetos dos testes. 
@@ -373,8 +361,13 @@ The compiler message was: "Method 'm' was not found in class 'A' or its supercla
 The 'ce' message is:      "Method 'm' was not found in class 'A' or its superclasses"
 
 
+ER-SEM84.KRA
+The compiler message was: "Redeclaration of final method 'finalMethod'"
+The 'ce' message is:      "Redeclaration of final method 'finalMethod'"
+
+
 ER-SEM85.KRA
-The compiler message was: "public/private or "}" expected"
+The compiler message was: "'final' method in a 'final' class"
 The 'ce' message is:      "'final' method in a 'final' class"
 
 
@@ -383,3 +376,4 @@ The compiler message was: "'operator expected' or 'variable expected at the left
 The 'ce' message is:      "Class 'A' was not found"
 
 
+Para os casos de teste que voc� utilizou, o compilador est� correto

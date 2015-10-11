@@ -184,8 +184,13 @@ public class Compiler {
         lexer.nextToken();
 
         boolean isStatic = false;
+        boolean isFinalm = false;
 
-        while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC || lexer.token == Symbol.STATIC) {
+        while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC || lexer.token == Symbol.STATIC || lexer.token == Symbol.FINAL) {
+            if (lexer.token == Symbol.FINAL) {
+                isFinalm = true;
+                lexer.nextToken();
+            }
             if (lexer.token == Symbol.STATIC) {
                 isStatic = true;
                 lexer.nextToken();
@@ -219,7 +224,7 @@ public class Compiler {
                 }
                 //ERRO 29 ERRO 30 AQUI
                 KraClass skc = kc.getSuperclass();
-                Method method = methodDec(t, name, qualifier, kc, skc, isStatic);
+                Method method = methodDec(t, name, qualifier, kc, skc, isStatic, isFinalm);
                 kc.addMethod(method);
                 isStatic = false;
 
@@ -261,12 +266,16 @@ public class Compiler {
         lexer.nextToken();
     }
 
-    private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc, boolean isStatic) {
+    private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc, boolean isStatic, boolean isFinalm) {
         /*
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
          */
+        if(isFinalm && currentClass.isFinal()){
+            signalError.show("'final' method in a 'final' class");
+        }
         Method method = new Method(name, type, qualifier);
+        method.setIsFinal(isFinalm);
         method.setIsStatic(isStatic);
         currentMethod = method;
         lexer.nextToken();
@@ -276,6 +285,9 @@ public class Compiler {
         while (skc != null) {
             Method skcmethod = skc.getMethod(name);
             if (skcmethod != null) {
+                if (skcmethod.isIsFinal()){
+                    signalError.show("Redeclaration of final method 'finalMethod'");
+                }
                 if (!method.getParamList().getTypeNames().equals(skcmethod.getParamList().getTypeNames())) {
                     signalError.show("Method '" + name + "' of the subclass '" + kc.getName() + "' has a signature different from the same method of superclass '" + skc.getName() + "'");
                 }

@@ -13,6 +13,7 @@ import lexer.Symbol;
  * @author Bruno
  */
 public class Method {
+    private boolean isFinal;
     private boolean isStatic;
     private String name;
     private Type type;
@@ -77,6 +78,15 @@ public class Method {
     public Symbol getQualifier() {
         return qualifier;
     }
+
+    public boolean isIsFinal() {
+        return isFinal;
+    }
+
+    public void setIsFinal(boolean isFinal) {
+        this.isFinal = isFinal;
+    }
+    
     
     
 }
