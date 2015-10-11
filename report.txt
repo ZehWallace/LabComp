@@ -1,23 +1,17 @@
 Relat�rio do Compilador
 
-3 de um total de 74 erros que deveriam ser sinalizados n�o o foram (4%)
+0 de um total de 73 erros que deveriam ser sinalizados n�o o foram (0%)
 1 erros foram sinalizados na linha errada (1%)
-
-Erros que deveriam ser sinalizados mas n�o foram:
-
-ER-SEM77.KRA, 10, Method 'run' was not found in class 'Program' (comp.Compiler.classDec())
-
-ER-SEM78.KRA, 10, Source code without a class 'Program' (comp.Compiler.program())
-
-ER-SEM79.KRA, 5, Method 'run' of class 'Program' cannot take parameters
-
+0 erros foram sinalizados em 1 arquivos sem erro (0%)
+Todos os erros que deveriam ter sido sinalizados o foram
 ######################################################
 Erros que foram sinalizados na linha errada:
 
-ER-SEM80.KRA
-    correto:    7, Method 'run' of class 'Program' with a return value type different from 'void' (comp.Compiler.methodDec())
-    sinalizado: 8, Missing 'return' statement in method 'run'
+ER-SEM84.KRA
+    correto:    12, Redeclaration of final method 'finalMethod' (comp.Compiler.methodDec())
+    sinalizado: 6, public/private or "}" expected
 
+O compilador n�o sinalizou nenhum erro que n�o deveria ter sinalizado
 ######################################################
 Em todos os testes abaixo, o compilador sinalizou o erro na linha correta (quando o teste tinha erros) ou n�o sinalizou o erro (quando o teste N�O tinha erros). Mas � necess�rio conferir se as mensagens emitidas pelo compilador s�o compat�veis com as mensagens de erro sugeridas pelas chamadas aos metaobjetos dos testes. 
 
@@ -371,5 +365,15 @@ The 'ce' message is:      "Static method 'm' was not found in class 'A'"
 ER-SEM76.KRA
 The compiler message was: "Method 'm' was not found in class 'A' or its superclasses"
 The 'ce' message is:      "Method 'm' was not found in class 'A' or its superclasses"
+
+
+ER-SEM85.KRA
+The compiler message was: "public/private or "}" expected"
+The 'ce' message is:      "'final' method in a 'final' class"
+
+
+ER-SEM86.KRA
+The compiler message was: "'operator expected' or 'variable expected at the left-hand side of a assignment'"
+The 'ce' message is:      "Class 'A' was not found"
 
 

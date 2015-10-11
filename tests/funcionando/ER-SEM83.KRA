@@ -1,0 +1,12 @@
+@cd(7, "Uma classe final nao pode ser herdada", "Class 'Program' is inheriting from final class 'Terra'")
+
+final class Terra {
+}
+
+// uma sub-terra? Isto nao deve ser possivel
+class Program extends Terra {  //#
+    
+    public void run() {  
+    }
+
+}

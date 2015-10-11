@@ -35,7 +35,7 @@ public class Compiler {
                 metaobjectCallList.add(metaobjectCall());
             }
             classDec();
-            while (lexer.token == Symbol.CLASS) {
+            while (lexer.token == Symbol.CLASS || lexer.token == Symbol.FINAL) {
                 classDec();
             }
             if (lexer.token != Symbol.EOF) {
@@ -129,6 +129,11 @@ public class Compiler {
          * MethodDec ::= Qualifier Type Id "("[ FormalParamDec ] ")" "{" StatementList "}" 
          * Qualifier ::= [ "static" ]  ( "private" | "public" )
          */
+        boolean isFinal = false;
+        if (lexer.token == Symbol.FINAL) {
+            isFinal = true;
+            lexer.nextToken();
+        }
         if (lexer.token != Symbol.CLASS) {
             signalError.show("'class' expected");
         }
@@ -141,12 +146,14 @@ public class Compiler {
             signalError.show("Class '" + className + "' is being redeclared");
         }
         KraClass kc = new KraClass(className);
+        kc.setIsFInal(isFinal);
         kraClassList.add(kc);
         currentClass = kc;
         symbolTable.putInGlobal(className, new KraClass(className));
         lexer.nextToken();
         if (lexer.token == Symbol.EXTENDS) {
             lexer.nextToken();
+            
             if (lexer.token != Symbol.IDENT) {
                 signalError.show("Class expected");
             }
@@ -158,6 +165,9 @@ public class Compiler {
             }
             if (symbolTable.getInGlobal(superclassName) == null) {
                 signalError.show("Class '" + superclassName + "' does not exist");
+            }
+            if(symbolTable.getInGlobal(superclassName).isFinal()){
+                signalError.show("Class '" + className + "' is inheriting from final class '"+ superclassName +"'");
             }
 
             for (KraClass k : kraClassList) {
@@ -205,7 +215,7 @@ public class Compiler {
                     signalError.show("Method '" + name + "' has name equal to an instance variable");
                 }
                 if (kc.getMethod(name) != null) {
-                    signalError.show("Redefinition of static method '"+ name +"'");
+                    signalError.show("Redefinition of static method '" + name + "'");
                 }
                 //ERRO 29 ERRO 30 AQUI
                 KraClass skc = kc.getSuperclass();
@@ -1107,8 +1117,8 @@ public class Compiler {
                                 }
 
                             }
-                            if (v != null && m.isIsStatic()){
-                                signalError.show("Method '"+ ident +"' was not found in class '" + objclass + "' or its superclasses");
+                            if (v != null && m.isStatic()) {
+                                signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
                             }
 
                             if (m.getQualifier() == Symbol.PRIVATE && m != currentClass.getMethod(ident)) {
@@ -1173,7 +1183,7 @@ public class Compiler {
                     lexer.nextToken();
                     // j� analisou "this" "." Id
                     if (lexer.token == Symbol.LEFTPAR) {
-                        if (currentMethod.isIsStatic()) {
+                        if (currentMethod.isStatic()) {
                             signalError.show("Call to 'this' in a static method");
                         }
                         // "this" "." Id "(" [ ExpressionList ] ")"
@@ -1230,7 +1240,7 @@ public class Compiler {
                         lexer.nextToken();
                         exprList = this.realParameters();
                     } else {
-                        if (currentMethod.isIsStatic()) {
+                        if (currentMethod.isStatic()) {
                             signalError.show("Attempt to access an instance variable using 'this' in a static method");
                         }
                         // retorne o objeto da ASA que representa "this" "." Id

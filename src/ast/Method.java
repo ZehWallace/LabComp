@@ -51,7 +51,7 @@ public class Method {
         this.statementList = statementList;
     }
 
-    public boolean isIsStatic() {
+    public boolean isStatic() {
         return isStatic;
     }
 

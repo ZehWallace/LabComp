@@ -43,10 +43,20 @@ public class KraClass extends Type {
         return superclass;
     }
 
+    public boolean isFinal() {
+        return isFInal;
+    }
+
+    public void setIsFInal(boolean isFInal) {
+        this.isFInal = isFInal;
+    }
+    
+
     private String name;
     private KraClass superclass;
     private InstanceVariableList instanceVariableList;
     private MethodList methodList;
+    private boolean isFInal;
    // private MethodList publicMethodList, privateMethodList;
     // m�todos p�blicos get e set para obter e iniciar as vari�veis acima,
     // entre outros m�todos
