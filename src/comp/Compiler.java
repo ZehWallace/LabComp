@@ -437,10 +437,9 @@ public class Compiler {
         }
 
         String className = lexer.getStringValue();
-        if(!isType(className)){
+        if (!isType(className)) {
             signalError.show("Class '" + className + "' was not found");
         }
-        
 
         lexer.nextToken();
         if (lexer.token != Symbol.LEFTPAR) {
