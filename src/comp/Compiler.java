@@ -367,7 +367,7 @@ public class Compiler {
             signalError.show("Variable '" + lexer.getStringValue() + "' is being redeclared");
         }
         Variable v = new Variable(lexer.getStringValue(), type); //VARDECLIST
-        variableexprlist.add(new VariableExpr(v));
+        variableexprlist.add(new VariableExpr(v,false,""));
         symbolTable.putInLocal(lexer.getStringValue(), v);
         lexer.nextToken();
         while (lexer.token == Symbol.COMMA) {
@@ -379,7 +379,7 @@ public class Compiler {
                 signalError.show("Variable " + lexer.getStringValue() + " is being redeclared");
             }
             v = new Variable(lexer.getStringValue(), type);
-            variableexprlist.add(new VariableExpr(v));
+            variableexprlist.add(new VariableExpr(v,false,""));
             symbolTable.putInLocal(lexer.getStringValue(), v);
             lexer.nextToken();
         }
@@ -1037,7 +1037,7 @@ public class Compiler {
                 /*
                  * return an object representing the creation of an object
                  */
-                return new VariableExpr(v);
+                return new VariableExpr(v,false,"");
             /*
              * PrimaryExpr ::= "super" "." Id "(" [ ExpressionList ] ")"  | 
              *                 Id  |
@@ -1101,16 +1101,16 @@ public class Compiler {
                         v = currentMethod.getParam(firstId);
                     }
                     if (v == null) {
-                        Object o = symbolTable.getInGlobal(lexer.getStringValue());
+                        KraClass o = symbolTable.getInGlobal(lexer.getStringValue());
                         if (o == null) {
                             //erro 18
                             return null;
                         } else {
-                            return new VariableExpr(new Variable(lexer.getStringValue(), Type.undefinedType));
+                            return new VariableExpr(new Variable(lexer.getStringValue(), o), false, "");
                         }
                     }
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
-                    return new VariableExpr(v);
+                    return new VariableExpr(v,false,"");
                 } else { // Id "."
 
                     v = symbolTable.getInLocal(lexer.getStringValue());
@@ -1240,7 +1240,7 @@ public class Compiler {
                             if (v == null) {
                                 return null;
                             } else {
-                                return new VariableExpr(v);
+                                return new VariableExpr(v,false,firstId);
                             }
                         }
                     }
@@ -1342,7 +1342,7 @@ public class Compiler {
                             signalError.show("Attempt to access an instance variable using 'this' in a static method");
                         }
 
-                        return new VariableExpr(var);
+                        return new VariableExpr(var,true,"");
                     }
                 }
                 break;

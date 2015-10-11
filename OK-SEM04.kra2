@@ -7,13 +7,9 @@ class Program {
       boolean f;
       
       a = 1;
-;
       b = 1;
-;
       e = true;
-;
       f = false;
-;
       if (){
          write ();
       }   }

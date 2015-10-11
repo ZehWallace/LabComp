@@ -3,12 +3,12 @@ class A {
    public void set (pn) {
       int n;
       
-      n = pn;
+      this.n = pn;
    }
    public int put (n, set) {
       boolean put;
       
-      n = n;
+      this.n = n;
       return n;
    }
 }

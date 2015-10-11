@@ -15,6 +15,7 @@ public class AssignExprLocalDecStatement extends Statement {
 
     ArrayList<VariableExpr> variableexprlist;
     Expr exprl, exprr;
+    
 
     //caso declaração
     public AssignExprLocalDecStatement(ArrayList<VariableExpr> variableexprlist) {
