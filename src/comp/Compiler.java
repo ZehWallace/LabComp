@@ -153,7 +153,7 @@ public class Compiler {
         lexer.nextToken();
         if (lexer.token == Symbol.EXTENDS) {
             lexer.nextToken();
-            
+
             if (lexer.token != Symbol.IDENT) {
                 signalError.show("Class expected");
             }
@@ -166,8 +166,8 @@ public class Compiler {
             if (symbolTable.getInGlobal(superclassName) == null) {
                 signalError.show("Class '" + superclassName + "' does not exist");
             }
-            if(symbolTable.getInGlobal(superclassName).isFinal()){  
-                signalError.show("Class '" + className + "' is inheriting from final class '"+ superclassName +"'");
+            if (symbolTable.getInGlobal(superclassName).isFinal()) {
+                signalError.show("Class '" + className + "' is inheriting from final class '" + superclassName + "'");
             }
 
             for (KraClass k : kraClassList) {
@@ -271,7 +271,7 @@ public class Compiler {
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
          */
-        if(isFinalm && currentClass.isFinal()){
+        if (isFinalm && currentClass.isFinal()) {
             signalError.show("'final' method in a 'final' class");
         }
         Method method = new Method(name, type, qualifier);
@@ -285,7 +285,7 @@ public class Compiler {
         while (skc != null) {
             Method skcmethod = skc.getMethod(name);
             if (skcmethod != null) {
-                if (skcmethod.isIsFinal()){
+                if (skcmethod.isIsFinal()) {
                     signalError.show("Redeclaration of final method 'finalMethod'");
                 }
                 if (!method.getParamList().getTypeNames().equals(skcmethod.getParamList().getTypeNames())) {
@@ -430,6 +430,32 @@ public class Compiler {
         }
     }
 
+    private NewStatement newStatement() {
+        lexer.nextToken();
+        if (lexer.token != Symbol.IDENT) {
+            signalError.show("Identifier expected");
+        }
+
+        String className = lexer.getStringValue();
+        if(!isType(className)){
+            signalError.show("Class '" + className + "' was not found");
+        }
+
+        lexer.nextToken();
+        if (lexer.token != Symbol.LEFTPAR) {
+            signalError.show("( expected");
+        }
+        lexer.nextToken();
+        if (lexer.token != Symbol.RIGHTPAR) {
+            signalError.show(") expected");
+        }
+        lexer.nextToken();
+        /*
+         * return an object representing the creation of an object
+         */
+        return new NewStatement(symbolTable.getInGlobal(className));
+    }
+
     private ArrayList statementList() {
         ArrayList<Statement> statementList = new ArrayList<>();
         // CompStatement ::= "{" { Statement } "}"
@@ -492,6 +518,9 @@ public class Compiler {
                 break;
             case LEFTCURBRACKET:
                 compositeStatement();
+                break;
+            case NEW:
+                newStatement();
                 break;
             default:
                 signalError.show("'operator expected' or 'variable expected at the left-hand side of a assignment'");

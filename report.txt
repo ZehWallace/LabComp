@@ -372,7 +372,7 @@ The 'ce' message is:      "'final' method in a 'final' class"
 
 
 ER-SEM86.KRA
-The compiler message was: "'operator expected' or 'variable expected at the left-hand side of a assignment'"
+The compiler message was: "Class 'A' was not found"
 The 'ce' message is:      "Class 'A' was not found"
 
 
