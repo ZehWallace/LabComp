@@ -1,5 +1,24 @@
 Relat�rio do Compilador
 
-0 erros foram sinalizados em 1 arquivos sem erro (0%)
-O compilador n�o sinalizou nenhum erro que n�o deveria ter sinalizado
-Para o caso de teste que voc� utilizou, o compilador est� correto
+9 erros foram sinalizados em 18 arquivos sem erro (50%)
+######################################################
+Erros que foram sinalizados mas n�o deveriam ter sido:
+
+OK-SEM01.KRA, 7, 'int' or 'String' expression expected
+
+OK-SEM03.KRA, 18, Incompatible types cannot be compared with '==' because the result will always be 'false'
+
+OK-SEM05.KRA, 50, Type error: type of the expression returned is not subclass of the method return type
+
+OK-SEM12.KRA, 22, Identifier expected
+
+OK-SEM14.KRA, 27, Incompatible types cannot be compared with '==' because the result will always be 'false'
+
+OK-SEM17.KRA, 12, Variable 'n' is being redeclared
+
+OK-SEM18.KRA, 23, Method 'get' of the subclass 'B' has a signature different from the same method of superclass 'A'
+
+OK-SEM19.KRA, 17, Attempt to access an instance variable using 'this' in a static method
+
+OK-SEM20.KRA, 22, Redeclaration of final method 'finalMethod'
+

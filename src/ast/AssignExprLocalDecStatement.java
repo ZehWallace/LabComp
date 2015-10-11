@@ -40,7 +40,7 @@ public class AssignExprLocalDecStatement extends Statement {
     void genKra(PW pw) {
         if (variableexprlist != null) {
             for(VariableExpr ve : variableexprlist){
-                pw.printIdent("");
+                pw.printIdent(ve.getType().getName() +" ");
                 ve.genKra(pw);
                 pw.println(";");
             }

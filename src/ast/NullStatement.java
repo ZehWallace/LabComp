@@ -18,7 +18,7 @@ public class NullStatement extends Statement{
 
     @Override
     void genKra(PW pw) {
-        pw.printlnIdent("null");
+        pw.printlnIdent("");
     }
     
 }

@@ -2,23 +2,23 @@ class A {
    public void print () {
       write ();
    }
-   public void accept (A x) {
-      ;
-      null
+   public void accept (x) {
+      print()batata pode acontecer;
+      
    }
 }
 class B {
    public void m () {
-      ;
-      null
+      accept()batata pode acontecer;
+      
    }
 }
 class Program {
    public void run () {
       B b;
-      null
-      B b = B B;
-      ;
-      null
+      
+      b = B;
+      m()batata pode acontecer;
+      
    }
 }

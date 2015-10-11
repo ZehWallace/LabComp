@@ -2,14 +2,18 @@ class Program {
    public void run () {
       int a;
       int b;
-      null
+      
       boolean e;
       boolean f;
-      null
-      int a = ;
-      int b = ;
-      boolean e = ;
-      boolean f = ;
+      
+      a = 1;
+;
+      b = 1;
+;
+      e = true;
+;
+      f = false;
+;
       if (){
          write ();
       }   }

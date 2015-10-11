@@ -1,24 +1,22 @@
 class A {
    private int n;
    public void set (int pn) {
-      int n;
+      n;
       null
-            private int n;
- = int pn;
+      n = pn;
    }
    public int put (int n, String set) {
-      boolean put;
+      put;
       null
-            private int n;
- = int n;
-      return int n;
+      n = n;
+      return n;
    }
 }
 class Program {
    public void run () {
-      A a;
+      a;
       null
-      A a = A A;
+      a = A;
       set()batata pode acontecer;
       null
    }

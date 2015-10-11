@@ -1,6 +1,7 @@
 class Program {
    public void run () {
-      while () {
+      while (true;
+) {
 **compositestatement**      }
    }
 }
