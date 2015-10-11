@@ -733,6 +733,15 @@ public class Compiler {
             //ERRO 13
             String name = lexer.getStringValue();
             Variable v = symbolTable.getInLocal(name);
+//            if(v == null){
+//                if(currentClass.getName().equals(name) || name.equals(Symbol.THIS)){
+//                    lexer.nextToken();
+//                    if(lexer.token == Symbol.DOT){
+//                        lexer.nextToken();
+//                        v = currentClass.getInstanceVariable(lexer.getStringValue());
+//                    }
+//                }
+//            }
             if (v == null) {
                 signalError.show("Variable " + name + " was not declared");
             }
@@ -1217,6 +1226,12 @@ public class Compiler {
                             return new MethodExpr(m);
                         } else {
                             // retorne o objeto da ASA que representa Id "." Id
+                            v = currentClass.getInstanceVariable(lexer.getStringValue());
+                            if(v == null){
+                                return null;
+                            }else{
+                                return new VariableExpr(v);
+                            }
                         }
                     }
                 }
