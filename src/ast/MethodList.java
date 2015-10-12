@@ -16,28 +16,39 @@ public class MethodList {
     public MethodList() {
         methodList = new ArrayList<>();
     }
-    
-    public void addElement(Method meth){
+
+    public void addElement(Method meth) {
         methodList.add(meth);
     }
-    
-    public int getSize(){
+
+    public int getSize() {
         return methodList.size();
     }
-    
-    public Method getInstanceMethod(String name){
-        for(Method m : methodList){
-            if(m.getName().equals(name)){
+
+    public Method getMethod(String name) {
+        for (Method m : methodList) {
+            if (m.getName().equals(name)) {
                 return m;
             }
         }
         return null;
     }
-    
+
+    public Method getNonStaticMethod(String name) {
+        for (Method m : methodList) {
+            if (m.getName().equals(name)) {
+                if (!m.isStatic()) {
+                    return m;
+                }
+            }
+        }
+        return null;
+    }
+
     ArrayList<Method> methodList;
 
     public void genKra(PW pw) {
-        for(Method m : methodList){
+        for (Method m : methodList) {
             m.genKra(pw);
         }
     }

@@ -190,6 +190,9 @@ public class Compiler {
         boolean isFinalm = false;
 
         while (lexer.token == Symbol.PRIVATE || lexer.token == Symbol.PUBLIC || lexer.token == Symbol.STATIC || lexer.token == Symbol.FINAL) {
+
+            isStatic = false;
+            isFinalm = false;
             if (lexer.token == Symbol.FINAL) {
                 isFinalm = true;
                 lexer.nextToken();
@@ -222,8 +225,11 @@ public class Compiler {
                 if (kc.getInstanceVariable(name) != null) {
                     signalError.show("Method '" + name + "' has name equal to an instance variable");
                 }
-                if (kc.getMethod(name) != null) {
-                    signalError.show("Redefinition of static method '" + name + "'");
+                Method m = kc.getMethod(name);
+                if (m != null) {
+                    if (!((!m.isStatic() && isStatic) || (m.isStatic() && !isStatic))) {
+                        signalError.show("Redefinition of static method '" + name + "'");
+                    }
                 }
                 //ERRO 29 ERRO 30 AQUI
                 KraClass skc = kc.getSuperclass();
@@ -238,8 +244,11 @@ public class Compiler {
                 if (kc.getMethod(name) != null) {
                     signalError.show("Variable '" + name + "' has name equal to a method");
                 }
-                if (kc.getInstanceVariable(name) != null) {
-                    signalError.show("Variable '" + name + "' is being redeclared");
+                InstanceVariable v = kc.getInstanceVariable(name);
+                if (v != null) {
+                    if (!((v.isStatic() && !isStatic) || (!v.isStatic() && isStatic))) {
+                        signalError.show("Variable '" + name + "' is being redeclared");
+                    }
                 }
                 kc.addInstanceVariable(new InstanceVariable(name, t, isStatic));
                 instanceVarDec(t, name);
@@ -338,7 +347,7 @@ public class Compiler {
                 isvoid = false;
             }
         }
-        if(hasreturn){
+        if (hasreturn) {
             isvoid = false;
         }
         if (type == Type.voidType) {
@@ -355,6 +364,7 @@ public class Compiler {
         }
 
         lexer.nextToken();
+        symbolTable.removeLocalIdent();
         return method;
     }
 
@@ -568,7 +578,7 @@ public class Compiler {
                 || lexer.token == Symbol.STRING
                 ||// token � uma classe declarada textualmente antes desta
                 // instru��o
-                (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()) && lexer.afterLastToken() != Symbol.DOT)) {
+                (lexer.token == Symbol.IDENT && isType(lexer.getStringValue()) && lexer.afterLastToken() != Symbol.DOT && lexer.afterLastToken() != Symbol.ASSIGN)) {
             /*
              * uma declara��o de vari�vel. 'lexer.token' � o tipo da vari�vel
              * 
@@ -707,16 +717,16 @@ public class Compiler {
         if (currentMethod.getType().getName() != expr.getType().getName()) {
             flag = false;
             if (currentMethod.getType() instanceof KraClass && expr.getType() instanceof KraClass) {
-                KraClass skc = ((KraClass)expr.getType()).getSuperclass();
-                while(skc != null){
-                    if(currentMethod.getType().getName() == skc.getName()){
+                KraClass skc = ((KraClass) expr.getType()).getSuperclass();
+                while (skc != null) {
+                    if (currentMethod.getType().getName() == skc.getName()) {
                         flag = true;
                     }
                     skc = skc.getSuperclass();
                 }
-                
-            } 
-            if(!flag){
+
+            }
+            if (!flag) {
                 signalError.show("Type error: type of the expression returned is not subclass of the method return type");
             }
         }
@@ -869,9 +879,32 @@ public class Compiler {
             lexer.nextToken();
             Expr right = simpleExpr();
             //ERRO 57
-            if (left.getType() != right.getType()) {
-                signalError.show("Incompatible types cannot be compared with '" + op + "' because the result will always be 'false'");
+
+            if (left.getType() != right.getType() && left.getType() != Type.undefinedType && right.getType() != Type.undefinedType) {
+                boolean flag = false;
+                if (left.getType() instanceof KraClass && right.getType() instanceof KraClass) {
+                    KraClass skc = ((KraClass) right.getType()).getSuperclass();
+                    while (skc != null) {
+                        if (left.getType().getName() == skc.getName()) {
+                            flag = true;
+                        }
+                        skc = skc.getSuperclass();
+                    }
+
+                    skc = ((KraClass) left.getType()).getSuperclass();
+                    while (skc != null) {
+                        if (right.getType().getName() == skc.getName()) {
+                            flag = true;
+                        }
+                        skc = skc.getSuperclass();
+                    }
+                }
+
+                if (!flag) {
+                    signalError.show("Incompatible types cannot be compared with '" + op + "' because the result will always be 'false'");
+                }
             }
+
             left = new CompositeExpr(left, op, right);
         }
         return left;
@@ -1215,7 +1248,10 @@ public class Compiler {
 
                             }
                             if (v != null && m.isStatic()) {
-                                signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
+                                m = objc.getNonStaticMethod(ident);
+                                if (m == null) {
+                                    signalError.show("Method '" + ident + "' was not found in class '" + objclass + "' or its superclasses");
+                                }
                             }
 
                             if (m.getQualifier() == Symbol.PRIVATE && m != currentClass.getMethod(ident)) {
@@ -1320,7 +1356,7 @@ public class Compiler {
                                 v = var.next();
                                 if (expr.getType() != v.getType()) {
                                     if (expr.getType().getClass() == KraClass.class && v.getType().getClass() == KraClass.class) {
-                                        skc = ((KraClass)expr.getType()).getSuperclass();
+                                        skc = ((KraClass) expr.getType()).getSuperclass();
                                         while (skc != null) {
                                             if (skc == v.getType()) {
                                                 isSubClass = true;

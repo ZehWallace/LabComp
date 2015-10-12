@@ -1,0 +1,18 @@
+class A {
+   static private int staticAnInt;
+   private int anInt;
+   static private A staticAnA;
+   private A anA;
+   public int getAnInt () {
+      return this.anInt;
+   }
+   public void setAnInt (int anInt) {
+      this.anInt = anInt;
+   }
+   public A getAnA () {
+      return this.anA;
+   }
+   public void setAnA (A anA) {
+      this.anA = anA;
+   }
+}

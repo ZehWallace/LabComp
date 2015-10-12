@@ -45,7 +45,12 @@ public class KraClass extends Type {
     }
     
     public Method getMethod(String name) {
-        Method m = methodList.getInstanceMethod(name);
+        Method m = methodList.getMethod(name);
+        return m;
+    }
+    
+    public Method getNonStaticMethod(String name) {
+        Method m = methodList.getNonStaticMethod(name);
         return m;
     }
     
