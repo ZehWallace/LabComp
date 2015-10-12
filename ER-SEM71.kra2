@@ -1,0 +1,8 @@
+class Program {
+   private int x;
+   static public void set () {
+      this.x = 0;
+   }
+   public void run () {
+   }
+}

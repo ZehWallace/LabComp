@@ -148,7 +148,6 @@ public class Compiler {
         if (symbolTable.getInGlobal(className) != null) {
             signalError.show("Class '" + className + "' is being redeclared");
         }
-        //System.out.println();
         KraClass kc = new KraClass(className);
         kc.setIsFInal(isFinal);
         kraClassList.add(kc);
@@ -274,6 +273,7 @@ public class Compiler {
     }
 
     private Method methodDec(Type type, String name, Symbol qualifier, KraClass kc, KraClass skc, boolean isStatic, boolean isFinalm) {
+        hasreturn = false;
         /*
          * MethodDec ::= Qualifier Return Id "("[ FormalParamDec ] ")" "{"
          *                StatementList "}"
@@ -338,6 +338,9 @@ public class Compiler {
                 isvoid = false;
             }
         }
+        if(hasreturn){
+            isvoid = false;
+        }
         if (type == Type.voidType) {
             if (!isvoid) {
                 signalError.show("Illegal 'return' statement. Method returns 'void'");
@@ -347,7 +350,6 @@ public class Compiler {
                 signalError.show("Missing 'return' statement in method '" + name + "'");
             }
         }
-
         if (lexer.token != Symbol.RIGHTCURBRACKET) {
             signalError.show("} expected");
         }
@@ -515,6 +517,7 @@ public class Compiler {
             case STRING:
                 return assignExprLocalDec();
             case RETURN:
+                hasreturn = true;
                 return returnStatement();
             case READ:
                 return readStatement();
@@ -536,7 +539,6 @@ public class Compiler {
                 nested_whiles -= 1;
                 return whileStatement;
             case SEMICOLON:
-                System.out.println(lexer.getStringValue());
                 return nullStatement();
             case LEFTCURBRACKET:
                 return compositeStatement();
@@ -698,12 +700,25 @@ public class Compiler {
     }
 
     private ReturnStat returnStatement() {
-
+        boolean flag = true;
         lexer.nextToken();
         Expr expr = expr();
         //ERRO 39
         if (currentMethod.getType().getName() != expr.getType().getName()) {
-            signalError.show("Type error: type of the expression returned is not subclass of the method return type");
+            flag = false;
+            if (currentMethod.getType() instanceof KraClass && expr.getType() instanceof KraClass) {
+                KraClass skc = ((KraClass)expr.getType()).getSuperclass();
+                while(skc != null){
+                    if(currentMethod.getType().getName() == skc.getName()){
+                        flag = true;
+                    }
+                    skc = skc.getSuperclass();
+                }
+                
+            } 
+            if(!flag){
+                signalError.show("Type error: type of the expression returned is not subclass of the method return type");
+            }
         }
         //ERRO 35
         if (currentMethod.getType() == Type.voidType) {
@@ -1305,10 +1320,12 @@ public class Compiler {
                                 v = var.next();
                                 if (expr.getType() != v.getType()) {
                                     if (expr.getType().getClass() == KraClass.class && v.getType().getClass() == KraClass.class) {
-                                        while ((skc = ((KraClass) expr.getType()).getSuperclass()) != null) {
+                                        skc = ((KraClass)expr.getType()).getSuperclass();
+                                        while (skc != null) {
                                             if (skc == v.getType()) {
                                                 isSubClass = true;
                                             }
+                                            skc = skc.getSuperclass();
                                         }
                                     }
                                     if (!isSubClass) {
@@ -1338,7 +1355,7 @@ public class Compiler {
                         if (var == null) {
                             signalError.show("Class '" + currentClass.getName() + "' does not have attribute '" + ident + "'");
                         }
-                        if (currentMethod.isStatic() && var.isStatic()) {
+                        if (currentMethod.isStatic() && !var.isStatic()) {
                             signalError.show("Attempt to access an instance variable using 'this' in a static method");
                         }
 
@@ -1381,4 +1398,5 @@ public class Compiler {
     private ArrayList<KraClass> kraClassList;
     private Method currentMethod;
     private KraClass currentClass;
+    private boolean hasreturn;
 }

@@ -46,8 +46,9 @@ class Program {
       if (i > 0) {
          return new A();
       }
-      else
+      else{
          return new B();
+	  }
    }   
    
    public void run() {
