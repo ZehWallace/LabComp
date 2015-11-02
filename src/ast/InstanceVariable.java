@@ -17,6 +17,9 @@ public class InstanceVariable extends Variable {
         super.genKra(pw);
         pw.println(";");
     }
+    void genC(PW pw) {
+        
+    }
     public void setisStatic(boolean isStatic){
         this.isStatic = isStatic;
     }
@@ -25,4 +28,6 @@ public class InstanceVariable extends Variable {
     }
     
     private boolean isStatic;
+
+
 }

@@ -34,7 +34,13 @@ public class InstanceVariableList {
             iv.genKra(pw);
         }
     }
+    void genC(PW pw) {
+        for (InstanceVariable iv : instanceVariableList){
+            iv.genC(pw);
+        }
+    }
 
     private ArrayList<InstanceVariable> instanceVariableList;
+
 
 }

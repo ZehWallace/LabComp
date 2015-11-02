@@ -25,6 +25,18 @@ public class KraClass extends Type {
         pw.sub();
         pw.printlnIdent("}");
     }
+    void genC(PW pw) {
+        // fazer alguma coisa com esse final
+        
+        pw.printlnIdent("typedef struct _" + name + " {");
+        pw.add();
+        pw.println("/* ponteiro para um vetor de métodos da classe */");
+        pw.println("Func *vt; ");
+        instanceVariableList.genC(pw);
+        pw.sub();
+        pw.printlnIdent("}_" + name);
+        methodList.genC(pw);
+    }
     
     @Override
     public String getCname() {
@@ -78,4 +90,6 @@ public class KraClass extends Type {
    // private MethodList publicMethodList, privateMethodList;
     // m�todos p�blicos get e set para obter e iniciar as vari�veis acima,
     // entre outros m�todos
+
+ 
 }
