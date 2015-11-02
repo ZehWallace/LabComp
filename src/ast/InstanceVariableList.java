@@ -19,6 +19,11 @@ public class InstanceVariableList {
     public int getSize() {
         return instanceVariableList.size();
     }
+
+    public ArrayList<InstanceVariable> getInstanceVariableList() {
+        return instanceVariableList;
+    }
+    
     
     public InstanceVariable getInstanceVariable(String name){
         for(InstanceVariable v : instanceVariableList){

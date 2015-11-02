@@ -91,3 +91,64 @@ class Program {
       write (e.m4(0, false));
    }
 }
+#include <malloc.h>
+#include <stdlib.h>
+#include <stdio.h>
+/* define o tipo boolean */
+typedef int boolean;
+#define true 1
+#define false 0
+/* define um tipo Func que ´e um ponteiro para fun¸c~ao */ 
+typedef void (*Func)();
+typedef struct _ST_A {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_A
+int A_m1(){
+}
+void A_m2(){
+}
+char * A_m3(){
+}
+char * A_m4(){
+}
+typedef struct _ST_B {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_B
+int B_m1(){
+}
+void B_m2(){
+}
+int B_mB(){
+}
+typedef struct _ST_C {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_C
+int C_m1(){
+}
+char * C_m4(){
+}
+char * C_m5(){
+}
+typedef struct _ST_D {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_D
+typedef struct _ST_E {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_E
+int E_m1(){
+}
+void E_m2(){
+}
+char * E_m4(){
+}
+typedef struct _ST_Program {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+}_class_Program
+void Program_run(){
+}

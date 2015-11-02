@@ -1,8 +1,8 @@
 Relat�rio do Compilador
 
-1 erros foram sinalizados em 1 arquivos sem erro (100%)
+1 erros foram sinalizados em 18 arquivos sem erro (5%)
 ######################################################
 Erros que foram sinalizados mas n�o deveriam ter sido:
 
-tests/oksem/ok-sem19.kra, 29, Method 'setAnA' was not found in class 'A' or its superclasses
+OK-SEM01.KRA, 7, 'int' or 'String' expression expected
 

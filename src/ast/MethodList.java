@@ -52,8 +52,9 @@ public class MethodList {
             m.genKra(pw);
         }
     }
-
     void genC(PW pw) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Method m : methodList) {
+            m.genC(pw);
+        }
     }
 }

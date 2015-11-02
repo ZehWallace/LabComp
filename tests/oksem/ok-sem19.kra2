@@ -12,4 +12,32 @@ class A {
    public A getAnA () {
       return this.anA;
    }
+   public void setAnA (A anA) {
+      this.anA = anA;
+   }
+}
+#include <malloc.h>
+#include <stdlib.h>
+#include <stdio.h>
+/* define o tipo boolean */
+typedef int boolean;
+#define true 1
+#define false 0
+/* define um tipo Func que ´e um ponteiro para fun¸c~ao */ 
+typedef void (*Func)();
+typedef struct _ST_A {
+   /* ponteiro para um vetor de métodos da classe */
+   Func *vt; 
+   int anInt;
+   A anA;
+}_class_A
+int_static_A_staticAnInt;
+A_static_A_staticAnA;
+intA_getAnInt(){
+}
+voidA_setAnInt(){
+}
+AA_getAnA(){
+}
+voidA_setAnA(){
 }

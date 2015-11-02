@@ -1,4 +1,7 @@
 package ast;
+
+import java.util.ArrayList;
+
 /*
  * Krakatoa Class
  */
@@ -28,13 +31,19 @@ public class KraClass extends Type {
     void genC(PW pw) {
         // fazer alguma coisa com esse final
         
-        pw.printlnIdent("typedef struct _" + name + " {");
+        pw.printlnIdent("typedef struct _ST_" + name + " {");
         pw.add();
-        pw.println("/* ponteiro para um vetor de métodos da classe */");
-        pw.println("Func *vt; ");
+        pw.printlnIdent("/* ponteiro para um vetor de métodos da classe */");
+        pw.printlnIdent("Func *vt; ");
         instanceVariableList.genC(pw);
         pw.sub();
-        pw.printlnIdent("}_" + name);
+        pw.printlnIdent("}_class_" + name);
+        ArrayList<InstanceVariable> vl =  instanceVariableList.getInstanceVariableList();
+        for(InstanceVariable v : vl){
+            if(v.isStatic()){
+                pw.println(v.getType().getCname() + " _static_" + name + "_" + v.getName() + ";");
+            }
+        }
         methodList.genC(pw);
     }
     

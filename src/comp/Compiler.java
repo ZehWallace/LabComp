@@ -293,6 +293,7 @@ public class Compiler {
         Method method = new Method(name, type, qualifier);
         method.setIsFinal(isFinalm);
         method.setIsStatic(isStatic);
+        method.setKc(kc);
         currentMethod = method;
         lexer.nextToken();
 

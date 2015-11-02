@@ -13,12 +13,14 @@ public class InstanceVariable extends Variable {
             pw.print("static ");
         }
         pw.print("private " + super.getType().getName() + " ");
-        
         super.genKra(pw);
         pw.println(";");
     }
     void genC(PW pw) {
-        
+        if(!isStatic){
+            pw.printIdent(super.getType().getCname() + " " + super.getName());
+            pw.println(";");
+        }
     }
     public void setisStatic(boolean isStatic){
         this.isStatic = isStatic;
