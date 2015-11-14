@@ -45,10 +45,25 @@ typedef struct _ST_B {
    Func *vt; 
 }_class_B
 void B_p(){
+   B A;
+   
+   A = B;
+   ;
+   
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   A a;
+   
+   B b;
+   
+   a = A;
+   b = B;
+   ;
+   
+   ;
+   
 }

@@ -36,18 +36,28 @@ typedef struct _ST_A {
    Func *vt; 
 }_class_A
 void A_print(){
+   printf ("%d",    0);
 }
-void A_accept(){
+void A_accept(A x){
+   ;
+   
 }
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_B
 void B_m(){
+   ;
+   
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   B b;
+   
+   b = B;
+   ;
+   
 }

@@ -57,23 +57,47 @@ typedef struct _ST_A {
    Func *vt; 
    int n;
 }_class_A
-void A_set(){
+void A_set(int pn){
+   n = pn;
 }
 int A_get(){
+   return n;
 }
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_B
-void B_set(){
+void B_set(int pn){
+   printf ("%d", pn);
+   ;
+   
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
-B Program_m(){
+B Program_m(A a){
+   ;
+   
+   return B;
 }
-A Program_p(){
+A Program_p(int i){
+   if ((i) >    0){
+   }
+ else {
+   }
 }
 void Program_run(){
+   A a;
+   
+   B b;
+   
+   a = A;
+   b = B;
+   a = b;
+   ;
+   
+   a = ;
+   b = ;
+   a = ;
 }

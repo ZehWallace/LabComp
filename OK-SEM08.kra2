@@ -42,21 +42,32 @@ typedef struct _ST_A {
    Func *vt; 
    int i;
 }_class_A
-void A_put(){
+void A_put(int x, int y, int ok){
+   if (((x) > (y)   ) && (ok)){
+   }
 }
 int A_get(){
+   return i;
 }
-void A_set(){
+void A_set(int i){
+   i = i;
 }
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_B
-void B_put(){
+void B_put(int a, int b, int c){
+   if ((((a) + (b)   ) <    1   ) && !c){
+   }
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   B b;
+   
+   b = B;
+   ;
+   
 }

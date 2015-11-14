@@ -43,16 +43,29 @@ typedef struct _ST_A {
 }_class_A
 int _static_A_n;
 int _static_A_get(){
+   return n;
 }
 int A_get(){
+   return n;
 }
-void _static_A_set(){
+void _static_A_set(int n){
+   n = n;
 }
-void A_set(){
+void A_set(int n){
+   n = n;
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   A a;
+   
+   a = A;
+   ;
+   
+   printf ("%d", );
+   ;
+   
+   printf ("%d", );
 }

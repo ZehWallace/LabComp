@@ -104,33 +104,41 @@ typedef struct _ST_A {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_A
-int A_m1(){
+int A_m1(int ok){
+   return    0;
 }
 void A_m2(){
 }
-char * A_m3(){
+char * A_m3(char * s, int ok){
+   return A;
 }
-char * A_m4(){
+char * A_m4(int i, int ok){
+   return Am4;
 }
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_B
-int B_m1(){
+int B_m1(int ok){
+   return    1;
 }
 void B_m2(){
 }
 int B_mB(){
+   return    1;
 }
 typedef struct _ST_C {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_C
-int C_m1(){
+int C_m1(int ok){
+   return    2;
 }
-char * C_m4(){
+char * C_m4(int i, int ok){
+   return C;
 }
 char * C_m5(){
+   return finally;
 }
 typedef struct _ST_D {
    /* ponteiro para um vetor de métodos da classe */
@@ -140,15 +148,60 @@ typedef struct _ST_E {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_E
-int E_m1(){
+int E_m1(int ok){
+   return    5;
 }
 void E_m2(){
 }
-char * E_m4(){
+char * E_m4(int i, int ok){
+   return Em4;
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   C c;
+   
+   c = C;
+   printf ("%d", );
+   ;
+   
+   printf ("%s", );
+   printf ("%s", );
+   printf ("%s", );
+   printf ("%d",  +    1);
+   B b;
+   
+   b = B;
+   printf ("%d", );
+   ;
+   
+   printf ("%s", );
+   printf ("%s", );
+   printf ("%d",  +    1);
+   A a;
+   
+   a = A;
+   printf ("%d", );
+   ;
+   
+   printf ("%s", );
+   printf ("%s", );
+   D d;
+   
+   d = D;
+   printf ("%d", );
+   ;
+   
+   printf ("%s", );
+   printf ("%s", );
+   E e;
+   
+   e = E;
+   printf ("%d", );
+   ;
+   
+   printf ("%s", );
+   printf ("%s", );
 }

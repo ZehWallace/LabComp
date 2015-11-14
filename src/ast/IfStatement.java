@@ -19,7 +19,20 @@ public class IfStatement extends Statement {
 
     @Override
     public void genC(PW pw) {
-      
+        pw.printIdent("if (");
+        expr.genC(pw,false);
+        pw.println("){");
+        pw.add();
+        stat.genC(pw);
+        pw.sub();
+        pw.printlnIdent("}");
+        if (stat2 != null) {
+            pw.add();
+            pw.println(" else {");
+            stat2.genC(pw);
+            pw.sub();
+            pw.printlnIdent("}");
+        }
     }
 
     private Expr expr;
@@ -35,7 +48,7 @@ public class IfStatement extends Statement {
         stat.genKra(pw);
         pw.sub();
         pw.printlnIdent("}");
-        if(stat2 != null){
+        if (stat2 != null) {
             pw.add();
             pw.println(" else {");
             stat2.genKra(pw);

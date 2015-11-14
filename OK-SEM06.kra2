@@ -35,13 +35,25 @@ typedef struct _ST_A {
    Func *vt; 
    int n;
 }_class_A
-void A_set(){
+void A_set(int pn){
+   int n;
+   
+   n = pn;
 }
-int A_put(){
+int A_put(int n, char * set){
+   int put;
+   
+   n = n;
+   return n;
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   A a;
+   
+   a = A;
+   ;
+   
 }

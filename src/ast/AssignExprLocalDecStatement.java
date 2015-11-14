@@ -15,7 +15,6 @@ public class AssignExprLocalDecStatement extends Statement {
 
     ArrayList<VariableExpr> variableexprlist;
     Expr exprl, exprr;
-    
 
     //caso declaração
     public AssignExprLocalDecStatement(ArrayList<VariableExpr> variableexprlist) {
@@ -25,7 +24,6 @@ public class AssignExprLocalDecStatement extends Statement {
     }
 
     //caso assignment
-
     public AssignExprLocalDecStatement(Expr exprl, Expr exprr) {
         this.exprl = exprl; //se exprr e exprl != null -> assignment
         this.exprr = exprr; //se exprr == null -> método
@@ -34,13 +32,30 @@ public class AssignExprLocalDecStatement extends Statement {
 
     @Override
     public void genC(PW pw) {
+        if (variableexprlist != null) {
+            for (VariableExpr ve : variableexprlist) {
+                pw.printIdent(ve.getType().getCname() + " ");
+                ve.genC(pw,false);                
+                pw.println(";");
+            }
+        } else if (exprl != null && exprr != null) {
+            pw.printIdent("");
+            exprl.genC(pw,false);
+            pw.print(" = ");
+            exprr.genC(pw,false);
+            pw.println(";");
+        } else if (exprl != null) {
+            pw.printIdent("");
+            exprl.genC(pw,false);
+            pw.println(";");
+        }
     }
 
     @Override
     void genKra(PW pw) {
         if (variableexprlist != null) {
-            for(VariableExpr ve : variableexprlist){
-                pw.printIdent(ve.getType().getName() +" ");
+            for (VariableExpr ve : variableexprlist) {
+                pw.printIdent(ve.getType().getName() + " ");
                 ve.genKra(pw);
                 pw.println(";");
             }
@@ -50,7 +65,7 @@ public class AssignExprLocalDecStatement extends Statement {
             pw.print(" = ");
             exprr.genKra(pw);
             pw.println(";");
-        } else if (exprl != null){
+        } else if (exprl != null) {
             pw.printIdent("");
             exprl.genKra(pw);
             pw.println(";");

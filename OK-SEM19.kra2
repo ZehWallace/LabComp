@@ -34,10 +34,14 @@ typedef struct _ST_A {
 int _static_A_staticAnInt;
 A _static_A_staticAnA;
 int A_getAnInt(){
+   return anInt;
 }
-void A_setAnInt(){
+void A_setAnInt(int anInt){
+   anInt = anInt;
 }
 A A_getAnA(){
+   return anA;
 }
-void A_setAnA(){
+void A_setAnA(A anA){
+   anA = anA;
 }

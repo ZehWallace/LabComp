@@ -5,22 +5,48 @@
  */
 package ast;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author guilherme
  */
 public class WriteStatement extends Statement {
 
-    public WriteStatement(ExprList exprlist){
+    private ExprList exprlist;
+
+    public WriteStatement(ExprList exprlist) {
         this.exprlist = exprlist;
     }
-    
+
     @Override
     public void genC(PW pw) {
-     
+
+        pw.printIdent("printf (\"");
+        ArrayList<Expr> exprlist2 = exprlist.getExprList();
+        for (Expr e : exprlist2) {
+            Type t = e.getType();
+            switch(t.getName()){
+                case "int":
+                    pw.print("%d");
+                    break;
+                case "String":
+                    pw.print("%s");
+                    break;
+                case "char":
+                    pw.print("%c");
+                    break;
+                case "float":
+                    pw.print("%f");
+                    break;
+                default:
+                    pw.print("nao contavam com a minha astucia ");
+            }
+        }
+        pw.print("\", ");
+        exprlist.genC(pw);
+        pw.println(");");
     }
-    
-    private ExprList exprlist;
 
     @Override
     void genKra(PW pw) {

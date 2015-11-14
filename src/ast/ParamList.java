@@ -19,11 +19,12 @@ public class ParamList {
     public int getSize() {
         return paramList.size();
     }
-    
-    public Variable getParam(String name){
-        for(Variable v : paramList){
-            if(v.getName().equals(name))
+
+    public Variable getParam(String name) {
+        for (Variable v : paramList) {
+            if (v.getName().equals(name)) {
                 return v;
+            }
         }
         return null;
     }
@@ -38,8 +39,8 @@ public class ParamList {
         return sb.toString();
 
     }
-    
-    public String getTypeNames(){
+
+    public String getTypeNames() {
         StringBuilder sb = new StringBuilder();
         for (Variable v : paramList) {
             sb.append(v.getType().getName());
@@ -52,8 +53,8 @@ public class ParamList {
 
     void genKra(PW pw) {
         int cont = 0;
-        for(Variable v : paramList){
-            if(cont > 0){
+        for (Variable v : paramList) {
+            if (cont > 0) {
                 pw.print(", ");
             }
             pw.print(v.getType().getName() + " " + v.getName());
@@ -62,7 +63,14 @@ public class ParamList {
     }
 
     void genC(PW pw) {
-        
+        int cont = 0;
+        for (Variable v : paramList) {
+            if (cont > 0) {
+                pw.print(", ");
+            }
+            pw.print(v.getType().getCname() + " " + v.getName());
+            cont++;
+        }
     }
 
 }

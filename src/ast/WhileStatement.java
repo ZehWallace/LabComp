@@ -18,7 +18,13 @@ public class WhileStatement extends Statement {
     
     @Override
     public void genC(PW pw) {
-    
+        pw.printIdent("while(");
+        expr.genC(pw,false);
+        pw.println(") {");
+        pw.add();
+        stat.genC(pw);
+        pw.sub();
+        pw.printlnIdent("}");
     }
     
     private Expr expr;

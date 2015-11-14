@@ -19,7 +19,31 @@ public class ReadStatement extends Statement {
 
     @Override
     public void genC(PW pw) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        pw.printIdent("scanf(");
+        for (Variable v : variableList) {
+            switch(v.getType().getName()){
+                case "int":
+                    pw.print("%d");
+                    break;
+                case "String":
+                    pw.print("%s");
+                    break;
+                case "char":
+                    pw.print("%c");
+                    break;
+                case "float":
+                    pw.print("%f");
+                    break;
+                default:
+                    pw.print("nao contavam com a minha astucia ");
+            }
+        }
+        for (Variable v : variableList) {
+            pw.print(", ");
+            pw.print(v.getName());
+        }
+        
+        pw.println(");");
     }
 
     @Override

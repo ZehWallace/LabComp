@@ -45,4 +45,18 @@ typedef struct _ST_Program {
    Func *vt; 
 }_class_Program
 void Program_run(){
+   A a;
+   A a2;
+   
+   B b;
+   
+   a =    NULL;
+   b =    NULL;
+   a2 =    NULL;
+   if ((a) == (b)){
+   }
+   if ((b) == (a)){
+   }
+   if ((a) == (a2)){
+   }
 }

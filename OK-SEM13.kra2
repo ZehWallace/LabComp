@@ -31,10 +31,17 @@ typedef struct _ST_A {
 void A_m(){
 }
 void A_p(){
+   int m;
+   
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   A a;
+   
+   a = A;
+   ;
+   
 }

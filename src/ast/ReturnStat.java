@@ -17,7 +17,9 @@ public class ReturnStat extends Statement {
     }
     @Override
     public void genC(PW pw) {
-        
+        pw.printIdent("return ");
+        expr.genC(pw,false);
+        pw.println(";");
     }
 
     @Override

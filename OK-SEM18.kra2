@@ -45,22 +45,37 @@ typedef struct _ST_A {
    Func *vt; 
 }_class_A
 int _static_A_n;
-int _static_A_get(){
+int _static_A_get(int n){
+   return n;
 }
-int _static_A_set(){
+int _static_A_set(int ok, int n){
+   n = n;
+   return 1;
 }
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_B
 int _static_B_n;
-int _static_B_get(){
+int _static_B_get(int n){
+   return (n) + (n);
 }
-int _static_B_set(){
+int _static_B_set(int ok, int n){
+   n = n;
+   return !ok;
 }
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_Program
 void Program_run(){
+   int batata;
+   
+   A a;
+   
+   a = A;
+   if (){
+      batata = ;
+   }
+   printf ("%d", );
 }

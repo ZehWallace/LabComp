@@ -25,4 +25,6 @@ typedef struct _ST_Program {
    Func *vt; 
 }_class_Program
 void Program_run(){
+   while(1) {
+   }
 }
