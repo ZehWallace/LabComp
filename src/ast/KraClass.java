@@ -39,7 +39,9 @@ public class KraClass extends Type {
         pw.add();
         pw.printlnIdent("/* ponteiro para um vetor de métodos da classe */");
         pw.printlnIdent("Func *vt; ");
-        instanceVariableList.genC(pw);
+
+        //instanceVariableList.genC(pw);
+        instanciarVariaveis(this, pw);
         pw.sub();
         pw.printlnIdent("}_class_" + name);
         ArrayList<InstanceVariable> vl = instanceVariableList.getInstanceVariableList();
@@ -53,13 +55,12 @@ public class KraClass extends Type {
         pw.printlnIdent("// apenas os métodos públicos");
         pw.printlnIdent("Func VTclass_" + this.name + "[] = { ");
         pw.add();
-        int cont = 0;
 
         gerarVetorMetodosPublicos(this, pw);
 
         pw.sub();
         pw.printlnIdent("};\n");
-        
+
         pw.printlnIdent("_class_" + this.name + " *new_" + this.name + "(){");
         pw.add();
         pw.printlnIdent("_class_" + this.name + " *t;");
@@ -72,8 +73,20 @@ public class KraClass extends Type {
         pw.printlnIdent("}\n");
     }
 
+    public void instanciarVariaveis(KraClass kc, PW pw) {
+        if (kc.superclass != null) {
+            instanciarVariaveis(kc.superclass, pw);
+        }
+        ArrayList<InstanceVariable> ivl = kc.instanceVariableList.getInstanceVariableList();
+        for (InstanceVariable iv : ivl) {
+            if (!iv.isStatic()) {
+                pw.printIdent(iv.getType().getCname() + " _" + kc.name + "_" + iv.getName());
+                pw.println(";");
+            }
+        }
+    }
+
     public void gerarVetorMetodosPublicos(KraClass kc, PW pw) {
-        int cont = 0;
         if (kc.superclass != null) {
             gerarVetorMetodosPublicos(kc.superclass, pw);
         }
@@ -81,11 +94,10 @@ public class KraClass extends Type {
         for (Method m : ml) {
             pw.printIdent("(void (*) () ) ");
             pw.print("_" + m.getKc().getName() + "_" + m.getName());
-            if (cont < ml.size()) {
+            if (!(kc.equals(this) && m.equals(ml.get(ml.size()-1)))) {
                 pw.print(",");
             }
             pw.println("");
-            cont++;
         }
     }
 
@@ -142,7 +154,7 @@ public class KraClass extends Type {
     private InstanceVariableList instanceVariableList;
     private MethodList methodList;
     private boolean isFInal;
-   // private MethodList publicMethodList, privateMethodList;
+    // private MethodList publicMethodList, privateMethodList;
     // m�todos p�blicos get e set para obter e iniciar as vari�veis acima,
     // entre outros m�todos
 
