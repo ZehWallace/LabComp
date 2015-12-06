@@ -12,7 +12,7 @@ class A {
       this.i = i;
    }
 }
-class B {
+class B extends A {
    public void put (int a, int b, boolean c) {
       if (( ( a + b) < 1) && !c){
          write (0);
@@ -52,6 +52,20 @@ int A_get(){
 void A_set(int i){
    i = i;
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_put,
+   (void (*) () ) _A_get,
+   (void (*) () ) _A_set,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -60,6 +74,21 @@ void B_put(int a, int b, int c){
    if ((((a) + (b)   ) <    1   ) && !c){
    }
 }
+// apenas os métodos públicos
+Func VTclass_B[] = { 
+   (void (*) () ) _A_put,
+   (void (*) () ) _A_get,
+   (void (*) () ) _A_set,
+   (void (*) () ) _B_put,
+};
+
+_class_B *new_B(){
+   _class_B *t;
+   if((t = malloc(sizeof(_class_B)))!=NULL)
+      t->vt = VTclass_B;
+   return t;
+}
+
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -67,7 +96,19 @@ typedef struct _ST_Program {
 void Program_run(){
    B b;
    
-   b = B;
-   ;
+   b = new_B();
+   b.put(1, 2, true);
    
 }
+// apenas os métodos públicos
+Func VTclass_Program[] = { 
+   (void (*) () ) _Program_run,
+};
+
+_class_Program *new_Program(){
+   _class_Program *t;
+   if((t = malloc(sizeof(_class_Program)))!=NULL)
+      t->vt = VTclass_Program;
+   return t;
+}
+

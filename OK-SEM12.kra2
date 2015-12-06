@@ -2,7 +2,7 @@ class A {
    public void m () {
    }
 }
-class B {
+class B extends A {
    public void p () {
       B A;
       
@@ -40,6 +40,18 @@ typedef struct _ST_A {
 }_class_A
 void A_m(){
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_m,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -47,10 +59,23 @@ typedef struct _ST_B {
 void B_p(){
    B A;
    
-   A = B;
-   ;
+   A = new_B();
+   A.m();
    
 }
+// apenas os métodos públicos
+Func VTclass_B[] = { 
+   (void (*) () ) _A_m,
+   (void (*) () ) _B_p,
+};
+
+_class_B *new_B(){
+   _class_B *t;
+   if((t = malloc(sizeof(_class_B)))!=NULL)
+      t->vt = VTclass_B;
+   return t;
+}
+
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -60,10 +85,22 @@ void Program_run(){
    
    B b;
    
-   a = A;
-   b = B;
-   ;
+   a = new_A();
+   b = new_B();
+   a.m();
    
-   ;
+   b.p();
    
 }
+// apenas os métodos públicos
+Func VTclass_Program[] = { 
+   (void (*) () ) _Program_run,
+};
+
+_class_Program *new_Program(){
+   _class_Program *t;
+   if((t = malloc(sizeof(_class_Program)))!=NULL)
+      t->vt = VTclass_Program;
+   return t;
+}
+

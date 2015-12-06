@@ -11,6 +11,12 @@ package ast;
  */
 public class MethodExpr extends Expr {
 
+    private Method method;
+    private boolean ismessagesendtoself;
+    private String messagesendtoclass;
+    private boolean ismessagesendtosuper;
+    private ExprList exprlist;
+
     public MethodExpr(Method method, ExprList exprlist, boolean ismessagesendtoself, boolean ismessagesendtosuper, String messagesendtoclass) {
         this.method = method;
         this.ismessagesendtoself = ismessagesendtoself;
@@ -21,7 +27,28 @@ public class MethodExpr extends Expr {
 
     @Override
     public void genC(PW pw, boolean putParenthesis) {
-
+        KraClass skc = null;
+        if (ismessagesendtosuper) {
+            skc = method.getKc();
+            pw.printIdent(skc.getName() + "_");
+        }
+        if (ismessagesendtoself) {
+            pw.print("this.");
+        }
+        if (!messagesendtoclass.equals("")) {
+            pw.print(messagesendtoclass + ".");
+        }
+        pw.print(method.getName() + "(");
+        if(ismessagesendtosuper){
+            pw.print("(_class_" + skc.getName() + " *) this");
+            if(!exprlist.isEmpty()){
+                pw.print(", ");
+            }
+        }
+        if (exprlist != null) {
+            exprlist.genKra(pw);
+        }
+        pw.print(")");
     }
 
     @Override
@@ -36,12 +63,6 @@ public class MethodExpr extends Expr {
     public Method getMethod() {
         return method;
     }
-
-    private Method method;
-    private boolean ismessagesendtoself;
-    private String messagesendtoclass;
-    private boolean ismessagesendtosuper;
-    private ExprList exprlist;
 
     @Override
     void genKra(PW pw) {

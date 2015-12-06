@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author Bruno
  */
 public class MethodList {
+    ArrayList<Method> methodList;
 
     public MethodList() {
         methodList = new ArrayList<>();
@@ -45,16 +46,20 @@ public class MethodList {
         return null;
     }
 
-    ArrayList<Method> methodList;
-
     public void genKra(PW pw) {
         for (Method m : methodList) {
             m.genKra(pw);
         }
     }
+
     void genC(PW pw) {
         for (Method m : methodList) {
             m.genC(pw);
         }
     }
+
+    public ArrayList<Method> getMethodList() {
+        return methodList;
+    }
+    
 }

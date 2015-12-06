@@ -26,6 +26,18 @@ typedef struct _ST_A {
 }_class_A
 void A_A(){
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_A,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -33,7 +45,19 @@ typedef struct _ST_Program {
 void Program_run(){
    A a;
    
-   a = A;
-   ;
+   a = new_A();
+   a.A();
    
 }
+// apenas os métodos públicos
+Func VTclass_Program[] = { 
+   (void (*) () ) _Program_run,
+};
+
+_class_Program *new_Program(){
+   _class_Program *t;
+   if((t = malloc(sizeof(_class_Program)))!=NULL)
+      t->vt = VTclass_Program;
+   return t;
+}
+

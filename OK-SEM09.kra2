@@ -13,3 +13,14 @@ typedef struct _ST_A {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_A
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+

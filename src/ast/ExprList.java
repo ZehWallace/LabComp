@@ -4,6 +4,8 @@ import java.util.*;
 
 public class ExprList {
 
+    private ArrayList<Expr> exprList;
+
     public ExprList() {
         exprList = new ArrayList<Expr>();
     }
@@ -27,8 +29,6 @@ public class ExprList {
         }
     }
 
-    private ArrayList<Expr> exprList;
-
     public ArrayList<Expr> getExprList() {
         return exprList;
     }
@@ -47,5 +47,8 @@ public class ExprList {
             }
         }
     }
-
+    
+    public boolean isEmpty(){
+        return exprList.isEmpty();
+    }
 }

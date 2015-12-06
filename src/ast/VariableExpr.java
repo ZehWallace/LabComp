@@ -10,12 +10,18 @@ public class VariableExpr extends Expr {
     }
 
     public void genC(PW pw, boolean putParenthesis) {
+        if(isNew){
+            pw.print ("new_");
+        }
         if(putParenthesis){
             pw.print("(");
         }
         pw.print(v.getName());
         if(putParenthesis){
             pw.print(")");
+        }
+        if(isNew){
+            pw.print("()");
         }
     }
 

@@ -45,3 +45,18 @@ A A_getAnA(){
 void A_setAnA(A anA){
    anA = anA;
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_getAnInt,
+   (void (*) () ) _A_setAnInt,
+   (void (*) () ) _A_getAnA,
+   (void (*) () ) _A_setAnA,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+

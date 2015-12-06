@@ -46,6 +46,19 @@ int A_put(int n, char * set){
    n = n;
    return n;
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_set,
+   (void (*) () ) _A_put,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -53,7 +66,19 @@ typedef struct _ST_Program {
 void Program_run(){
    A a;
    
-   a = A;
-   ;
+   a = new_A();
+   a.set(0);
    
 }
+// apenas os métodos públicos
+Func VTclass_Program[] = { 
+   (void (*) () ) _Program_run,
+};
+
+_class_Program *new_Program(){
+   _class_Program *t;
+   if((t = malloc(sizeof(_class_Program)))!=NULL)
+      t->vt = VTclass_Program;
+   return t;
+}
+

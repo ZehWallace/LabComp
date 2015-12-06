@@ -126,7 +126,7 @@ public class Method {
             pw.printIdent(type.getCname() + " _static_" + kc.getCname() + "_" + name + "(");
 
         } else {
-            pw.printIdent(type.getCname() +" "+  kc.getCname() + "_" + name + "(");
+            pw.printIdent(type.getCname() + " " + kc.getCname() + "_" + name + "(");
         }
         paramList.genC(pw);
         pw.println("){");
@@ -137,6 +137,10 @@ public class Method {
 
         pw.sub();
         pw.printlnIdent("}");
+    }
+
+    public KraClass getKc() {
+        return kc;
     }
 
 }

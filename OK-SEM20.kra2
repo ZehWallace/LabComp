@@ -11,7 +11,7 @@ class A {
       return "Am4";
    }
 }
-class B {
+class B extends A {
    public int m1 (boolean ok) {
       return 1;
    }
@@ -21,7 +21,7 @@ class B {
       return 1;
    }
 }
-class C {
+class C extends B {
    public int m1 (boolean ok) {
       return 2;
    }
@@ -32,9 +32,9 @@ class C {
       return "finally";
    }
 }
-final class D {
+final class D extends A {
 }
-final class E {
+final class E extends A {
    public int m1 (boolean ok) {
       return 5;
    }
@@ -115,6 +115,21 @@ char * A_m3(char * s, int ok){
 char * A_m4(int i, int ok){
    return Am4;
 }
+// apenas os métodos públicos
+Func VTclass_A[] = { 
+   (void (*) () ) _A_m1,
+   (void (*) () ) _A_m2,
+   (void (*) () ) _A_m3,
+   (void (*) () ) _A_m4,
+};
+
+_class_A *new_A(){
+   _class_A *t;
+   if((t = malloc(sizeof(_class_A)))!=NULL)
+      t->vt = VTclass_A;
+   return t;
+}
+
 typedef struct _ST_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -127,6 +142,24 @@ void B_m2(){
 int B_mB(){
    return    1;
 }
+// apenas os métodos públicos
+Func VTclass_B[] = { 
+   (void (*) () ) _A_m1,
+   (void (*) () ) _A_m2,
+   (void (*) () ) _A_m3,
+   (void (*) () ) _A_m4,
+   (void (*) () ) _B_m1,
+   (void (*) () ) _B_m2,
+   (void (*) () ) _B_mB,
+};
+
+_class_B *new_B(){
+   _class_B *t;
+   if((t = malloc(sizeof(_class_B)))!=NULL)
+      t->vt = VTclass_B;
+   return t;
+}
+
 typedef struct _ST_C {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -140,10 +173,46 @@ char * C_m4(int i, int ok){
 char * C_m5(){
    return finally;
 }
+// apenas os métodos públicos
+Func VTclass_C[] = { 
+   (void (*) () ) _A_m1,
+   (void (*) () ) _A_m2,
+   (void (*) () ) _A_m3,
+   (void (*) () ) _A_m4,
+   (void (*) () ) _B_m1,
+   (void (*) () ) _B_m2,
+   (void (*) () ) _B_mB,
+   (void (*) () ) _C_m1,
+   (void (*) () ) _C_m4,
+   (void (*) () ) _C_m5,
+};
+
+_class_C *new_C(){
+   _class_C *t;
+   if((t = malloc(sizeof(_class_C)))!=NULL)
+      t->vt = VTclass_C;
+   return t;
+}
+
 typedef struct _ST_D {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
 }_class_D
+// apenas os métodos públicos
+Func VTclass_D[] = { 
+   (void (*) () ) _A_m1,
+   (void (*) () ) _A_m2,
+   (void (*) () ) _A_m3,
+   (void (*) () ) _A_m4,
+};
+
+_class_D *new_D(){
+   _class_D *t;
+   if((t = malloc(sizeof(_class_D)))!=NULL)
+      t->vt = VTclass_D;
+   return t;
+}
+
 typedef struct _ST_E {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -156,6 +225,24 @@ void E_m2(){
 char * E_m4(int i, int ok){
    return Em4;
 }
+// apenas os métodos públicos
+Func VTclass_E[] = { 
+   (void (*) () ) _A_m1,
+   (void (*) () ) _A_m2,
+   (void (*) () ) _A_m3,
+   (void (*) () ) _A_m4,
+   (void (*) () ) _E_m1,
+   (void (*) () ) _E_m2,
+   (void (*) () ) _E_m4,
+};
+
+_class_E *new_E(){
+   _class_E *t;
+   if((t = malloc(sizeof(_class_E)))!=NULL)
+      t->vt = VTclass_E;
+   return t;
+}
+
 typedef struct _ST_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
@@ -163,45 +250,57 @@ typedef struct _ST_Program {
 void Program_run(){
    C c;
    
-   c = C;
-   printf ("%d", );
-   ;
+   c = new_C();
+   printf ("%d", c.m1(true));
+   c.m2();
    
-   printf ("%s", );
-   printf ("%s", );
-   printf ("%s", );
-   printf ("%d",  +    1);
+   printf ("%s", c.m3("ok", false));
+   printf ("%s", c.m4(0, false));
+   printf ("%s", c.m5());
+   printf ("%d", c.mB() +    1);
    B b;
    
-   b = B;
-   printf ("%d", );
-   ;
+   b = new_B();
+   printf ("%d", b.m1(true));
+   b.m2();
    
-   printf ("%s", );
-   printf ("%s", );
-   printf ("%d",  +    1);
+   printf ("%s", b.m3("ok", false));
+   printf ("%s", b.m4(0, false));
+   printf ("%d", c.mB() +    1);
    A a;
    
-   a = A;
-   printf ("%d", );
-   ;
+   a = new_A();
+   printf ("%d", a.m1(true));
+   a.m2();
    
-   printf ("%s", );
-   printf ("%s", );
+   printf ("%s", a.m3("ok", false));
+   printf ("%s", a.m4(0, false));
    D d;
    
-   d = D;
-   printf ("%d", );
-   ;
+   d = new_D();
+   printf ("%d", d.m1(true));
+   d.m2();
    
-   printf ("%s", );
-   printf ("%s", );
+   printf ("%s", d.m3("ok", false));
+   printf ("%s", d.m4(0, false));
    E e;
    
-   e = E;
-   printf ("%d", );
-   ;
+   e = new_E();
+   printf ("%d", e.m1(true));
+   e.m2();
    
-   printf ("%s", );
-   printf ("%s", );
+   printf ("%s", e.m3("ok", false));
+   printf ("%s", e.m4(0, false));
 }
+// apenas os métodos públicos
+Func VTclass_Program[] = { 
+   (void (*) () ) _Program_run,
+};
+
+_class_Program *new_Program(){
+   _class_Program *t;
+   if((t = malloc(sizeof(_class_Program)))!=NULL)
+      t->vt = VTclass_Program;
+   return t;
+}
+
