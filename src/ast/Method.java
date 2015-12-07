@@ -129,7 +129,9 @@ public class Method {
             pw.printIdent(type.getCname() + " _" + kc.getCname() + "_" + name + "(");
         }
         pw.print("_class_" + kc.getName()+" *this");
-        
+        if(!paramList.isEmpty()){
+            pw.print(", ");
+        }
         paramList.genC(pw);
         pw.println("){");
         pw.add();

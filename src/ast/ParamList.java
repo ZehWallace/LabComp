@@ -72,5 +72,8 @@ public class ParamList {
             cont++;
         }
     }
+    boolean isEmpty(){
+        return paramList.isEmpty();
+    }
 
 }

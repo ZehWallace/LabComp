@@ -32,7 +32,7 @@ public class MethodExpr extends Expr {
         KraClass skc = null;
         if (ismessagesendtosuper) {
             skc = method.getKc();
-            pw.print(skc.getName() + "_");
+            pw.print("_" + skc.getName() + "_");
         }
         if (ismessagesendtoself) {
             pw.print("this->" + method.getKc().getCname());
@@ -62,9 +62,7 @@ public class MethodExpr extends Expr {
         }
         if (ismessagesendtosuper) {
             pw.print("(_class_" + skc.getName() + " *) this");
-            if (exprlist != null && !exprlist.isEmpty()) {
-                pw.print(", ");
-            }
+
         }
         if (exprlist != null) {
             pw.print(", ");

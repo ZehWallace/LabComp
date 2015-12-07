@@ -23,7 +23,7 @@ int _A_get(_class_A *this){
    return this->_A_i;
 }
 
-void _A_put(_class_A *thisint p_i){
+void _A_put(_class_A *this, int p_i){
    this->_A_i = _p_i;
 }
 

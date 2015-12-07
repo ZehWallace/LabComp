@@ -1,22 +1,22 @@
+/* deve-se incluir alguns headers porque algumas funções da biblioteca padrão de C são utilizadas na tradução. */
+
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+/* define o tipo boolean */
 typedef int boolean;
 #define true  1
 #define false 0
 
-typedef
-  void (*Func)();
+/* define um tipo Func que é um ponteiro para função*/ 
+typedef void (*Func)();
 
-  /* class A { ... } */
-typedef
-  struct _St_A {
+typedef struct _St_A {
+	/* ponteiro para um vetor de métodos da classe */
     Func *vt;
-       /* variável de instância i da classe A */
     int _A_i;
     } _class_A;
-
 _class_A *new_A(void);
 
 int _A_get( _class_A *this ) {
@@ -33,23 +33,19 @@ Func VTclass_A[] = {
   ( void (*)() ) _A_put
   };
 
-_class_A *new_A()
-{
+_class_A *new_A(){
   _class_A *t;
-
   if ( (t = malloc(sizeof(_class_A))) != NULL )
     t->vt = VTclass_A;
   return t;
   }
 
-
-typedef
-  struct _St_B {
+typedef struct _St_B {
+	/* ponteiro para um vetor de métodos da classe */
     Func *vt;
     int _A_i;
     int _B_lastInc;
     } _class_B;
-
 _class_B *new_B(void);
 
 void _B_add( _class_B *this, int _n )
@@ -58,8 +54,7 @@ void _B_add( _class_B *this, int _n )
   _A_put( (_class_A *) this, _A_get( (_class_A *) this ) + _n );
   }
 
-void _B_print ( _class_B *this )
-{
+void _B_print ( _class_B *this ){
   printf("%d ", ((int (*)(_class_A *)) this->vt[0])( (_class_A *) this));
   }
 
