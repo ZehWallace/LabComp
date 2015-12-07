@@ -35,9 +35,6 @@ public class MethodExpr extends Expr {
             pw.print("_" + skc.getName() + "_");
         }
         if (ismessagesendtoself) {
-            pw.print("this->" + method.getKc().getCname());
-        }
-        if (!messagesendtoclass.equals("")) {
             KraClass kc = method.getKc();
             ArrayList<Method> methodlist = new ArrayList<>();
             gerarListaMetodos(kc, methodlist);
@@ -49,7 +46,27 @@ public class MethodExpr extends Expr {
                 }
             }
 
-            pw.print("( (void (*)(_class_" + kc.getName() + " *");
+            pw.print("( (" + method.getType().getCname() + " (*)(_class_" + kc.getName() + " *");
+            if (exprlist != null) {
+                ArrayList el = exprlist.getExprList();
+                for (Object e : el) {
+                    pw.print(", " + ((Expr) e).getType().getCname());
+                }
+            }
+            pw.print(")) " + "this" + "->[" + pos + "] ) (" + "this");
+        } else if (!messagesendtoclass.equals("")) {
+            KraClass kc = method.getKc();
+            ArrayList<Method> methodlist = new ArrayList<>();
+            gerarListaMetodos(kc, methodlist);
+            int pos = 0;
+            for (Method m : methodlist) {
+                if (m.equals(method)) {
+                    pos = methodlist.indexOf(m);
+                    break;
+                }
+            }
+
+            pw.print("( (" + method.getType().getCname() + " (*)(_class_" + kc.getName() + " *");
             if (exprlist != null) {
                 ArrayList el = exprlist.getExprList();
                 for (Object e : el) {

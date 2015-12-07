@@ -54,7 +54,7 @@ void _Program_run(_class_Program *this){
    _a = new_A();
    ( (void (*)(_class_A *, int)) _a->[1] ) (_a, 5);
    
-   _k = ( (void (*)(_class_A *)) _a->[0] ) (_a);
+   _k = ( (int (*)(_class_A *)) _a->[0] ) (_a);
    printf("%d", _k);
 }
 
