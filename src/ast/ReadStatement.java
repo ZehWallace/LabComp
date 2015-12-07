@@ -19,31 +19,39 @@ public class ReadStatement extends Statement {
 
     @Override
     public void genC(PW pw) {
-        pw.printIdent("scanf(");
         for (Variable v : variableList) {
-            switch(v.getType().getName()){
+            pw.printlnIdent("{");
+            pw.add();
+            pw.printlnIdent("char __s[512];");
+            pw.printlnIdent("gets(__s)");
+            pw.printIdent("sscanf(__s, \"");
+            switch (v.getType().getCname()) {
                 case "int":
-                    pw.print("%d");
+                    pw.print("%d\", &");
+                    pw.print(v.getCname());
+                    pw.println(");");
                     break;
                 case "String":
-                    pw.print("%s");
+                    pw.print("%s\", ");
+                    pw.print(v.getCname());
+                    pw.println(");");
                     break;
                 case "char":
-                    pw.print("%c");
+                    pw.print("%c\", &");
+                    pw.print(v.getCname());
+                    pw.println(");");
                     break;
                 case "float":
-                    pw.print("%f");
+                    pw.print("%f\", &");
+                    pw.print(v.getCname());
+                    pw.println(");");
                     break;
                 default:
                     pw.print("nao contavam com a minha astucia ");
             }
+            pw.sub();
+            pw.printlnIdent("}");
         }
-        for (Variable v : variableList) {
-            pw.print(", ");
-            pw.print(v.getName());
-        }
-        
-        pw.println(");");
     }
 
     @Override
@@ -51,7 +59,7 @@ public class ReadStatement extends Statement {
         int cont = 0;
         pw.printIdent("read (");
         for (Variable v : variableList) {
-            if(cont > 0){
+            if (cont > 0) {
                 pw.print(", ");
             }
             pw.print(v.getName());

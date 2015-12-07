@@ -34,19 +34,26 @@ public class AssignExprLocalDecStatement extends Statement {
     public void genC(PW pw) {
         if (variableexprlist != null) {
             for (VariableExpr ve : variableexprlist) {
-                pw.printIdent(ve.getType().getCname() + " ");
-                ve.genC(pw,false);                
+                pw.printIdent("");
+                if (ve.getType() instanceof KraClass) {
+                    pw.print("_class_");
+                }
+                pw.print(ve.getType().getCname());
+                if (ve.getType() != Type.stringType) {
+                    pw.print(" ");
+                }
+                ve.genC(pw, false);
                 pw.println(";");
             }
         } else if (exprl != null && exprr != null) {
             pw.printIdent("");
-            exprl.genC(pw,false);
+            exprl.genC(pw, false);
             pw.print(" = ");
-            exprr.genC(pw,false);
+            exprr.genC(pw, false);
             pw.println(";");
         } else if (exprl != null) {
             pw.printIdent("");
-            exprl.genC(pw,false);
+            exprl.genC(pw, false);
             pw.println(";");
         }
     }

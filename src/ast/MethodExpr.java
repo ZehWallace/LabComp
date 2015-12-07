@@ -5,6 +5,8 @@
  */
 package ast;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Bruno
@@ -30,25 +32,55 @@ public class MethodExpr extends Expr {
         KraClass skc = null;
         if (ismessagesendtosuper) {
             skc = method.getKc();
-            pw.printIdent(skc.getName() + "_");
+            pw.print(skc.getName() + "_");
         }
         if (ismessagesendtoself) {
-            pw.print("this.");
+            pw.print("this->" + method.getKc().getCname());
         }
         if (!messagesendtoclass.equals("")) {
-            pw.print(messagesendtoclass + ".");
+            KraClass kc = method.getKc();
+            ArrayList<Method> methodlist = new ArrayList<>();
+            gerarListaMetodos(kc, methodlist);
+            int pos = 0;
+            for (Method m : methodlist) {
+                if (m.equals(method)) {
+                    pos = methodlist.indexOf(m);
+                    break;
+                }
+            }
+
+            pw.print("( (void (*)(_class_" + kc.getName() + " *");
+            if (exprlist != null) {
+                ArrayList el = exprlist.getExprList();
+                for (Object e : el) {
+                    pw.print(", " + ((Expr) e).getType().getCname());
+                }
+            }
+            pw.print(")) _" + messagesendtoclass + "->[" + pos + "] ) (_" + messagesendtoclass);
+        } else {
+            pw.print(method.getName() + "(");
         }
-        pw.print(method.getName() + "(");
-        if(ismessagesendtosuper){
+        if (ismessagesendtosuper) {
             pw.print("(_class_" + skc.getName() + " *) this");
-            if(!exprlist.isEmpty()){
+            if (exprlist != null && !exprlist.isEmpty()) {
                 pw.print(", ");
             }
         }
         if (exprlist != null) {
-            exprlist.genKra(pw);
+            pw.print(", ");
+            exprlist.genC(pw);
         }
         pw.print(")");
+    }
+
+    public void gerarListaMetodos(KraClass kc, ArrayList<Method> methodlist) {
+        if (kc.getSuperclass() != null) {
+            gerarListaMetodos(kc.getSuperclass(), methodlist);
+        }
+        ArrayList<Method> ml = kc.getMethodList().getMethodList();
+        for (Method m : ml) {
+            methodlist.add(m);
+        }
     }
 
     @Override

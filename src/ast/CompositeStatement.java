@@ -19,7 +19,9 @@ public class CompositeStatement extends Statement{
     }
     @Override
     public void genC(PW pw) {
-    
+        for(Statement statement : statementList){
+            statement.genC(pw);
+        }
     }
 
     @Override

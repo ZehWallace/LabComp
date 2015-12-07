@@ -22,30 +22,34 @@ public class WriteStatement extends Statement {
     @Override
     public void genC(PW pw) {
 
-        pw.printIdent("printf (\"");
         ArrayList<Expr> exprlist2 = exprlist.getExprList();
         for (Expr e : exprlist2) {
             Type t = e.getType();
             switch(t.getName()){
                 case "int":
-                    pw.print("%d");
+                    pw.printIdent("printf(\"%d\", ");
+                    e.genC(pw, false);
+                    pw.println(");");
                     break;
                 case "String":
-                    pw.print("%s");
+                    pw.printIdent("puts(");
+                    e.genC(pw, false);
+                    pw.println(");");
                     break;
                 case "char":
-                    pw.print("%c");
+                    pw.printIdent("printf(\"%c\", ");
+                    e.genC(pw, false);
+                    pw.println(");");
                     break;
                 case "float":
-                    pw.print("%f");
+                    pw.printIdent("printf(\"%f\", ");
+                    e.genC(pw, false);
+                    pw.println(");");
                     break;
                 default:
                     pw.print("nao contavam com a minha astucia ");
             }
         }
-        pw.print("\", ");
-        exprlist.genC(pw);
-        pw.println(");");
     }
 
     @Override

@@ -35,21 +35,24 @@ public class KraClass extends Type {
     void genC(PW pw) {
         // fazer alguma coisa com esse final
 
-        pw.printlnIdent("typedef struct _ST_" + name + " {");
+        pw.printlnIdent("typedef struct _St_" + name + " {");
         pw.add();
         pw.printlnIdent("/* ponteiro para um vetor de métodos da classe */");
         pw.printlnIdent("Func *vt; ");
-
-        //instanceVariableList.genC(pw);
+        
         instanciarVariaveis(this, pw);
         pw.sub();
-        pw.printlnIdent("}_class_" + name);
+        pw.printlnIdent("} _class_" + name);
+        pw.printlnIdent("_class_" + name + " *new_" + name + "(void);\n");
+        
+        //VARIAVEIS DE INSTANCIA
         ArrayList<InstanceVariable> vl = instanceVariableList.getInstanceVariableList();
         for (InstanceVariable v : vl) {
             if (v.isStatic()) {
                 pw.println(v.getType().getCname() + " _static_" + name + "_" + v.getName() + ";");
             }
         }
+        //METODOS
         methodList.genC(pw);
 
         pw.printlnIdent("// apenas os métodos públicos");
@@ -71,6 +74,7 @@ public class KraClass extends Type {
         pw.printlnIdent("return t;");
         pw.sub();
         pw.printlnIdent("}\n");
+
     }
 
     public void instanciarVariaveis(KraClass kc, PW pw) {

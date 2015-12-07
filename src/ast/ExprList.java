@@ -21,10 +21,12 @@ public class ExprList {
     public void genC(PW pw) {
 
         int size = exprList.size();
-        for (Expr e : exprList) {
-            e.genC(pw, false);
-            if (--size > 0) {
-                pw.print(", ");
+        if (exprList != null) {
+            for (Expr e : exprList) {
+                e.genC(pw, false);
+                if (--size > 0) {
+                    pw.print(", ");
+                }
             }
         }
     }
@@ -47,8 +49,8 @@ public class ExprList {
             }
         }
     }
-    
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return exprList.isEmpty();
     }
 }

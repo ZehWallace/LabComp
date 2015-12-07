@@ -10,6 +10,9 @@ package ast;
  * @author guilherme
  */
 public class IfStatement extends Statement {
+    private Expr expr;
+    private Statement stat;
+    private Statement stat2;
 
     public IfStatement(Expr expr, Statement stat, Statement stat2) {
         this.expr = expr;
@@ -27,17 +30,13 @@ public class IfStatement extends Statement {
         pw.sub();
         pw.printlnIdent("}");
         if (stat2 != null) {
+            pw.printlnIdent("else {");
             pw.add();
-            pw.println(" else {");
             stat2.genC(pw);
             pw.sub();
             pw.printlnIdent("}");
         }
     }
-
-    private Expr expr;
-    private Statement stat;
-    private Statement stat2;
 
     @Override
     void genKra(PW pw) {

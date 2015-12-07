@@ -247,7 +247,7 @@ public class Comp {
         	   
               PW pw = new PW();
               pw.set(printWriter);
-              program.genKra( pw );
+//              program.genKra( pw );
               program.genC(pw);
               if ( printWriter.checkError() ) {
                  outError.println("There was an error in the output");

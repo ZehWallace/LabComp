@@ -2,6 +2,11 @@ package ast;
 
 public class VariableExpr extends Expr {
 
+    private Variable v;
+    private boolean ismessagetoself;
+    private String messagetoclass;
+    private boolean isNew;
+
     public VariableExpr(Variable v, boolean ismessagetoself, String messagetoclass, boolean isNew) {
         this.v = v;
         this.ismessagetoself = ismessagetoself;
@@ -10,33 +15,39 @@ public class VariableExpr extends Expr {
     }
 
     public void genC(PW pw, boolean putParenthesis) {
-        if(isNew){
-            pw.print ("new_");
+        if (ismessagetoself) {
+            pw.print("this->");
         }
-        if(putParenthesis){
+        if (isNew) {
+            pw.print("new");
+        }
+        if (putParenthesis) {
             pw.print("(");
         }
-        pw.print(v.getName());
-        if(putParenthesis){
+        if(v.getKc()!=null){
+            pw.print("_" + v.getKc().getName());
+        }
+        pw.print("_" + v.getName());
+        if (putParenthesis) {
             pw.print(")");
         }
-        if(isNew){
+        if (isNew) {
             pw.print("()");
         }
     }
 
     public void genKra(PW pw) {
-        if(ismessagetoself){
+        if (ismessagetoself) {
             pw.print("this.");
         }
-        if(!messagetoclass.equals("")){
+        if (!messagetoclass.equals("")) {
             pw.print(messagetoclass + ".");
         }
-        if(isNew){
+        if (isNew) {
             pw.print("new ");
         }
         pw.print(v.getName());
-        if(isNew){
+        if (isNew) {
             pw.print("()");
         }
     }
@@ -44,9 +55,4 @@ public class VariableExpr extends Expr {
     public Type getType() {
         return v.getType();
     }
-
-    private Variable v;
-    private boolean ismessagetoself;
-    private String messagetoclass;
-    private boolean isNew;
 }

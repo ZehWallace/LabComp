@@ -250,7 +250,9 @@ public class Compiler {
                         signalError.show("Variable '" + name + "' is being redeclared");
                     }
                 }
-                kc.addInstanceVariable(new InstanceVariable(name, t, isStatic));
+                InstanceVariable iv = new InstanceVariable(name, t, isStatic);
+                iv.setKc(currentClass);
+                kc.addInstanceVariable(iv);
                 instanceVarDec(t, name);
             }
         }
@@ -419,7 +421,8 @@ public class Compiler {
         }
         String name = lexer.getStringValue();
         lexer.nextToken();
-        return new Variable(name, type);
+        Variable v = new Variable(name, type);
+        return v;
     }
 
     private Type type() {
@@ -1155,10 +1158,12 @@ public class Compiler {
                             //erro 18
                             return null;
                         } else {
-                            return new VariableExpr(new Variable(lexer.getStringValue(), o), false, "", false);
+                            v = new Variable(lexer.getStringValue(), o);
+                            return new VariableExpr(v, false, "", false);
                         }
                     }
                     //ARRUMAR K NÃO FOI DECLARADO COMO VARIÁVEL NEM CLASSE COMOFAZ
+
                     return new VariableExpr(v, false, "", false);
                 } else { // Id "."
 
@@ -1395,7 +1400,6 @@ public class Compiler {
                         if (currentMethod.isStatic() && !var.isStatic()) {
                             signalError.show("Attempt to access an instance variable using 'this' in a static method");
                         }
-
                         return new VariableExpr(var, true, "", false);
                     }
                 }
