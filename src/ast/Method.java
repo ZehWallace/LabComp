@@ -121,15 +121,26 @@ public class Method {
 
     void genC(PW pw) {
         //nao sei oque fazer com o final
-
+        pw.printIdent("");
         if (isStatic) {
-            pw.printIdent(type.getCname() + " _static_" + kc.getCname() + "_" + name + "(");
+            if (type instanceof KraClass) {
+                pw.print("_class_" + type.getCname() + " *");
+                pw.print("_static_" + kc.getCname() + "_" + name + "(");
+            } else {
+                pw.print(type.getCname() + " _static_" + kc.getCname() + "_" + name + "(");
+            }
 
         } else {
-            pw.printIdent(type.getCname() + " _" + kc.getCname() + "_" + name + "(");
+            if (type instanceof KraClass) {
+                pw.print("_class_" + type.getCname() + " *");
+                pw.print("_" + kc.getCname() + "_" + name + "(");
+            } else {
+                pw.print(type.getCname() + " _" + kc.getCname() + "_" + name + "(");
+            }
+
         }
-        pw.print("_class_" + kc.getName()+" *this");
-        if(!paramList.isEmpty()){
+        pw.print("_class_" + kc.getName() + " *this");
+        if (!paramList.isEmpty()) {
             pw.print(", ");
         }
         paramList.genC(pw);

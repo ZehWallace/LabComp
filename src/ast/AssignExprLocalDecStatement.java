@@ -42,6 +42,9 @@ public class AssignExprLocalDecStatement extends Statement {
                 if (ve.getType() != Type.stringType) {
                     pw.print(" ");
                 }
+                if(ve.getType() instanceof KraClass){
+                    pw.print("*");
+                }
                 ve.genC(pw, false);
                 pw.println(";");
             }

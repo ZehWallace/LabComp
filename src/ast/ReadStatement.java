@@ -23,7 +23,7 @@ public class ReadStatement extends Statement {
             pw.printlnIdent("{");
             pw.add();
             pw.printlnIdent("char __s[512];");
-            pw.printlnIdent("gets(__s)");
+            pw.printlnIdent("gets(__s);");
             pw.printIdent("sscanf(__s, \"");
             switch (v.getType().getCname()) {
                 case "int":

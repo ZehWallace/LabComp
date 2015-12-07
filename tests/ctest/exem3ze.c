@@ -58,19 +58,19 @@ void _B_print ( _class_B *this ){
   printf("%d ", ((int (*)(_class_A *)) this->vt[0])( (_class_A *) this));
   }
 
-void _B_put( _class_B *this, int _p_i )
-{
-  if ( _p_i > 0 )
+void _B_put( _class_B *this, int _p_i ){
+  if ( _p_i > 0 ){
     _A_put((_class_A *) this, _p_i);
   }
+
+}
 
 void _B_inc( _class_A *this ) 
 {
   _B_add( (_class_B *) this, 1);
   }
 
-int _B_getLastInc( _class_B *this )
-{
+int _B_getLastInc( _class_B *this ){
   return this->_B_lastInc;
 }  
 
@@ -83,19 +83,14 @@ Func VTclass_B[] = {
   (void (*) () ) _B_getLastInc
   };
 
-_class_B *new_B()
-{
+_class_B *new_B(){
   _class_B *t;
-
   if ((t = malloc (sizeof(_class_B))) != NULL)
     t->vt = VTclass_B;
   return t;
 }
 
-
-
-typedef
-  struct _St_Program {
+typedef struct _St_Program {
     Func *vt;
     } _class_Program;
 

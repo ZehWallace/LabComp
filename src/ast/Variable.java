@@ -5,6 +5,7 @@ public class Variable {
     private String name;
     private Type type;
     private KraClass kc;
+    private boolean isStatic;
     
     public Variable(String name, Type type) {
         this.name = name;
@@ -35,5 +36,14 @@ public class Variable {
     public KraClass getKc() {
         return kc;
     }
+//
+//    public boolean isIsStatic() {
+//        return isStatic;
+//    }
+//
+//    public void setIsStatic(boolean isStatic) {
+//        this.isStatic = isStatic;
+//    }
+    
     
 }

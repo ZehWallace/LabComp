@@ -4,9 +4,10 @@ public class InstanceVariable extends Variable {
 
     public InstanceVariable( String name, Type type, boolean isStatic ) {
         super(name, type);
-        this.setisStatic(isStatic);
+        this.isStatic = isStatic;
     }
 
+    @Override
     public void genKra(PW pw) {
         pw.printIdent("");
         if(isStatic){
@@ -22,6 +23,7 @@ public class InstanceVariable extends Variable {
             pw.println(";");
         }
     }
+    
     public void setisStatic(boolean isStatic){
         this.isStatic = isStatic;
     }

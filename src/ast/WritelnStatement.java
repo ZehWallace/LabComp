@@ -25,7 +25,7 @@ public class WritelnStatement extends Statement{
             Type t = e.getType();
             switch(t.getName()){
                 case "int":
-                    pw.printIdent("printf(\"%d\\n\", ");
+                    pw.printIdent("printf(\"%d \\n\", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;
@@ -36,12 +36,12 @@ public class WritelnStatement extends Statement{
                     pw.printlnIdent("printf(\"\\n\");");
                     break;
                 case "char":
-                    pw.printIdent("printf(\"%c\\n\", ");
+                    pw.printIdent("printf(\"%c \\n\", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;
                 case "float":
-                    pw.printIdent("printf(\"%f\\n\", ");
+                    pw.printIdent("printf(\"%f \\n\", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;

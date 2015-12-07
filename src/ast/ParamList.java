@@ -68,11 +68,20 @@ public class ParamList {
             if (cont > 0) {
                 pw.print(", ");
             }
-            pw.print(v.getType().getCname() + " " + v.getName());
+            if (v.getType() instanceof KraClass) {
+                pw.print("_class_");
+            }
+            pw.print(v.getType().getCname() + " ");
+            if (v.getType() instanceof KraClass) {
+                pw.print("*");
+            }
+            pw.print(v.getCname());
+
             cont++;
         }
     }
-    boolean isEmpty(){
+
+    boolean isEmpty() {
         return paramList.isEmpty();
     }
 

@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import lexer.Symbol;
 
 /*
  * Krakatoa Class
@@ -39,17 +40,24 @@ public class KraClass extends Type {
         pw.add();
         pw.printlnIdent("/* ponteiro para um vetor de métodos da classe */");
         pw.printlnIdent("Func *vt; ");
-        
+
         instanciarVariaveis(this, pw);
         pw.sub();
-        pw.printlnIdent("} _class_" + name);
+        pw.printlnIdent("} _class_" + name + ";");
         pw.printlnIdent("_class_" + name + " *new_" + name + "(void);\n");
-        
-        //VARIAVEIS DE INSTANCIA
+
+        //VARIAVEIS GLOBAIS
         ArrayList<InstanceVariable> vl = instanceVariableList.getInstanceVariableList();
         for (InstanceVariable v : vl) {
             if (v.isStatic()) {
-                pw.println(v.getType().getCname() + " _static_" + name + "_" + v.getName() + ";");
+                if(v.getType() instanceof KraClass){
+                    pw.print("_class_");
+                }
+                pw.print(v.getType().getCname() + " ");
+                if(v.getType() instanceof KraClass){
+                    pw.print("*");
+                }
+                pw.println("_static_" + name + "_" + v.getName() + ";");
             }
         }
         //METODOS
@@ -59,7 +67,18 @@ public class KraClass extends Type {
         pw.printlnIdent("Func VTclass_" + this.name + "[] = { ");
         pw.add();
 
-        gerarVetorMetodosPublicos(this, pw);
+//        gerarVetorMetodosPublicos(this, pw);
+        ArrayList<Method> methodlist = new ArrayList<>();
+        gerarListaMetodos(this, this, methodlist);
+
+        for (Method m : methodlist) {
+            pw.printIdent("(void (*) () ) ");
+            pw.print("_" + m.getKc().getName() + "_" + m.getName());
+            if (!m.equals(methodlist.get(methodlist.size() - 1))) {
+                pw.print(",");
+            }
+            pw.println("");
+        }
 
         pw.sub();
         pw.printlnIdent("};\n");
@@ -83,9 +102,69 @@ public class KraClass extends Type {
         }
         ArrayList<InstanceVariable> ivl = kc.instanceVariableList.getInstanceVariableList();
         for (InstanceVariable iv : ivl) {
+            pw.printIdent("");
             if (!iv.isStatic()) {
-                pw.printIdent(iv.getType().getCname() + " _" + kc.name + "_" + iv.getName());
+                if (iv.getType() instanceof KraClass) {
+                    pw.print("struct _St_");
+                }
+                pw.print(iv.getType().getCname() + " ");
+                if(iv.getType() instanceof KraClass){
+                    pw.print("*");
+                }
+                pw.print("_" + kc.name + "_" + iv.getName());
                 pw.println(";");
+            }
+        }
+    }
+
+    public void gerarListaMetodos(KraClass currentclass, KraClass kc, ArrayList<Method> methodlist) {
+        boolean adicionar = true;
+        if (kc.getSuperclass() != null) {
+            gerarListaMetodos(currentclass, kc.getSuperclass(), methodlist);
+        }
+        ArrayList<Method> ml = kc.getMethodList().getMethodList();
+        if (!currentclass.equals(kc)) {
+            for (Method m : ml) {
+                if (currentclass.getMethod(m.getName()) == null) {
+                    adicionar = true;
+                    for (Method m2 : methodlist) {
+                        if (m2.getName().equals(m.getName())) {
+                            adicionar = false;
+                        }
+                    }
+                    if (adicionar && m.getQualifier() != Symbol.PRIVATE) {
+                        if (!m.isStatic()) {
+                            methodlist.add(m);
+                        }
+                    }
+                } else {
+                    Method method = currentclass.getMethod(m.getName());
+
+                    adicionar = true;
+                    for (Method m2 : methodlist) {
+                        if (m2.getName().equals(method.getName())) {
+                            adicionar = false;
+                        }
+                    }
+                    
+                    if (adicionar && !method.isStatic()) {
+                        methodlist.add(method);
+                    }
+                }
+            }
+        } else {
+            for (Method m : ml) {
+                adicionar = true;
+                for (Method m2 : methodlist) {
+                    if (m.getName().equals(m2.getName())) {
+                        adicionar = false;
+                    }
+                }
+                if (adicionar && m.getQualifier() != Symbol.PRIVATE) {
+                    if (!m.isStatic()) {
+                        methodlist.add(m);
+                    }
+                }
             }
         }
     }
@@ -98,7 +177,7 @@ public class KraClass extends Type {
         for (Method m : ml) {
             pw.printIdent("(void (*) () ) ");
             pw.print("_" + m.getKc().getName() + "_" + m.getName());
-            if (!(kc.equals(this) && m.equals(ml.get(ml.size()-1)))) {
+            if (!(kc.equals(this) && m.equals(ml.get(ml.size() - 1)))) {
                 pw.print(",");
             }
             pw.println("");

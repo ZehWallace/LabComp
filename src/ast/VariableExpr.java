@@ -24,9 +24,15 @@ public class VariableExpr extends Expr {
         if (putParenthesis) {
             pw.print("(");
         }
-        if(v.getKc()!=null){
+        if (v instanceof InstanceVariable) {
+            if (((InstanceVariable) v).isStatic()) {
+                pw.print("_static");
+            }
+        }
+        if (v.getKc() != null) {
             pw.print("_" + v.getKc().getName());
         }
+
         pw.print("_" + v.getName());
         if (putParenthesis) {
             pw.print(")");

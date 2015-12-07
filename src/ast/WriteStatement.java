@@ -27,7 +27,7 @@ public class WriteStatement extends Statement {
             Type t = e.getType();
             switch(t.getName()){
                 case "int":
-                    pw.printIdent("printf(\"%d\", ");
+                    pw.printIdent("printf(\"%d \", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;
@@ -37,12 +37,12 @@ public class WriteStatement extends Statement {
                     pw.println(");");
                     break;
                 case "char":
-                    pw.printIdent("printf(\"%c\", ");
+                    pw.printIdent("printf(\"%c \", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;
                 case "float":
-                    pw.printIdent("printf(\"%f\", ");
+                    pw.printIdent("printf(\"%f \", ");
                     e.genC(pw, false);
                     pw.println(");");
                     break;

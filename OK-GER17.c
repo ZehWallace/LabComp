@@ -15,22 +15,23 @@ typedef void (*Func)();
 typedef struct _St_A {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-   int _A_i;
-} _class_A
+} _class_A;
 _class_A *new_A(void);
 
-int _A_get(_class_A *this){
-   return this->_A_i;
+int _static_A_get0(_class_A *this){
+   return 0;
 }
 
-void _A_put(_class_A *this, int p_i){
-   this->_A_i = _p_i;
+int _static_A_get1(_class_A *this){
+   return 1;
+}
+
+int _static_A_ident(_class_A *this, int _n){
+   return _n;
 }
 
 // apenas os métodos públicos
 Func VTclass_A[] = { 
-   (void (*) () ) _A_get,
-   (void (*) () ) _A_put
 };
 
 _class_A *new_A(){
@@ -43,46 +44,21 @@ _class_A *new_A(){
 typedef struct _St_B {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-   int _A_i;
-   int _B_lastInc;
-} _class_B
+} _class_B;
 _class_B *new_B(void);
 
-void _B_add(_class_B *this, int n){
-   this->_B_lastInc = _n;
-   _A_put((_class_A *) this, _A_get((_class_A *) this) + _n);
-   
+int _static_B_get(_class_B *this){
+   return 3;
 }
 
-void _B_print(_class_B *this){
-   printf("%d", ( (int (*)(_class_A *)) this->[0] ) (this));
-}
-
-void _B_put(_class_B *this, int p_i){
-   if (_p_i > 0){
-      _A_put((_class_A *) this, _p_i);
-   }
-   
-}
-
-void _B_inc(_class_B *this){
-   ( (void (*)(_class_B *, int)) this->[2] ) (this, 1);
-   
-}
-
-int _B_getLastInc(_class_B *this){
-   return this->_B_lastInc;
+void _static_B_print(_class_B *this){
+   printf("%d ", _static_A_ident((_class_A *) this, 2));
+   printf("%d ", _static_B_get((_class_B *) this));
+   printf("%d ", 4);
 }
 
 // apenas os métodos públicos
 Func VTclass_B[] = { 
-   (void (*) () ) _A_get,
-   (void (*) () ) _A_put,
-   (void (*) () ) _B_add,
-   (void (*) () ) _B_print,
-   (void (*) () ) _B_put,
-   (void (*) () ) _B_inc,
-   (void (*) () ) _B_getLastInc
 };
 
 _class_B *new_B(){
@@ -95,30 +71,22 @@ _class_B *new_B(){
 typedef struct _St_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-} _class_Program
+} _class_Program;
 _class_Program *new_Program(void);
 
 void _Program_run(_class_Program *this){
-   _class_A _a;
+   puts("");
+   printf("\n");
+   puts("Ok-ger17");
+   printf("\n");
+   puts("The output should be: ");
+   printf("\n");
+   puts("0 1 2 3 4");
+   printf("\n");
+   printf("%d ", _static_A_get0((_class_A *) this));
+   printf("%d ", _static_A_get1((_class_A *) this));
+   _static_B_print((_class_B *) this);
    
-   int _k;
-   
-   _class_B _b;
-   
-   _a = new_A();
-   ( (void (*)(_class_A *, int)) _a->[1] ) (_a, 5);
-   
-   _k = ( (int (*)(_class_A *)) _a->[0] ) (_a);
-   printf("%d", _k);
-   _b = new_B();
-   ( (void (*)(_class_B *, int)) _b->[4] ) (_b, 2);
-   
-   ( (void (*)(_class_B *)) _b->[5] ) (_b);
-   
-   ( (void (*)(_class_B *)) _b->[3] ) (_b);
-   
-   printf("%d", ( (int (*)(_class_B *)) _b->[6] ) (_b));
-   printf("%d", ( (int (*)(_class_A *)) _b->[0] ) (_b));
 }
 
 // apenas os métodos públicos

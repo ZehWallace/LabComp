@@ -1,5 +1,8 @@
 Relat�rio do Compilador
 
-0 erros foram sinalizados em 3 arquivos sem erro (0%)
-O compilador n�o sinalizou nenhum erro que n�o deveria ter sinalizado
-Para os casos de teste que voc� utilizou, o compilador est� correto
+1 erros foram sinalizados em 22 arquivos sem erro (4%)
+######################################################
+Erros que foram sinalizados mas n�o deveriam ter sido:
+
+OK-GER15.KRA, 67, Method 'p' was not found in the public interface of 'B' or its superclasses
+

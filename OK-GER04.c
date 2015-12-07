@@ -15,22 +15,30 @@ typedef void (*Func)();
 typedef struct _St_A {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-   int _A_i;
-} _class_A
+} _class_A;
 _class_A *new_A(void);
 
-int _A_get(_class_A *this){
-   return this->_A_i;
-}
-
-void _A_put(_class_A *this, int p_i){
-   this->_A_i = _p_i;
+void _A_m(_class_A *this){
+   int _i;
+   
+   boolean _b;
+   
+   printf("%d ", 6);
+   _i = 1;
+   while(_i <= 5) {
+      printf("%d ", _i);
+      _i = _i + 1;
+   }
+   _b = false;
+   while(_b != true) {
+      printf("%d ", 6);
+      _b = !_b;
+   }
 }
 
 // apenas os métodos públicos
 Func VTclass_A[] = { 
-   (void (*) () ) _A_get,
-   (void (*) () ) _A_put
+   (void (*) () ) _A_m
 };
 
 _class_A *new_A(){
@@ -43,19 +51,23 @@ _class_A *new_A(){
 typedef struct _St_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-} _class_Program
+} _class_Program;
 _class_Program *new_Program(void);
 
 void _Program_run(_class_Program *this){
-   _class_A _a;
+   _class_A *_a;
    
-   int _k;
-   
+   puts("");
+   printf("\n");
+   puts("Ok-ger04");
+   printf("\n");
+   puts("The output should be :");
+   printf("\n");
+   puts("6 1 2 3 4 5 6");
+   printf("\n");
    _a = new_A();
-   ( (void (*)(_class_A *, int)) _a->[1] ) (_a, 5);
+   ( (void (*)(_class_A *)) _a->vt[0] ) ((_class_A *) _a);
    
-   _k = ( (int (*)(_class_A *)) _a->[0] ) (_a);
-   printf("%d", _k);
 }
 
 // apenas os métodos públicos

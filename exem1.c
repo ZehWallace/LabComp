@@ -15,7 +15,7 @@ typedef void (*Func)();
 typedef struct _St_Program {
    /* ponteiro para um vetor de métodos da classe */
    Func *vt; 
-} _class_Program
+} _class_Program;
 _class_Program *new_Program(void);
 
 void _Program_run(_class_Program *this){
@@ -30,7 +30,7 @@ void _Program_run(_class_Program *this){
    puts("Digite um numero: ");
    {
       char __s[512];
-      gets(__s)
+      gets(__s);
       sscanf(__s, "%d", &_b);
    }
    _primo = true;
